@@ -1,21 +1,50 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { NativeRouter, Link, Route } from 'react-router-native';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View, AppRegistry } from 'react-native';
+import LoginView from "./views/LoginView";
 
-export default function App() {
+//TODO: Implementar imagem logo.png
+
+function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+    <NativeRouter>
+      <View style={styles.container}>
+        <Route exact path="/">
+          <LoginView />
+        </Route>
+        {/*<Route path="/home" component={About} />*/}
+        {/*<Route path="/topics" component={Topics} />*/}
+      </View>
       <StatusBar style="auto" />
-    </View>
+    </NativeRouter>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginTop: 25,
+    padding: 10,
   },
+  header: {
+    fontSize: 20
+  },
+  nav: {
+    flexDirection: "row",
+    justifyContent: "space-around"
+  },
+  navItem: {
+    flex: 1,
+    alignItems: "center",
+    padding: 10
+  },
+  subNavItem: {
+    padding: 5
+  },
+  topic: {
+    textAlign: "center",
+    fontSize: 15
+  }
 });
+
+export default App;
