@@ -1,17 +1,25 @@
 import React from 'react';
+import { useHistory } from 'react-router-native';
 import {
   View,
   StyleSheet,
   TextInput,
   Image,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback
 } from 'react-native';
-
 import Button from "../../components/Button";
-
+import { EmailField, PasswordField } from "../../components/Fields";
 import logo from "../../assets/logo.png"
+import {Keyboard} from 'react-native-web';
+
+const Logo = () =>
+  <Image source={logo}/>
+;
 
 const LoginView = () => {
+  const history = useHistory();
   const [email, setEmail] = React.useState("");
   const [senha, setSenha] = React.useState("");
 
@@ -21,47 +29,42 @@ const LoginView = () => {
   const handleChangeSenha = senha =>
     setSenha(senha);
 
+  const handleGoTo = path => {
+    history.push(path);
+  };
+
   return (
     <KeyboardAvoidingView
-      behavior="padding"
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
-      <View style={{height: 400, display: "flex", justifyContent: "center", alignItems: "center"}}>
-        <Image source={logo}/>
+      <View style={styles.logoView}>
+        <Logo/>
       </View>
       <View>
-        <TextInput
-          keyboardType="email-address"
-          placeholder="Email"
-          style={styles.input}
-          autocomplete="off"
-          autoCapitalize="none"
-          onChangeText={text => handleChangeEmail(text)}
-        />
-        <TextInput
-          keyboardType="default"
-          placeholder="Senha"
-          style={styles.input}
-          autocomplete="off"
-          autoCapitalize="none"
-          secureTextEntry={true}
-          onChangeText={text => handleChangeSenha(text)}
-        />
+        <EmailField onChange={handleChangeEmail} />
+        <PasswordField onChange={handleChangeSenha} />
       </View>
       <View>
         <Button
           variant="flat"
-          label="Login"
+          label="Entrar"
           fullWidth
+          pathTo="/home"
+          onPress={handleGoTo}
         />
         <Button
           variant="link"
           label="Não possui conta?"
           spaceTop
+          pathTo="/signup"
+          onPress={handleGoTo}
         />
         <Button
           variant="link"
           label="Esqueceu a senha?"
+          pathTo="/password"
+          onPress={handleGoTo}
         />
       </View>
     </KeyboardAvoidingView>
@@ -72,22 +75,17 @@ const styles = StyleSheet.create({
   container: {
     height: "100%",
     width: "100%",
+    flexGrow: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
   },
-  input: {
-    marginBottom: 35,
-    borderWidth: 1,
-    borderColor: "#000099",
-    backgroundColor: "rgba(0,0,0,.025)",
-    borderRadius: 10,
-    width: 300,
-    height: 50,
-    paddingLeft: 10,
-    paddingRight: 10,
-    fontSize: 16
-  },
+  logoView: {
+    height: 300,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  }
 });
 
 export default LoginView;
