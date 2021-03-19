@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NativeRouter, Link, Route } from 'react-router-native';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, AppRegistry } from 'react-native';
-import LoginView from "./views/LoginView";
+import { FAB, Portal, Provider } from 'react-native-paper';
 
-//TODO: Implementar imagem logo.png
+// Import Views
+import LoginView from "./views/LoginView";
+import PasswordView from "./views/PasswordView";
+import SignUpView from "./views/SignUpView";
+import HomeView from "./views/HomeView";
 
 function App() {
   return (
@@ -13,8 +17,15 @@ function App() {
         <Route exact path="/">
           <LoginView />
         </Route>
-        {/*<Route path="/home" component={About} />*/}
-        {/*<Route path="/topics" component={Topics} />*/}
+        <Route exact path="/signup">
+          <SignUpView />
+        </Route>
+        <Route exact path="/password">
+          <PasswordView />
+        </Route>
+        <Route exact path="/home">
+          <HomeView />
+        </Route>
       </View>
       <StatusBar style="auto" />
     </NativeRouter>
@@ -23,27 +34,13 @@ function App() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 25,
-    padding: 10,
+    flex: 1
   },
-  header: {
-    fontSize: 20
-  },
-  nav: {
-    flexDirection: "row",
-    justifyContent: "space-around"
-  },
-  navItem: {
-    flex: 1,
-    alignItems: "center",
-    padding: 10
-  },
-  subNavItem: {
-    padding: 5
-  },
-  topic: {
-    textAlign: "center",
-    fontSize: 15
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 0
   }
 });
 
