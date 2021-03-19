@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-const Button = ({variant, label, spaceTop, fullWidth, onPress}) => {
+const Button = ({variant, label, spaceTop, fullWidth, pathTo, onPress}) => {
   let _styleText = [styles.text];
   let _styleRoot = [styles.button];
 
@@ -21,8 +21,17 @@ const Button = ({variant, label, spaceTop, fullWidth, onPress}) => {
   if (fullWidth)
     _styleRoot.push(styles.fullWidth);
 
+  const handlePress = () => {
+    if (pathTo) {
+      onPress(pathTo);
+      return;
+    }
+
+    onPress();
+  };
+
   return (
-    <TouchableOpacity style={_styleRoot}>
+    <TouchableOpacity style={_styleRoot} onPress={handlePress}>
       <Text style={_styleText}>
         {label}
       </Text>
