@@ -13,38 +13,48 @@ const HomeView = () => {
 
   return (
     <View style={{flex: 1, borderWidth: 1, borderColor: "black"}}>
-      <View style={{width: "100%", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", height: 95, padding: 5, backgroundColor: "#F5F5F5"}}>
-        <View style={{flexGrow: 2, flexDirection: "row", justifyContent: "flex-start"}}>
-          <Button onPress={() => history.goBack()}><Text>Voltar</Text></Button>
-        </View>
-        <Text style={{fontSize: 18, padding: 8}}>Cadastro</Text>
-        <View style={{flexGrow: 2, flexDirection: "row", justifyContent: "flex-end"}}>
-          <Button onPress={() => history.goBack()}><Text>Voltar</Text></Button>
-        </View>
-      </View>
       {/* Menu FAB */}
       <Provider>
         <Portal>
           <FAB.Group
+            fabStyle={{backgroundColor: "#000099"}}
             open={openMenu}
-            icon={openMenu ? 'close' : 'plus'}
+            icon={openMenu ? 'close' : 'menu'}
             actions={[
-              { icon: 'plus', onPress: () => console.log('Pressed add') },
-              {
-                icon: 'star',
-                label: 'Star',
-                onPress: () => console.log('Pressed star'),
+              { icon: 'exit-to-app',
+                label: 'Sair',
+                onPress: () => history.push("/"),
+                small: false,
+                style: {
+                  backgroundColor: "#000099"
+                }
               },
               {
-                icon: 'email',
-                label: 'Email',
-                onPress: () => console.log('Pressed email'),
+                icon: 'bag-personal',
+                label: 'Mochila',
+                onPress: () => console.log('Ir para mochila'),
+                small: false,
+                style: {
+                  backgroundColor: "#000099"
+                }
               },
               {
                 icon: 'bell',
-                label: 'Remind',
+                label: 'Notificações',
+                onPress: () => console.log('Notificações'),
+                small: false,
+                style: {
+                  backgroundColor: "#000099"
+                }
+              },
+              {
+                icon: 'account',
+                label: 'Perfil',
                 onPress: () => console.log('Pressed notifications'),
                 small: false,
+                style: {
+                  backgroundColor: "#000099"
+                }
               },
             ]}
             onStateChange={handleMenu}
