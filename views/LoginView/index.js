@@ -41,7 +41,7 @@ const LoginView = () => {
   };
 
   return (
-    <ImageBackground source={require("../../assets/brasilia-1.jpg")} style={{flex: 1, resizeMode: "cover", justifyContent: "center"}}>
+    <ImageBackground source={require("../../assets/brasilia-3.jpg")} style={{flex: 1, resizeMode: "cover", justifyContent: "center"}}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     display: "flex",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   }
 });
 
