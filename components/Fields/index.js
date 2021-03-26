@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, TextInput} from 'react-native';
+import { fade } from "../../utils";
 
 const Input = ({type, placeholder, value, onChange}) => {
   return (
@@ -41,8 +42,8 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 35,
     borderWidth: 1,
-    borderColor: "#000099",
-    backgroundColor: "rgba(0,0,0,.025)",
+    borderColor: fade("#9e9e9e", .35),
+    backgroundColor: fade("#fff", .9),
     borderRadius: 10,
     width: 300,
     height: 50,
