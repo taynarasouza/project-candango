@@ -35,6 +35,25 @@ export const
         onChange={onChange}
       />
     )
+  },
+
+  PhoneInput = ({value, placeholder = "Telefone", onChange}) => {
+    return (
+      <Input
+        type="number-pad"
+        placeholder={placeholder}
+        onChange={onChange}
+      />
+    )
+  },
+
+  CustomInput = ({value, placeholder = "Placeholder", onChange}) => {
+    return (
+      <Input
+        placeholder={placeholder}
+        onChange={onChange}
+      />
+    )
   }
 ;
 

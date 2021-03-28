@@ -12,11 +12,13 @@ import {
 import { Appbar, Avatar } from 'react-native-paper';
 
 import Button from "../../components/Button";
-import { EmailField, PasswordField } from "../../components/Fields";
+import { EmailField, PasswordField, PhoneInput, CustomInput } from "../../components/Fields";
 
 const SignUpView = () => {
   const history = useHistory();
+  const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
+  const [phone, setPhone] = React.useState("");
   const [senha, setSenha] = React.useState("");
 
   const handleChangeEmail = email =>
@@ -24,6 +26,12 @@ const SignUpView = () => {
 
   const handleChangeSenha = senha =>
     setSenha(senha);
+
+  const handleChangeName = name => 
+    setName(name);
+
+  const handleChangePhone = phone => 
+    setPhone(phone);
 
   const handleGoTo = path =>
     history.push(path);
@@ -44,9 +52,9 @@ const SignUpView = () => {
               <Avatar.Image size={200} source={require('../../assets/avatar_female.png')} />
             </View>
             <View>
+              <CustomInput placeholder="Nome" onChange={handleChangeName} />
               <EmailField onChange={handleChangeEmail} />
-              <EmailField onChange={handleChangeEmail} />
-              <EmailField onChange={handleChangeEmail} />
+              <PhoneInput onChange={handleChangePhone} />
               <EmailField onChange={handleChangeEmail} />
               <PasswordField onChange={handleChangeSenha} />
             </View>
