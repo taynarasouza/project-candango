@@ -13,7 +13,7 @@ import { TextInput, HelperText, Button } from "react-native-paper";
 // import Button from "../../components/Button";
 import { EmailField, PasswordField } from "../../components/Fields";
 import logo from "../../assets/logo.png"
-import background from "../../assets/brasilia-1.jpg"
+import background from "../../assets/brasilia-6.jpg"
 import {Keyboard} from 'react-native-web';
 import { login } from "../../utils/api";
 import { fade } from "../../utils";
@@ -41,7 +41,7 @@ const LoginView = () => {
   };
 
   return (
-    <ImageBackground source={require("../../assets/brasilia-3.jpg")} style={{flex: 1, resizeMode: "cover", justifyContent: "center"}}>
+    <ImageBackground source={require("../../assets/brasilia-6.jpg")} style={{flex: 1, resizeMode: "cover", justifyContent: "center"}}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}
@@ -56,7 +56,7 @@ const LoginView = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            paddingTop: 30,
+            paddingTop: 90,
             paddingBottom: 15,
             borderTopRightRadius: 15,
             borderTopLeftRadius: 15,

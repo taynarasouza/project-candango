@@ -1,4 +1,4 @@
-const host = "http://54afb3e16666.ngrok.io/api";
+const host = "http://24ed2c5af0d1.ngrok.io/api";
 
 
 export const
