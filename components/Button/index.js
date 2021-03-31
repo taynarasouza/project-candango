@@ -42,9 +42,12 @@ const Button = ({variant, label, spaceTop, fullWidth, pathTo, onPress}) => {
 const styles = StyleSheet.create({
   button: {
     minWidth: 150,
-    height: 40,
+    height: 50,
     padding: 8,
-    borderRadius: 30
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 35,
   },
   fullWidth: {
     width: 300
