@@ -9,7 +9,7 @@ import {
   Platform,
   ScrollView
 } from 'react-native';
-import { Appbar, Avatar } from 'react-native-paper';
+import { Appbar, Avatar, HelperText } from 'react-native-paper';
 
 import Button from "../../components/Button";
 import { EmailField, PasswordField, PhoneInput, CustomInput } from "../../components/Fields";
@@ -36,6 +36,10 @@ const SignUpView = () => {
   const handleGoTo = path =>
     history.push(path);
 
+    const emailHasErrors = () => {
+      return !email.includes('@');
+    };
+
   return (
     <>
       <Appbar.Header style={{backgroundColor: "#F5F5F5"}}>
@@ -48,13 +52,17 @@ const SignUpView = () => {
           style={styles.container}
         >
           <>
-            <View style={{marginBottom: 25}}>
-              <Avatar.Image size={200} source={require('../../assets/avatar_female.png')} />
-            </View>
+            <Avatar.Image size={200} source={require('../../assets/avatar_female.png')} />
             <View>
-              <CustomInput placeholder="Nome" onChange={handleChangeName} />
-              <EmailField onChange={handleChangeEmail} />
-              <PhoneInput onChange={handleChangePhone} />
+              <CustomInput label="Nome" placeholder="Escreva seu nome" onChange={handleChangeName} />
+              <EmailField valeu={email} placeholder="Escreva seu email" onChange={handleChangeEmail} />
+              <HelperText type="error" visible={emailHasErrors()}>
+                Email inválido.
+              </HelperText>
+              <PhoneInput 
+                placeholder="(XX) X XXXX-XXXX" 
+                onChange={handleChangePhone} 
+              />
               <EmailField onChange={handleChangeEmail} />
               <PasswordField onChange={handleChangeSenha} />
             </View>

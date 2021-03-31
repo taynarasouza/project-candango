@@ -1,10 +1,16 @@
 import React from 'react';
-import {StyleSheet, TextInput} from 'react-native';
+import { ProgressViewIOSComponent, StyleSheet } from 'react-native';
+import { TextInput, HelperText } from 'react-native-paper';
+import { TextInputMask } from 'react-native-masked-text';
+
 import { fade } from "../../utils";
 
-const Input = ({type, placeholder, value, onChange}) => {
+const Input = ({render, type, placeholder, label, value, onChange}) => {
   return (
     <TextInput
+      render={render}
+      mode="outlined"
+      label={label}
       keyboardType={type}
       placeholder={placeholder}
       style={styles.input}
@@ -17,19 +23,24 @@ const Input = ({type, placeholder, value, onChange}) => {
 
 export const
 
-  EmailField = ({value, placeholder = "Email", onChange}) => {
+  EmailField = ({value, label="Email", placeholder = "Email", onChange}) => {
+
     return (
-      <Input
-        type="email-address"
-        placeholder={placeholder}
-        onChange={onChange}
-      />
+      <>
+        <Input
+          label={label}
+          type="email-address"
+          placeholder={placeholder}
+          onChange={onChange}
+        />
+      </>
     )
   },
 
-  PasswordField = ({value, placeholder = "Senha", onChange}) => {
+  PasswordField = ({value, label = "Senha", placeholder = "Senha", onChange}) => {
     return (
       <Input
+        label={label}
         type="default"
         placeholder={placeholder}
         onChange={onChange}
@@ -37,19 +48,32 @@ export const
     )
   },
 
-  PhoneInput = ({value, placeholder = "Telefone", onChange}) => {
+  PhoneInput = ({value, label = "Telefone", placeholder = "Telefone", onChange}) => {
     return (
       <Input
+        label={label}
         type="number-pad"
         placeholder={placeholder}
         onChange={onChange}
+        render={props =>
+          <TextInputMask
+            {...props}
+            type={'cel-phone'}
+            options={{
+              maskType: 'BRL',
+              withDDD: true,
+              dddMask: '(99) '
+            }}
+          />
+        }
       />
     )
   },
 
-  CustomInput = ({value, placeholder = "Placeholder", onChange}) => {
+  CustomInput = ({value, label, placeholder = "Placeholder", onChange}) => {
     return (
       <Input
+        label={label}
         placeholder={placeholder}
         onChange={onChange}
       />
@@ -59,9 +83,9 @@ export const
 
 const styles = StyleSheet.create({
   input: {
-    marginBottom: 35,
-    borderWidth: 1,
-    borderColor: fade("#9e9e9e", .35),
+    marginTop: 25,
+    // borderWidth: 1,
+    // borderColor: fade("#9e9e9e", .35),
     backgroundColor: fade("#fff", .9),
     borderRadius: 10,
     width: 300,
