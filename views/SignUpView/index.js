@@ -8,9 +8,11 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  Alert
+  Alert,
+  ScrollView
 } from 'react-native';
 import { Appbar, Avatar, HelperText } from 'react-native-paper';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
 
 import Button from "../../components/Button";
@@ -27,14 +29,17 @@ const SignUpView = () => {
     confirmPassword: '',
   });
 
-  const schema = Yup.object().shape({
+  const schemaValidation = Yup.object().shape({
     name: Yup.string().required("Campo obrigatório."),
     email: Yup.string()
       .email("Email inválido.")
       .required("Campo obrigatório."),
-    confirmEmail: Yup.string().when('email', (email, field) =>
-      email ? field.required().oneOf([Yup.ref('email')]) : field
-    ),
+    confirmEmail: Yup.string()
+      .required("Campo obrigatório.")
+      .oneOf([Yup.ref('email')], "Os emails não conferem."),
+    phone: Yup.string()
+      .required("Campo obrigatório."),
+      // .min(10, ({ min }) => `Deve conter pelo menos ${min} digitos.`), //Verificar se a mask conta como caracter
     password: Yup.string()
       .required("Campo obrigatório!")
       .min(8, ({ min }) => `A senha deve ter pelo menos ${min} caracteres.`),
@@ -42,39 +47,6 @@ const SignUpView = () => {
       password ? field.required().oneOf([Yup.ref('password')]) : field
     ),
   });
-
-  // const [name, setName] = React.useState("");
-  // const [email, setEmail] = React.useState("");
-  // const [phone, setPhone] = React.useState("");
-  // const [senha, setSenha] = React.useState("");
-
-  const handleChange = e => {
-    const { name, value } = e.currentTarget
-    setValues(prevState => ({
-      ...prevState,
-      [name]: value
-    }))
-  }
-
-  const handleSubmit = async() => {
-    if (!(await schema.isValid(values))) {
-      Alert.alert("Erro");
-    } else {
-      return 0;
-    }
-  }
-
-  // const handleChangeEmail = email =>
-  //   setEmail(email);
-
-  // const handleChangeSenha = senha =>
-  //   setSenha(senha);
-
-  // const handleChangeName = name => 
-  //   setName(name);
-
-  // const handleChangePhone = phone => 
-  //   setPhone(phone);
 
   const handleGoTo = path =>
     history.push(path);
@@ -85,61 +57,108 @@ const SignUpView = () => {
         <Appbar.BackAction onPress={() => handleGoTo("/")} />
         <Appbar.Content title="Cadastro" />
       </Appbar.Header>
-      <SafeAreaView>
+      <SafeAreaView
+          style={styles.container}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={styles.container}
         >
-          <>
-            <Avatar.Image size={200} source={require('../../assets/avatar_female.png')} />
-            <View>
-              <CustomInput 
-                name="name"
-                label="Nome" 
-                placeholder="Escreva seu nome" 
-                onChange={handleChange} 
-              />
-              <EmailField 
-                name="email"
-                valeu={values.email} 
-                placeholder="Escreva seu email" 
-                onChange={handleChange} 
-              />
-              <EmailField 
-                name="confirmEmail"
-                label="Confirmar email"
-                valeu={values.email} 
-                placeholder="Escreva seu email" 
-                onChange={handleChange} 
-              />
-              {/*<HelperText type="error"> 
-               visible={emailHasErrors()}>
-                Email inválido.
-              </HelperText> */}
-              <PhoneInput 
-                value={values.phone}
-                placeholder="(XX) X XXXX-XXXX" 
-                onChange={handleChange} 
-              />
-              <PasswordField 
-                value={values.password} 
-                onChange={handleChange} 
-              />
-              <PasswordField 
-                label="Confirmar senha"
-                value={values.confirmPassword} 
-                onChange={handleChange} 
-              />
-            </View>
-            <View>
-              <Button
-                onPress={handleSubmit}
-                variant="flat"
-                label="Cadastrar"
-                fullWidth
-              />
-            </View>
-          </>
+          <Formik
+            validationSchema={schemaValidation}
+            initialValues={{ 
+              name: '',
+              email: '', 
+              confirmEmail: '', 
+              phone: '',
+              password: '', 
+              confirmPassword: '' 
+            }}
+            onSubmit={values => console.log(values)}
+          >
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              values,
+              errors,
+              touched,
+              isValid,
+            }) => (
+              <ScrollView 
+                style={styles.scrollView}
+                showsVerticalScrollIndicator={false}
+              >
+                <View>
+                <Avatar.Image style={styles.avatar} size={200} source={require('../../assets/avatar_female.png')} />
+                  <CustomInput 
+                    name="name"
+                    label="Nome" 
+                    value={values.name} 
+                    placeholder="Escreva seu nome" 
+                    onChange={handleChange('name')} 
+                  />
+                  <HelperText style={styles.erro} type="error" visible={errors.name && touched.name}>
+                    {errors.name}
+                  </HelperText>
+                  <EmailField 
+                    name="email"
+                    label="Email"
+                    value={values.email} 
+                    placeholder="Escreva seu email" 
+                    onChange={handleChange('email')} 
+                  />
+                  <HelperText style={styles.erro} type="error" visible={errors.email && touched.email}>
+                    {errors.email}
+                  </HelperText>
+                  <EmailField 
+                    name="confirmEmail"
+                    label="Confirmar email"
+                    value={values.confirmEmail} 
+                    placeholder="Escreva seu email" 
+                    onChange={handleChange('confirmEmail')} 
+                  />
+                  <HelperText style={styles.erro} type="error" visible={errors.confirmEmail && touched.confirmEmail}>
+                    {errors.confirmEmail}
+                  </HelperText>
+                  <PhoneInput 
+                    name="phone"
+                    label="Telefone"
+                    value={values.phone}
+                    placeholder="(XX) X XXXX-XXXX" 
+                    onChange={handleChange('confirmEmail')} 
+                  />
+                  <HelperText style={styles.erro} type="error" visible={errors.phone && touched.phone}>
+                    {errors.phone}
+                  </HelperText>
+                  <PasswordField 
+                    name="password"
+                    label="Senha"
+                    value={values.password} 
+                    placeholder="Escreva sua senha"
+                    onChange={handleChange('password')} 
+                  />
+                  <HelperText style={styles.erro} type="error" visible={errors.password && touched.password}>
+                    {errors.password}
+                  </HelperText>
+                  <PasswordField 
+                    name="confirmPassword"
+                    label="Confirmar senha"
+                    value={values.confirmPassword} 
+                    placeholder="Escreva sua senha"
+                    onChange={handleChange('confirmPassword')} 
+                  />
+                  <HelperText style={styles.erro} type="error" visible={errors.confirmPassword && touched.confirmPassword}>
+                    {errors.confirmPassword}
+                  </HelperText>
+                  <Button
+                    onPress={handleSubmit}
+                    variant="flat"
+                    label="Cadastrar"
+                    fullWidth
+                  />
+                  </View>
+                </ScrollView>
+              )}
+          </Formik>
         </KeyboardAvoidingView>
       </SafeAreaView>
     </>
@@ -155,11 +174,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  scrollView: {
+  },
+  avatar: { alignSelf: 'center' },
   logoView: {
     height: 300,
     display: "flex",
     justifyContent: "center",
     alignItems: "center"
+  },
+  erro: {
+    textAlign: 'right',
+    width: 300,
   }
 });
 
