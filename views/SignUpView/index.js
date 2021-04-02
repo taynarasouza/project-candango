@@ -12,6 +12,7 @@ import {
   ScrollView
 } from 'react-native';
 import { Appbar, Avatar, HelperText } from 'react-native-paper';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
@@ -38,14 +39,14 @@ const SignUpView = () => {
       .required("Campo obrigatório.")
       .oneOf([Yup.ref('email')], "Os emails não conferem."),
     phone: Yup.string()
-      .required("Campo obrigatório."),
-      // .min(10, ({ min }) => `Deve conter pelo menos ${min} digitos.`), //Verificar se a mask conta como caracter
+      .required("Campo obrigatório.")
+      .min(14, ({ min }) => `Deve conter pelo menos 10 digitos.`), //Verificar se a mask conta como caracter
     password: Yup.string()
       .required("Campo obrigatório!")
       .min(8, ({ min }) => `A senha deve ter pelo menos ${min} caracteres.`),
-    confirmPassword: Yup.string().when('password', (password, field) =>
-      password ? field.required().oneOf([Yup.ref('password')]) : field
-    ),
+    confirmPassword: Yup.string()
+      .required("Campo obrigatório!")
+      .oneOf([Yup.ref('password')], "As senhas não conferem."),
   });
 
   const handleGoTo = path =>
@@ -59,8 +60,12 @@ const SignUpView = () => {
       </Appbar.Header>
       <SafeAreaView
           style={styles.container}>
-        <KeyboardAvoidingView
+        <KeyboardAwareScrollView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
+          contentContainerStyle={{ alignItems: 'center' }}
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+          
         >
           <Formik
             validationSchema={schemaValidation}
@@ -83,11 +88,7 @@ const SignUpView = () => {
               touched,
               isValid,
             }) => (
-              <ScrollView 
-                style={styles.scrollView}
-                showsVerticalScrollIndicator={false}
-              >
-                <View>
+              <>
                 <Avatar.Image style={styles.avatar} size={200} source={require('../../assets/avatar_female.png')} />
                   <CustomInput 
                     name="name"
@@ -124,7 +125,7 @@ const SignUpView = () => {
                     label="Telefone"
                     value={values.phone}
                     placeholder="(XX) X XXXX-XXXX" 
-                    onChange={handleChange('confirmEmail')} 
+                    onChange={handleChange('phone')} 
                   />
                   <HelperText style={styles.erro} type="error" visible={errors.phone && touched.phone}>
                     {errors.phone}
@@ -155,11 +156,10 @@ const SignUpView = () => {
                     label="Cadastrar"
                     fullWidth
                   />
-                  </View>
-                </ScrollView>
+                </>
               )}
           </Formik>
-        </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     </>
   )
@@ -171,12 +171,14 @@ const styles = StyleSheet.create({
     width: "100%",
     flexGrow: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   scrollView: {
+    marginBottom: 60,
   },
-  avatar: { alignSelf: 'center' },
+  avatar: { 
+    alignSelf: 'center',
+    marginVertical: 20,
+  },
   logoView: {
     height: 300,
     display: "flex",

@@ -5,10 +5,10 @@ import { TextInputMask } from 'react-native-masked-text';
 
 import { fade } from "../../utils";
 
-const Input = ({props, type, placeholder, label, value, onChange}) => {
+const Input = ({render, type, placeholder, label, value, onChange}) => {
   return (
     <TextInput
-      {...props}
+      render={render} //Para fazer a mask funcionar
       mode="outlined"
       label={label}
       keyboardType={type}
@@ -83,7 +83,7 @@ export const
 
 const styles = StyleSheet.create({
   input: {
-    marginTop: 15,
+    // marginTop: 15,
     // borderWidth: 1,
     // borderColor: fade("#9e9e9e", .35),
     backgroundColor: fade("#fff", .9),
