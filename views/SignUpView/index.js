@@ -70,12 +70,11 @@ const SignUpView = () => {
     state,
     country
   }) => {
-      console.log("Chegou aqui");
 
       cadastrar(name, gender, phone, email, password, state, country)
         .then(res => {
-          console.log(".then");
-          // history.push("/home");
+          Alert.alert('Cadastro concluído!', res.msg);
+          history.push("/home");
       }).catch(err => {
         Alert.alert('Falha no cadastro', err.response.data.msg);
         console.error(err);

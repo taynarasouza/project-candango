@@ -48,7 +48,7 @@ const LoginView = () => {
   const handleLogin = (values) => {
     login(values.email, values.senha)
       .then(res => {
-      history.push("/home");
+        history.push("/home");
     });
   };
 
