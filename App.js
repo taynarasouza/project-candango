@@ -9,6 +9,7 @@ import LoginView from "./views/LoginView";
 import PasswordView from "./views/PasswordView";
 import SignUpView from "./views/SignUpView";
 import HomeView from "./views/HomeView";
+import NewPasswordView from './views/NewPasswordView';
 
 const theme = {
   ...DefaultTheme,
@@ -39,6 +40,9 @@ function App() {
           </Route>
           <Route exact path="/password">
             <PasswordView />
+          </Route>
+          <Route exact path="/password/generate">
+            <NewPasswordView/>
           </Route>
           <Route exact path="/home">
             <HomeView />
