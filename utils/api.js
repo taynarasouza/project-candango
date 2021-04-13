@@ -37,6 +37,36 @@ export const
     .then(response => response.json())
     .catch(err => console.error(err)),
 
+  recoverPassword = eml_usuario =>
+    fetch(`${host}/candango/forgotPassword`, {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        eml_usuario
+      })
+    })
+      .then(response => response.json())
+      .catch(err => console.error(err)),
+
+  changePassword = (eml_usuario, cod_recuperar_senha, nova_senha) =>
+    fetch(`${host}/candango/changePassword`, {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        eml_usuario,
+        cod_recuperar_senha,
+        nova_senha
+      })
+    })
+    .then(response => response.json())
+    .catch(err => console.error(err)),
+
   getPoints = () =>
     fetch(`${host}/candango/pontos-turisticos`, {
       method: "GET",
