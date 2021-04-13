@@ -7,26 +7,62 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  ScrollView
+  ScrollView,
+  Alert
 } from 'react-native';
-import { Appbar, Avatar } from 'react-native-paper';
+import { Appbar, HelperText } from 'react-native-paper';
 
 import Button from "../../components/Button";
 import { EmailField, PasswordField } from "../../components/Fields";
 
+import { validadeEmail } from "../../utils";
+import { recoverPassword } from "../../utils/api";
+
 const PasswordView = () => {
   const history = useHistory();
   const [email, setEmail] = React.useState("");
-  const [senha, setSenha] = React.useState("");
+  const [error, setError] = React.useState({
+    show: false,
+    text: ""
+  });
 
   const handleChangeEmail = email =>
     setEmail(email);
 
-  const handleChangeSenha = senha =>
-    setSenha(senha);
-
   const handleGoTo = path =>
     history.push(path);
+
+  const handlePress = () => {
+    if (!email.length) {
+      setError({
+        show: true,
+        text: "Não pode ficar vazio"
+      });
+      return;
+    }
+
+    if(!validadeEmail(email)) {
+      setError({
+        show: true,
+        text: "Email inválido"
+      });
+      return;
+    }
+
+    if (error.show)
+      setError({show: false, message: ""});
+
+    recoverPassword(email)
+      .then(res => {
+        if (res == null) {
+          Alert.alert("Problema ao tentar recuperar a senha");
+          return;
+        }
+
+        history.push("/password/generate", {email});
+      })
+      .catch(err => console.error(err));
+  };
 
   return (
     <>
@@ -42,12 +78,18 @@ const PasswordView = () => {
         <>
           <View>
             <EmailField onChange={handleChangeEmail} />
+            {error.show && (
+              <HelperText type="error" style={{textAlign: "right"}}>
+                {error.text}
+              </HelperText>
+            )}
           </View>
           <View>
             <Button
               variant="flat"
               label="Recuperar senha"
               fullWidth
+              onPress={handlePress}
             />
           </View>
         </>
