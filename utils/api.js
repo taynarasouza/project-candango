@@ -17,7 +17,7 @@ export const
     .then(response => response.json())
     .catch(err => console.error(err)),
 
-  cadastrar = (nome, email, senha) =>
+  cadastrar = (name, gender, phone, email, password, state, country) =>
     fetch(`${host}/candango/signup`, {
       method: "POST",
       headers: {
@@ -25,9 +25,13 @@ export const
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        "nme_usuario": nome,
+        "nme_usuario": name,
         "eml_usuario": email,
-        "pwd_usuario": senha
+        "pwd_usuario": password,
+        "tlf_usuario": phone,
+        "gen_usuario": gender,
+        "est_usuario": state,
+        "pais_usuario": country,
       })
     })
     .then(response => response.json())

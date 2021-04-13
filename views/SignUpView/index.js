@@ -39,30 +39,48 @@ const SignUpView = () => {
     email: Yup.string()
       .email("Email inválido.")
       .required("Campo obrigatório."),
+    gender: Yup.string()
+      .required("Campo obrigatório!")
+      .max(1, "Apenas 2 letras."),
+    phone: Yup.string()
+      .required("Campo obrigatório.")
+      .min(14, ({ min }) => `Deve conter pelo menos 10 digitos.`), 
     confirmEmail: Yup.string()
       .required("Campo obrigatório.")
       .oneOf([Yup.ref('email')], "Os emails não conferem."),
-    phone: Yup.string()
-      .required("Campo obrigatório.")
-      .min(14, ({ min }) => `Deve conter pelo menos 10 digitos.`), //Verificar se a mask conta como caracter
     password: Yup.string()
       .required("Campo obrigatório!")
       .min(8, ({ min }) => `A senha deve ter pelo menos ${min} caracteres.`),
     confirmPassword: Yup.string()
       .required("Campo obrigatório!")
       .oneOf([Yup.ref('password')], "As senhas não conferem."),
-      // gender: Yup.string().required("Campo obrigatório!"),
+    state: Yup.string()
+      .required("Campo obrigatório!")
+      .max(2, "Apenas 2 letras."),
+    country: Yup.string()
+      .required("Campo obrigatório!"),
   });
 
-  const handleSubmitForm = values => {
-    Alert.alert(JSON.stringify(values));
+  const handleSubmitForm = ({
+    name,
+    gender,
+    phone,
+    email,
+    password,
+    state,
+    country
+  }) => {
+      console.log("Chegou aqui");
 
-    console.log(values);
+      cadastrar(name, gender, phone, email, password, state, country)
+        .then(res => {
+          console.log(".then");
+          // history.push("/home");
+      }).catch(err => {
+        Alert.alert('Falha no cadastro', err.response.data.msg);
+        console.error(err);
+      });
 
-    cadastrar(values.name, values.email, values.password)
-      .then(res => {
-      history.push("/home");
-    })
   }
 
   const handleGoTo = path =>
@@ -87,12 +105,14 @@ const SignUpView = () => {
             validationSchema={schemaValidation}
             initialValues={{ 
               name: '',
+              gender: '',
+              phone: '',
               email: '', 
               confirmEmail: '', 
-              phone: '',
               password: '', 
               confirmPassword: '',
-              // gender: '',
+              state: '',
+              country: '',
             }}
             onSubmit={values => handleSubmitForm(values)}
           >
@@ -117,6 +137,26 @@ const SignUpView = () => {
                   <HelperText style={styles.erro} type="error" visible={errors.name && touched.name}>
                     {errors.name}
                   </HelperText>
+                  <CustomInput 
+                    name="gender"
+                    label="Gênero" 
+                    value={values.gender} 
+                    placeholder="Escreva seu gênero" 
+                    onChange={handleChange('gender')} 
+                  />
+                  <HelperText style={styles.erro} type="error" visible={errors.gender && touched.gender}>
+                    {errors.gender}
+                  </HelperText>
+                  <PhoneInput 
+                    name="phone"
+                    label="Telefone"
+                    value={values.phone}
+                    placeholder="(XX) X XXXX-XXXX" 
+                    onChange={handleChange('phone')} 
+                  />
+                  <HelperText style={styles.erro} type="error" visible={errors.phone && touched.phone}>
+                    {errors.phone}
+                  </HelperText>
                   <EmailField 
                     name="email"
                     label="Email"
@@ -137,16 +177,6 @@ const SignUpView = () => {
                   <HelperText style={styles.erro} type="error" visible={errors.confirmEmail && touched.confirmEmail}>
                     {errors.confirmEmail}
                   </HelperText>
-                  <PhoneInput 
-                    name="phone"
-                    label="Telefone"
-                    value={values.phone}
-                    placeholder="(XX) X XXXX-XXXX" 
-                    onChange={handleChange('phone')} 
-                  />
-                  <HelperText style={styles.erro} type="error" visible={errors.phone && touched.phone}>
-                    {errors.phone}
-                  </HelperText>
                   <PasswordField 
                     name="password"
                     label="Senha"
@@ -161,11 +191,31 @@ const SignUpView = () => {
                     name="confirmPassword"
                     label="Confirmar senha"
                     value={values.confirmPassword} 
-                    placeholder="Escreva sua senha"
+                    placeholder="Escreva sua senha novamente"
                     onChange={handleChange('confirmPassword')} 
                   />
                   <HelperText style={styles.erro} type="error" visible={errors.confirmPassword && touched.confirmPassword}>
                     {errors.confirmPassword}
+                  </HelperText>
+                  <CustomInput 
+                    name="state"
+                    label="Estado" 
+                    value={values.state} 
+                    placeholder="Escreva seu estado" 
+                    onChange={handleChange('state')} 
+                  />
+                  <HelperText style={styles.erro} type="error" visible={errors.state && touched.state}>
+                    {errors.state}
+                  </HelperText>
+                  <CustomInput 
+                    name="country"
+                    label="País" 
+                    value={values.country} 
+                    placeholder="Escreva seu país" 
+                    onChange={handleChange('country')} 
+                  />
+                  <HelperText style={styles.erro} type="error" visible={errors.country && touched.country}>
+                    {errors.country}
                   </HelperText>
                   {/* <CustomPicker 
                     value={values.gender}

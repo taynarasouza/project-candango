@@ -6,7 +6,7 @@ import { TextInputMask } from 'react-native-masked-text';
 
 import { fade } from "../../utils";
 
-const Input = ({render, type, placeholder, label, value, onChange}) => {
+const Input = ({render, type, placeholder, label, value, onChange, style}) => {
   return (
     <TextInput
       render={render} //Para fazer a mask funcionar
@@ -14,7 +14,7 @@ const Input = ({render, type, placeholder, label, value, onChange}) => {
       label={label}
       keyboardType={type}
       placeholder={placeholder}
-      style={styles.input}
+      style={{...styles.input, ...style}}
       autocomplete="off"
       autoCapitalize="none"
       onChangeText={text => onChange(text)}
@@ -24,11 +24,12 @@ const Input = ({render, type, placeholder, label, value, onChange}) => {
 
 export const
 
-  EmailField = ({value, label="Email", placeholder = "Email", onChange}) => {
+  EmailField = ({value, label="Email", placeholder = "Escreva seu email", onChange, style}) => {
 
     return (
       <>
         <Input
+          style={style}
           label={label}
           type="email-address"
           placeholder={placeholder}
@@ -38,9 +39,10 @@ export const
     )
   },
 
-  PasswordField = ({value, label = "Senha", placeholder = "Senha", onChange}) => {
+  PasswordField = ({value, label = "Senha", placeholder = "Senha", onChange, style}) => {
     return (
       <Input
+        style={style}
         label={label}
         type="default"
         placeholder={placeholder}
