@@ -1,23 +1,26 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-native';
 import {
-  View,
   SafeAreaView,
   StyleSheet,
-  TextInput,
-  Image,
-  KeyboardAvoidingView,
   Platform,
   Alert,
-  ScrollView
 } from 'react-native';
 import { Appbar, Avatar, HelperText } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
+import { cadastrar } from "../../utils/api";
+
 import Button from "../../components/Button";
-import { EmailField, PasswordField, PhoneInput, CustomInput } from "../../components/Fields";
+import { 
+  EmailField, 
+  PasswordField, 
+  PhoneInput, 
+  CustomInput, 
+  CustomPicker 
+} from "../../components/Fields";
 
 const SignUpView = () => {
   const history = useHistory();
@@ -28,6 +31,7 @@ const SignUpView = () => {
     phone: '',
     password: '',
     confirmPassword: '',
+    // gender: '',
   });
 
   const schemaValidation = Yup.object().shape({
@@ -47,7 +51,19 @@ const SignUpView = () => {
     confirmPassword: Yup.string()
       .required("Campo obrigatório!")
       .oneOf([Yup.ref('password')], "As senhas não conferem."),
+      // gender: Yup.string().required("Campo obrigatório!"),
   });
+
+  const handleSubmitForm = values => {
+    Alert.alert(JSON.stringify(values));
+
+    console.log(values);
+
+    cadastrar(values.name, values.email, values.password)
+      .then(res => {
+      history.push("/home");
+    })
+  }
 
   const handleGoTo = path =>
     history.push(path);
@@ -75,9 +91,10 @@ const SignUpView = () => {
               confirmEmail: '', 
               phone: '',
               password: '', 
-              confirmPassword: '' 
+              confirmPassword: '',
+              // gender: '',
             }}
-            onSubmit={values => console.log(values)}
+            onSubmit={values => handleSubmitForm(values)}
           >
             {({
               handleChange,
@@ -150,6 +167,14 @@ const SignUpView = () => {
                   <HelperText style={styles.erro} type="error" visible={errors.confirmPassword && touched.confirmPassword}>
                     {errors.confirmPassword}
                   </HelperText>
+                  {/* <CustomPicker 
+                    value={values.gender}
+                    items={{
+                      "M": "Masculino",
+                      "F": "Feminino"
+                    }}
+                    onChange={handleChange('gender')}
+                  /> */}
                   <Button
                     onPress={handleSubmit}
                     variant="flat"
