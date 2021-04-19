@@ -12,7 +12,7 @@ import {
 import { TextInput, HelperText, Button } from "react-native-paper";
 // import Button from "../../components/Button";
 import { EmailField, PasswordField } from "../../components/Fields";
-import logo from "../../assets/logo.png"
+import logo from "../../assets/logo.png";
 import background from "../../assets/brasilia-6.jpg"
 import {Keyboard} from 'react-native-web';
 import { login } from "../../utils/api";

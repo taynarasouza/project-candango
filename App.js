@@ -5,11 +5,11 @@ import { StyleSheet, Text, View, AppRegistry } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 
 // Import Views
-import LoginView from "./views/LoginView";
-import PasswordView from "./views/PasswordView";
-import SignUpView from "./views/SignUpView";
-import HomeView from "./views/HomeView";
-import NewPasswordView from './views/NewPasswordView';
+import LoginView from "./src/views/LoginView";
+import PasswordView from "./src/views/PasswordView";
+import SignUpView from "./src/views/SignUpView";
+import HomeView from "./src/views/HomeView";
+import NewPasswordView from './src/views/NewPasswordView';
 
 const theme = {
   ...DefaultTheme,
