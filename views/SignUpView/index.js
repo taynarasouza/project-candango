@@ -73,13 +73,15 @@ const SignUpView = () => {
 
       cadastrar(name, gender, phone, email, password, state, country)
         .then(res => {
-          Alert.alert('Cadastro concluído!', res.msg);
-          history.push("/home");
+          Alert.alert(res.msg);
+
+          if(res.status == '200')
+            history.push("/home");
+
       }).catch(err => {
-        Alert.alert('Falha no cadastro', err.response.data.msg);
+        Alert.alert('Erro!', "Contate a equipe do CanganGO");
         console.error(err);
       });
-
   }
 
   const handleGoTo = path =>
