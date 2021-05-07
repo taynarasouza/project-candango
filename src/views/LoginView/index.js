@@ -76,11 +76,10 @@ const LoginView = () => {
               </Helper>
               <Input
                 label="Senha"
-                keyboardType="email"
                 secureTextEntry={true}
                 placeholder="Digite sua senha"
                 value={values.password}
-                onChange={handleChange('password')}
+                onChangeText={handleChange('password')}
               />
               <Helper visible={errors.password && touched.password}>
                 {errors.password}
