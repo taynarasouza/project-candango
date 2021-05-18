@@ -16,8 +16,6 @@ import {
 } from './styles';
 
 import logo from "../../assets/logo.png";
-import background from "../../assets/brasilia-6.jpg";
-import background2 from "../../assets/brasilia-1.jpg";
 import background3 from "../../assets/brasilia-16.jpg";
 import { login } from "../../utils/api";
 
