@@ -19,7 +19,7 @@ import logo from "../../assets/logo.png";
 import background3 from "../../assets/brasilia-16.jpg";
 import { login } from "../../utils/api";
 
-const LoginView = () => {
+const LoginView = ({onLoad}) => {
   const history = useHistory();
 
   const schemaValidation = Yup.object().shape({
@@ -31,15 +31,18 @@ const LoginView = () => {
   });
 
   const handleLogin = (values) => {
+    onLoad(true);
     login(values.email, values.senha)
       .then(res => {
         if (res == null) {
           Alert.alert("Erro ao efetuar login");
           return;
         }
+        onLoad(false);
         history.push("/home");
       })
       .catch(err => {
+        onLoad(false);
         Alert.alert("Erro ao efetuar login");
         console.error(err);
       });
