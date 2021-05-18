@@ -16,7 +16,7 @@ import {
   Input,
   PhoneNumberInput,
   Helper,
-  // Picker
+  Picker
 } from './styles';
 
 import Button from "../../components/Button";
@@ -24,7 +24,7 @@ import {
   EmailField, 
   PasswordField, 
   CustomInput, 
-  CustomPicker 
+  CustomPicker, 
 } from "../../components/Fields";
 
 const SignUpView = () => {
@@ -36,8 +36,10 @@ const SignUpView = () => {
     phone: '',
     password: '',
     confirmPassword: '',
-    // gender: '',
+    gender: '',
   });
+
+  const [genderIsOpen, setGenderIsOpen] = useState(false);
 
   const schemaValidation = Yup.object().shape({
     name: Yup.string().required("Campo obrigatório."),
@@ -123,6 +125,7 @@ const SignUpView = () => {
               errors,
               touched,
               isValid,
+              setFieldValue,
             }) => (
               <>
                 <Input 
@@ -135,13 +138,27 @@ const SignUpView = () => {
                 <Helper style={styles.erro} type="error" visible={errors.name && touched.name}>
                   {errors.name}
                 </Helper>
-                <Input 
+                {/* <Picker
                   name="gender"
+                  open={genderIsOpen}
+                  value={values.gender}
+                  items={[
+                    { label: 'Masculino', value: 'M' },
+                    { label: 'Feminino', value: 'F' },
+                    { label: 'Outro', value: 'O' }
+                  ]}
+                  setOpen={setGenderIsOpen}
+                  onChangeValue={(value) => {
+                    Alert.alert("Clicou")
+                    // setFieldValue('gender', value);
+                  }}
+                  placeholder="Gênero"
+                /> */}
+                {/* <Input 
                   label="Gênero" 
-                  value={values.gender} 
                   placeholder="Escreva seu gênero" 
                   onChange={handleChange('gender')} 
-                />
+                /> */}
                 <Helper style={styles.erro} type="error" visible={errors.gender && touched.gender}>
                   {errors.gender}
                 </Helper>

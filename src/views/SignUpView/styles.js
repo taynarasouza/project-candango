@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 import { Formik } from 'formik';
 import { Avatar, HelperText } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 import { 
   EmailField, 
@@ -36,7 +37,24 @@ export const Input = styled(CustomInput)``;
 
 export const PhoneNumberInput = styled(PhoneInput)``;
 
-// export const Picker = styled(CustomPicker)``;
+export const Picker = styled(DropDownPicker).attrs({
+    containerStyle: {
+        width: 280,
+    },
+    placeholderStyle: {
+        color: 'rgba(0, 0, 0, 0.55)',
+        fontSize: 16,
+    },
+    textStyle: {
+        fontSize: 16,
+    }
+})`
+    width: 280px;
+    margin-top: 5px;
+    align-self: center;
+    border: 1px solid rgba(0, 0, 0, 0.55);
+    border-radius: 3px;
+`;
 
 export const Helper = styled(HelperText)`
     text-align: right;
