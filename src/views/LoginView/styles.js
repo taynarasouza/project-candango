@@ -24,7 +24,11 @@ export const LogoContainer = styled.View`
     align-items: center;
 `;
 
-export const Logo = styled.Image``;
+export const Logo = styled.Image.attrs({
+    resizeMode: 'contain',
+})`
+    width: 100%;
+`;
 
 export const Form = styled(Formik)`
     flex: 1;
