@@ -6,7 +6,7 @@ import { TextInputMask } from 'react-native-masked-text';
 
 import { fade } from "../../utils";
 
-const Input = ({render, type, placeholder, label, value, onChange, style}) => {
+const Input = ({render, type, placeholder, label, value, onChange, style, secureTextEntry}) => {
   return (
     <TextInput
       render={render} //Para fazer a mask funcionar
@@ -18,6 +18,7 @@ const Input = ({render, type, placeholder, label, value, onChange, style}) => {
       autocomplete="off"
       autoCapitalize="none"
       onChangeText={text => onChange(text)}
+      secureTextEntry={secureTextEntry}
     />
   )
 };
@@ -73,10 +74,12 @@ export const
     )
   },
 
-  CustomInput = ({value, label, placeholder = "Placeholder", onChange}) => {
+  CustomInput = ({secureTextEntry, type, value, label, placeholder = "Placeholder", onChange}) => {
     return (
       <Input
+        type={type}
         label={label}
+        secureTextEntry={secureTextEntry}
         placeholder={placeholder}
         onChange={onChange}
       />

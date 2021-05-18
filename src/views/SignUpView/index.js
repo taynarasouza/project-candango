@@ -1,23 +1,27 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-native';
 import {
-  SafeAreaView,
   StyleSheet,
-  Platform,
   Alert,
 } from 'react-native';
-import { Appbar, Avatar, HelperText } from 'react-native-paper';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
-import { Formik } from 'formik';
+import { Appbar } from 'react-native-paper';
 import * as Yup from 'yup';
 
 import { cadastrar } from "../../utils/api";
+
+import {
+  Wrapper,
+  Container,
+  Form,
+  Input,
+  PhoneNumberInput,
+  Helper
+} from './styles';
 
 import Button from "../../components/Button";
 import { 
   EmailField, 
   PasswordField, 
-  PhoneInput, 
   CustomInput, 
   CustomPicker 
 } from "../../components/Fields";
@@ -93,16 +97,9 @@ const SignUpView = () => {
         <Appbar.BackAction onPress={() => handleGoTo("/")} />
         <Appbar.Content title="Cadastro" />
       </Appbar.Header>
-      <SafeAreaView
-          style={styles.container}>
-        <KeyboardAwareScrollView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          contentContainerStyle={{ alignItems: 'center' }}
-          style={styles.scrollView}
-          showsVerticalScrollIndicator={false}
-          
-        >
-          <Formik
+      <Wrapper>
+        <Container>
+          <Form
             validationSchema={schemaValidation}
             initialValues={{ 
               name: '',
@@ -127,134 +124,124 @@ const SignUpView = () => {
               isValid,
             }) => (
               <>
-                <Avatar.Image style={styles.avatar} size={200} source={require('../../assets/avatar_female.png')} />
-                  <CustomInput 
-                    name="name"
-                    label="Nome" 
-                    value={values.name} 
-                    placeholder="Escreva seu nome" 
-                    onChange={handleChange('name')} 
-                  />
-                  <HelperText style={styles.erro} type="error" visible={errors.name && touched.name}>
-                    {errors.name}
-                  </HelperText>
-                  <CustomInput 
-                    name="gender"
-                    label="Gênero" 
-                    value={values.gender} 
-                    placeholder="Escreva seu gênero" 
-                    onChange={handleChange('gender')} 
-                  />
-                  <HelperText style={styles.erro} type="error" visible={errors.gender && touched.gender}>
-                    {errors.gender}
-                  </HelperText>
-                  <PhoneInput 
-                    name="phone"
-                    label="Telefone"
-                    value={values.phone}
-                    placeholder="(XX) X XXXX-XXXX" 
-                    onChange={handleChange('phone')} 
-                  />
-                  <HelperText style={styles.erro} type="error" visible={errors.phone && touched.phone}>
-                    {errors.phone}
-                  </HelperText>
-                  <EmailField 
-                    name="email"
-                    label="Email"
-                    value={values.email} 
-                    placeholder="Escreva seu email" 
-                    onChange={handleChange('email')} 
-                  />
-                  <HelperText style={styles.erro} type="error" visible={errors.email && touched.email}>
-                    {errors.email}
-                  </HelperText>
-                  <EmailField 
-                    name="confirmEmail"
-                    label="Confirmar email"
-                    value={values.confirmEmail} 
-                    placeholder="Escreva seu email" 
-                    onChange={handleChange('confirmEmail')} 
-                  />
-                  <HelperText style={styles.erro} type="error" visible={errors.confirmEmail && touched.confirmEmail}>
-                    {errors.confirmEmail}
-                  </HelperText>
-                  <PasswordField 
-                    name="password"
-                    label="Senha"
-                    value={values.password} 
-                    placeholder="Escreva sua senha"
-                    onChange={handleChange('password')} 
-                  />
-                  <HelperText style={styles.erro} type="error" visible={errors.password && touched.password}>
-                    {errors.password}
-                  </HelperText>
-                  <PasswordField 
-                    name="confirmPassword"
-                    label="Confirmar senha"
-                    value={values.confirmPassword} 
-                    placeholder="Escreva sua senha novamente"
-                    onChange={handleChange('confirmPassword')} 
-                  />
-                  <HelperText style={styles.erro} type="error" visible={errors.confirmPassword && touched.confirmPassword}>
-                    {errors.confirmPassword}
-                  </HelperText>
-                  <CustomInput 
-                    name="state"
-                    label="Estado" 
-                    value={values.state} 
-                    placeholder="Escreva seu estado" 
-                    onChange={handleChange('state')} 
-                  />
-                  <HelperText style={styles.erro} type="error" visible={errors.state && touched.state}>
-                    {errors.state}
-                  </HelperText>
-                  <CustomInput 
-                    name="country"
-                    label="País" 
-                    value={values.country} 
-                    placeholder="Escreva seu país" 
-                    onChange={handleChange('country')} 
-                  />
-                  <HelperText style={styles.erro} type="error" visible={errors.country && touched.country}>
-                    {errors.country}
-                  </HelperText>
-                  {/* <CustomPicker 
-                    value={values.gender}
-                    items={{
-                      "M": "Masculino",
-                      "F": "Feminino"
-                    }}
-                    onChange={handleChange('gender')}
-                  /> */}
-                  <Button
-                    onPress={handleSubmit}
-                    variant="flat"
-                    label="Cadastrar"
-                    fullWidth
-                  />
-                </>
+                <Input 
+                  name="name"
+                  label="Nome" 
+                  value={values.name} 
+                  placeholder="Escreva seu nome" 
+                  onChange={handleChange('name')} 
+                />
+                <Helper style={styles.erro} type="error" visible={errors.name && touched.name}>
+                  {errors.name}
+                </Helper>
+                <Input 
+                  name="gender"
+                  label="Gênero" 
+                  value={values.gender} 
+                  placeholder="Escreva seu gênero" 
+                  onChange={handleChange('gender')} 
+                />
+                <Helper style={styles.erro} type="error" visible={errors.gender && touched.gender}>
+                  {errors.gender}
+                </Helper>
+                <PhoneNumberInput 
+                  name="phone"
+                  label="Telefone"
+                  value={values.phone}
+                  placeholder="(XX) X XXXX-XXXX" 
+                  onChange={handleChange('phone')} 
+                />
+                <Helper style={styles.erro} type="error" visible={errors.phone && touched.phone}>
+                  {errors.phone}
+                </Helper>
+                <Input 
+                  name="email"
+                  label="Email"
+                  value={values.email} 
+                  type="email-address"
+                  placeholder="Escreva seu email" 
+                  onChange={handleChange('email')} 
+                />
+                <Helper style={styles.erro} type="error" visible={errors.email && touched.email}>
+                  {errors.email}
+                </Helper>
+                <Input 
+                  name="confirmEmail"
+                  label="Confirmar email"
+                  value={values.confirmEmail} 
+                  type="email-address"
+                  placeholder="Escreva seu email" 
+                  onChange={handleChange('confirmEmail')} 
+                />
+                <Helper style={styles.erro} type="error" visible={errors.confirmEmail && touched.confirmEmail}>
+                  {errors.confirmEmail}
+                </Helper>
+                <Input 
+                  name="password"
+                  label="Senha"
+                  value={values.password} 
+                  placeholder="Escreva sua senha"
+                  secureTextEntry={true}
+                  onChange={handleChange('password')} 
+                />
+                <Helper style={styles.erro} type="error" visible={errors.password && touched.password}>
+                  {errors.password}
+                </Helper>
+                <Input 
+                  name="confirmPassword"
+                  label="Confirmar senha"
+                  value={values.confirmPassword} 
+                  placeholder="Escreva sua senha novamente"
+                  secureTextEntry={true}
+                  onChange={handleChange('confirmPassword')} 
+                />
+                <Helper style={styles.erro} type="error" visible={errors.confirmPassword && touched.confirmPassword}>
+                  {errors.confirmPassword}
+                </Helper>
+                <CustomInput 
+                  name="country"
+                  label="País" 
+                  value={values.country} 
+                  placeholder="Escreva seu país" 
+                  onChange={handleChange('country')} 
+                />
+                <Helper style={styles.erro} type="error" visible={errors.country && touched.country}>
+                  {errors.country}
+                </Helper>
+                <CustomInput 
+                  name="state"
+                  label="Estado" 
+                  value={values.state} 
+                  placeholder="Escreva seu estado" 
+                  onChange={handleChange('state')} 
+                />
+                <Helper style={styles.erro} type="error" visible={errors.state && touched.state}>
+                  {errors.state}
+                </Helper>
+                {/* <CustomPicker 
+                  value={values.gender}
+                  items={{
+                    "M": "Masculino",
+                    "F": "Feminino"
+                  }}
+                  onChange={handleChange('gender')}
+                /> */}
+                <Button
+                  onPress={handleSubmit}
+                  variant="flat"
+                  label="Cadastrar"
+                  fullWidth
+                />
+              </>
               )}
-          </Formik>
-        </KeyboardAwareScrollView>
-      </SafeAreaView>
+          </Form>
+        </Container>
+      </Wrapper>
     </>
   )
 };
 
 const styles = StyleSheet.create({
-  container: {
-    height: "100%",
-    width: "100%",
-    flexGrow: 1,
-    backgroundColor: '#fff',
-  },
-  scrollView: {
-    marginBottom: 60,
-  },
-  avatar: { 
-    alignSelf: 'center',
-    marginVertical: 20,
-  },
   logoView: {
     height: 300,
     display: "flex",
