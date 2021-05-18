@@ -5,6 +5,7 @@ import {
   Alert,
 } from 'react-native';
 import { Appbar } from 'react-native-paper';
+import { ModalSelectList } from 'react-native-modal-select-list';
 import * as Yup from 'yup';
 
 import { cadastrar } from "../../utils/api";
@@ -16,7 +17,10 @@ import {
   Input,
   PhoneNumberInput,
   Helper,
-  Picker
+  Picker,
+  PickerText,
+  PickerIcon,
+  PickerClose,
 } from './styles';
 
 import Button from "../../components/Button";
@@ -39,7 +43,15 @@ const SignUpView = () => {
     gender: '',
   });
 
-  const [genderIsOpen, setGenderIsOpen] = useState(false);
+  const genderMap = {
+    "M": "Masculino",
+    "F": "Feminino",
+    "O": "Outro",
+  }
+
+  let selectGender;
+  const openModal = () => selectGender.show();
+  const selectGenderRef = ref => selectGender = ref;
 
   const schemaValidation = Yup.object().shape({
     name: Yup.string().required("Campo obrigatório."),
@@ -129,7 +141,6 @@ const SignUpView = () => {
             }) => (
               <>
                 <Input 
-                  name="name"
                   label="Nome" 
                   value={values.name} 
                   placeholder="Escreva seu nome" 
@@ -138,32 +149,27 @@ const SignUpView = () => {
                 <Helper style={styles.erro} type="error" visible={errors.name && touched.name}>
                   {errors.name}
                 </Helper>
-                {/* <Picker
-                  name="gender"
-                  open={genderIsOpen}
-                  value={values.gender}
-                  items={[
+                <Picker onPress={openModal}>
+                  <PickerText>{genderMap[values.gender] || "Gênero"}</PickerText>
+                  <PickerIcon size={20} color="#ddd" />
+                </Picker>
+                <ModalSelectList
+                  ref={selectGenderRef}
+                  placeholder={"Pesquisar"}
+                  closeButtonComponent={<PickerClose />}
+                  options={[
                     { label: 'Masculino', value: 'M' },
                     { label: 'Feminino', value: 'F' },
                     { label: 'Outro', value: 'O' }
                   ]}
-                  setOpen={setGenderIsOpen}
-                  onChangeValue={(value) => {
-                    Alert.alert("Clicou")
-                    // setFieldValue('gender', value);
-                  }}
-                  placeholder="Gênero"
-                /> */}
-                {/* <Input 
-                  label="Gênero" 
-                  placeholder="Escreva seu gênero" 
-                  onChange={handleChange('gender')} 
-                /> */}
+                  onSelectedOption={value => setFieldValue('gender', value)}
+                  disableTextSearch={false}
+                  numberOfLines={1}
+                />
                 <Helper style={styles.erro} type="error" visible={errors.gender && touched.gender}>
                   {errors.gender}
                 </Helper>
                 <PhoneNumberInput 
-                  name="phone"
                   label="Telefone"
                   value={values.phone}
                   placeholder="(XX) X XXXX-XXXX" 
@@ -173,7 +179,6 @@ const SignUpView = () => {
                   {errors.phone}
                 </Helper>
                 <Input 
-                  name="email"
                   label="Email"
                   value={values.email} 
                   type="email-address"
@@ -184,7 +189,6 @@ const SignUpView = () => {
                   {errors.email}
                 </Helper>
                 <Input 
-                  name="confirmEmail"
                   label="Confirmar email"
                   value={values.confirmEmail} 
                   type="email-address"
@@ -195,7 +199,6 @@ const SignUpView = () => {
                   {errors.confirmEmail}
                 </Helper>
                 <Input 
-                  name="password"
                   label="Senha"
                   value={values.password} 
                   placeholder="Escreva sua senha"
@@ -206,7 +209,6 @@ const SignUpView = () => {
                   {errors.password}
                 </Helper>
                 <Input 
-                  name="confirmPassword"
                   label="Confirmar senha"
                   value={values.confirmPassword} 
                   placeholder="Escreva sua senha novamente"
@@ -217,7 +219,6 @@ const SignUpView = () => {
                   {errors.confirmPassword}
                 </Helper>
                 <CustomInput 
-                  name="country"
                   label="País" 
                   value={values.country} 
                   placeholder="Escreva seu país" 
@@ -227,7 +228,6 @@ const SignUpView = () => {
                   {errors.country}
                 </Helper>
                 <CustomInput 
-                  name="state"
                   label="Estado" 
                   value={values.state} 
                   placeholder="Escreva seu estado" 

@@ -1,7 +1,6 @@
 import React from 'react';
 import { ProgressViewIOSComponent, StyleSheet } from 'react-native';
 import { TextInput, HelperText } from 'react-native-paper';
-import DropDownPicker from 'react-native-dropdown-picker';
 import { TextInputMask } from 'react-native-masked-text';
 
 import { fade } from "../../utils";
