@@ -1,7 +1,7 @@
 import React from 'react';
 import { ProgressViewIOSComponent, StyleSheet } from 'react-native';
 import { TextInput, HelperText } from 'react-native-paper';
-import { Picker } from '@react-native-picker/picker';
+import DropDownPicker from 'react-native-dropdown-picker';
 import { TextInputMask } from 'react-native-masked-text';
 
 import { fade } from "../../utils";
@@ -86,25 +86,26 @@ export const
     )
   },
 
-  CustomPicker = ({value, items, label, placeholder = "Placeholder", onChange}) => {
+  CustomPicker = ({
+    value,
+    items,
+    open,
+    setOpen,
+    setValue,
+    setItems,
+    label,
+    placeholder = "Placeholder",
+    onChange
+  }) => {
     return (
-      <Picker
-        selectedValue={value}
-        onValueChange={(itemValue, itemIndex) =>
-          onChange(itemValue)
-        }>
-        {
-          Object.keys(items).map((key) => {
-            return (
-              <Picker.Item 
-                label={items[key]} 
-                value={key} 
-                key={key}
-              />
-            )
-          })
-        }
-      </Picker>
+      <DropDownPicker
+        open={open}
+        value={value}
+        items={items}
+        setOpen={setOpen}
+        setValue={setValue}
+        setItems={setItems}
+      />
     );
   }
 ;

@@ -9,7 +9,7 @@ import {
   PasswordField, 
   PhoneInput, 
   CustomInput, 
-  CustomPicker 
+  CustomPicker,
 } from "../../components/Fields";
 
 
@@ -35,6 +35,8 @@ export const Form = styled(Formik)`
 export const Input = styled(CustomInput)``;
 
 export const PhoneNumberInput = styled(PhoneInput)``;
+
+// export const Picker = styled(CustomPicker)``;
 
 export const Helper = styled(HelperText)`
     text-align: right;
