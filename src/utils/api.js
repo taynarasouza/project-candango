@@ -14,7 +14,15 @@ export const
         "pwd_usuario": senha  // "adminroot"
       })
     })
-    .then(response => response.json())
+    .then(response => {
+      if (!response || response == null)
+        return {
+          status: -1,
+          msg: "Erro ao efetuar login"
+        };
+
+      return response.json();
+    })
     .catch(err => console.error(err)),
 
   cadastrar = (name, gender, phone, email, password, state, country) =>
