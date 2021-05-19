@@ -3,6 +3,7 @@ import { NativeRouter, Link, Route } from 'react-router-native';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, AppRegistry } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 // Import Views
 import LoginView from "./src/views/LoginView";
@@ -28,12 +29,25 @@ const theme = {
 };
 
 function App() {
+  const [spinner, setSpinner] = useState(false);
+
+  const handleLoading = loading => {
+    setSpinner(loading);
+  };
+
   return (
     <PaperProvider theme={theme}>
       <NativeRouter>
+        <Spinner
+          animation="fade"
+          visible={spinner}
+          textStyle={{color: "#FFF"}}
+          overlayColor="rgba(0, 0, 0, .4)"
+        />
+
         <View style={styles.container}>
-          <Route exact path="/">
-            <LoginView />
+          <Route exact path={Routes.Login}>
+            <LoginView onLoad={handleLoading}/>
           </Route>
           <Route exact path="/signup">
             <SignUpView />
