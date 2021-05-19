@@ -17,10 +17,6 @@ import {
   Input,
   PhoneNumberInput,
   Helper,
-  Picker,
-  PickerText,
-  PickerIcon,
-  PickerClose,
 } from './styles';
 
 import Button from "../../components/Button";
@@ -28,7 +24,7 @@ import {
   EmailField, 
   PasswordField, 
   CustomInput, 
-  CustomPicker, 
+  Picker, 
 } from "../../components/Fields";
 
 const SignUpView = () => {
@@ -50,7 +46,7 @@ const SignUpView = () => {
   }
 
   let selectGender;
-  const openModal = () => selectGender.show();
+  const openGenderModal = () => selectGender.show();
   const selectGenderRef = ref => selectGender = ref;
 
   const schemaValidation = Yup.object().shape({
@@ -146,36 +142,29 @@ const SignUpView = () => {
                   placeholder="Escreva seu nome" 
                   onChange={handleChange('name')} 
                 />
-                <Helper style={styles.erro} type="error" visible={errors.name && touched.name}>
+                <Helper type="error" visible={errors.name && touched.name}>
                   {errors.name}
                 </Helper>
-                <Picker onPress={openModal}>
-                  <PickerText>{genderMap[values.gender] || "Gênero"}</PickerText>
-                  <PickerIcon size={20} color="#ddd" />
-                </Picker>
-                <ModalSelectList
+                <Picker 
                   ref={selectGenderRef}
-                  placeholder={"Pesquisar"}
-                  closeButtonComponent={<PickerClose />}
+                  openModal={openGenderModal}
+                  label={genderMap[values.gender] || "Gênero"}
                   options={[
                     { label: 'Masculino', value: 'M' },
                     { label: 'Feminino', value: 'F' },
                     { label: 'Outro', value: 'O' }
                   ]}
                   onSelectedOption={value => setFieldValue('gender', value)}
-                  disableTextSearch={false}
-                  numberOfLines={1}
+                  errors={errors.gender}
+                  touched={touched.gender}
                 />
-                <Helper style={styles.erro} type="error" visible={errors.gender && touched.gender}>
-                  {errors.gender}
-                </Helper>
                 <PhoneNumberInput 
                   label="Telefone"
                   value={values.phone}
                   placeholder="(XX) X XXXX-XXXX" 
                   onChange={handleChange('phone')} 
                 />
-                <Helper style={styles.erro} type="error" visible={errors.phone && touched.phone}>
+                <Helper type="error" visible={errors.phone && touched.phone}>
                   {errors.phone}
                 </Helper>
                 <Input 
@@ -185,7 +174,7 @@ const SignUpView = () => {
                   placeholder="Escreva seu email" 
                   onChange={handleChange('email')} 
                 />
-                <Helper style={styles.erro} type="error" visible={errors.email && touched.email}>
+                <Helper type="error" visible={errors.email && touched.email}>
                   {errors.email}
                 </Helper>
                 <Input 
@@ -195,7 +184,7 @@ const SignUpView = () => {
                   placeholder="Escreva seu email" 
                   onChange={handleChange('confirmEmail')} 
                 />
-                <Helper style={styles.erro} type="error" visible={errors.confirmEmail && touched.confirmEmail}>
+                <Helper type="error" visible={errors.confirmEmail && touched.confirmEmail}>
                   {errors.confirmEmail}
                 </Helper>
                 <Input 
@@ -205,7 +194,7 @@ const SignUpView = () => {
                   secureTextEntry={true}
                   onChange={handleChange('password')} 
                 />
-                <Helper style={styles.erro} type="error" visible={errors.password && touched.password}>
+                <Helper type="error" visible={errors.password && touched.password}>
                   {errors.password}
                 </Helper>
                 <Input 
@@ -215,7 +204,7 @@ const SignUpView = () => {
                   secureTextEntry={true}
                   onChange={handleChange('confirmPassword')} 
                 />
-                <Helper style={styles.erro} type="error" visible={errors.confirmPassword && touched.confirmPassword}>
+                <Helper type="error" visible={errors.confirmPassword && touched.confirmPassword}>
                   {errors.confirmPassword}
                 </Helper>
                 <CustomInput 
@@ -224,7 +213,7 @@ const SignUpView = () => {
                   placeholder="Escreva seu país" 
                   onChange={handleChange('country')} 
                 />
-                <Helper style={styles.erro} type="error" visible={errors.country && touched.country}>
+                <Helper type="error" visible={errors.country && touched.country}>
                   {errors.country}
                 </Helper>
                 <CustomInput 
@@ -233,17 +222,9 @@ const SignUpView = () => {
                   placeholder="Escreva seu estado" 
                   onChange={handleChange('state')} 
                 />
-                <Helper style={styles.erro} type="error" visible={errors.state && touched.state}>
+                <Helper type="error" visible={errors.state && touched.state}>
                   {errors.state}
                 </Helper>
-                {/* <CustomPicker 
-                  value={values.gender}
-                  items={{
-                    "M": "Masculino",
-                    "F": "Feminino"
-                  }}
-                  onChange={handleChange('gender')}
-                /> */}
                 <Button
                   onPress={handleSubmit}
                   variant="flat"
@@ -258,18 +239,5 @@ const SignUpView = () => {
     </>
   )
 };
-
-const styles = StyleSheet.create({
-  logoView: {
-    height: 300,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  erro: {
-    textAlign: 'right',
-    width: 300,
-  }
-});
 
 export default SignUpView;

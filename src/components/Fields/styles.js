@@ -13,30 +13,6 @@ import {
   CustomPicker,
 } from "../../components/Fields";
 
-
-export const Wrapper = styled.SafeAreaView`
-    height: 100%;
-    width: 100%;
-    flex-grow: 1;
-    background: #fff;
-`;
-
-export const Container = styled(KeyboardAwareScrollView).attrs({
-    behavior: Platform.OS === "ios" ? "padding" : "height",
-    contentContainerStyle: { alignItems: 'center' },
-    showsVerticalScrollIndicator: false,
-})`
-    padding-top: 20px;
-    margin-bottom: 60px;
-`;
-
-export const Form = styled(Formik)`
-`;
-
-export const Input = styled(CustomInput)``;
-
-export const PhoneNumberInput = styled(PhoneInput)``;
-
 export const Picker = styled.TouchableOpacity`
     justify-content: space-between;
     align-items: center;

@@ -2,6 +2,15 @@ import React from 'react';
 import { ProgressViewIOSComponent, StyleSheet } from 'react-native';
 import { TextInput, HelperText } from 'react-native-paper';
 import { TextInputMask } from 'react-native-masked-text';
+import { ModalSelectList } from 'react-native-modal-select-list';
+
+import {
+  Picker as PickerComp,
+  PickerText,
+  PickerIcon,
+  PickerClose,
+  Helper,
+} from './styles';
 
 import { fade } from "../../utils";
 
@@ -25,7 +34,6 @@ const Input = ({render, type, placeholder, label, value, onChange, style, secure
 export const
 
   EmailField = ({value, label="Email", placeholder = "Escreva seu email", onChange, style}) => {
-
     return (
       <>
         <Input
@@ -55,7 +63,7 @@ export const
     return (
       <Input
         label={label}
-        type="number-pad"
+        type="phone-pad"
         placeholder={placeholder}
         onChange={onChange}
         render={props =>
@@ -76,37 +84,45 @@ export const
   CustomInput = ({secureTextEntry, type, value, label, placeholder = "Placeholder", onChange}) => {
     return (
       <Input
-        type={type}
-        label={label}
-        secureTextEntry={secureTextEntry}
+          type={type}
+          label={label}
+          secureTextEntry={secureTextEntry}
         placeholder={placeholder}
         onChange={onChange}
       />
     )
   },
 
-  CustomPicker = ({
-    value,
-    items,
-    open,
-    setOpen,
-    setValue,
-    setItems,
+  Picker = React.forwardRef(({
+    openModal,
     label,
-    placeholder = "Placeholder",
-    onChange
-  }) => {
+    options,
+    onSelectedOption,
+    lines = 1,
+    errors,
+    touched,
+  }, ref) => {
     return (
-      <DropDownPicker
-        open={open}
-        value={value}
-        items={items}
-        setOpen={setOpen}
-        setValue={setValue}
-        setItems={setItems}
-      />
+      <>
+        <PickerComp onPress={openModal}>
+          <PickerText>{label}</PickerText>
+          <PickerIcon size={20} color="#ddd" />
+        </PickerComp>
+        <ModalSelectList
+          ref={ref}
+          placeholder={"Pesquisar"}
+          closeButtonComponent={<PickerClose />}
+          options={options}
+          onSelectedOption={onSelectedOption}
+          disableTextSearch={false}
+          numberOfLines={lines}
+        />
+        <Helper type="error" visible={errors && touched}>
+          {errors}
+        </Helper>
+      </>
     );
-  }
+  })
 ;
 
 const styles = StyleSheet.create({
