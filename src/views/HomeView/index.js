@@ -11,6 +11,45 @@ const HomeView = () => {
   const handleMenu = ({open}) =>
     setOpenMenu(open);
 
+
+  const actions = [
+    { icon: 'exit-to-app',
+      label: 'Sair',
+      onPress: () => history.push(Routes.Login),
+      small: false,
+      style: {
+        backgroundColor: "#000099"
+      }
+    },
+    {
+      icon: 'bag-personal',
+      label: 'Mochila',
+      onPress: () => history.push(Routes.Bag),
+      small: false,
+      style: {
+        backgroundColor: "#000099"
+      }
+    },
+    {
+      icon: 'bell',
+      label: 'Notificações',
+      onPress: () => console.log('Notificações'),
+      small: false,
+      style: {
+        backgroundColor: "#000099"
+      }
+    },
+    {
+      icon: 'account',
+      label: 'Perfil',
+      onPress: () => history.push(Routes.Profile),
+      small: false,
+      style: {
+        backgroundColor: "#000099"
+      }
+    },
+  ];
+
   return (
     <View style={{flex: 1, borderWidth: 1, borderColor: "black"}}>
       {/* Menu FAB */}
@@ -20,43 +59,7 @@ const HomeView = () => {
             fabStyle={{backgroundColor: "#000099"}}
             open={openMenu}
             icon={openMenu ? 'close' : 'menu'}
-            actions={[
-              { icon: 'exit-to-app',
-                label: 'Sair',
-                onPress: () => history.push("/"),
-                small: false,
-                style: {
-                  backgroundColor: "#000099"
-                }
-              },
-              {
-                icon: 'bag-personal',
-                label: 'Mochila',
-                onPress: () => console.log('Ir para mochila'),
-                small: false,
-                style: {
-                  backgroundColor: "#000099"
-                }
-              },
-              {
-                icon: 'bell',
-                label: 'Notificações',
-                onPress: () => console.log('Notificações'),
-                small: false,
-                style: {
-                  backgroundColor: "#000099"
-                }
-              },
-              {
-                icon: 'account',
-                label: 'Perfil',
-                onPress: () => console.log('Pressed notifications'),
-                small: false,
-                style: {
-                  backgroundColor: "#000099"
-                }
-              },
-            ]}
+            actions={actions}
             onStateChange={handleMenu}
           />
         </Portal>
