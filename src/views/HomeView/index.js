@@ -4,6 +4,8 @@ import { View, Text } from 'react-native';
 import {Button, FAB, Portal, Provider} from 'react-native-paper';
 import {BackButton} from 'react-router-native';
 
+import { Routes } from "../../utils/constants";
+
 const HomeView = () => {
   const history = useHistory();
   const [openMenu, setOpenMenu] = useState(false);
