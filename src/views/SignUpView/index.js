@@ -5,8 +5,17 @@ import {
   Alert,
 } from 'react-native';
 import { Appbar } from 'react-native-paper';
+import { ModalSelectList } from 'react-native-modal-select-list';
 import * as Yup from 'yup';
 
+import {
+  gendersOptions,
+  gendersMap,
+  contriesOptions,
+  contriesMap, 
+  statesOptions,
+  statesMap,
+} from '../../utils/pickerList';
 import { cadastrar } from "../../utils/api";
 
 import {
@@ -15,7 +24,7 @@ import {
   Form,
   Input,
   PhoneNumberInput,
-  Helper
+  Helper,
 } from './styles';
 
 import Button from "../../components/Button";
@@ -23,7 +32,7 @@ import {
   EmailField, 
   PasswordField, 
   CustomInput, 
-  CustomPicker 
+  Picker, 
 } from "../../components/Fields";
 
 const SignUpView = () => {
@@ -35,8 +44,20 @@ const SignUpView = () => {
     phone: '',
     password: '',
     confirmPassword: '',
-    // gender: '',
+    gender: '',
   });
+
+  let selectGender;
+  const openGenderModal = () => selectGender.show();
+  const selectGenderRef = ref => selectGender = ref;
+
+  let selectContry;
+  const openContryModal = () => selectContry.show();
+  const selectContryRef = ref => selectContry = ref;
+
+  let selectState;
+  const openStateModal = () => selectState.show();
+  const selectStateRef = ref => selectState = ref;
 
   const schemaValidation = Yup.object().shape({
     name: Yup.string().required("Campo obrigatório."),
@@ -122,110 +143,94 @@ const SignUpView = () => {
               errors,
               touched,
               isValid,
+              setFieldValue,
             }) => (
               <>
                 <Input 
-                  name="name"
                   label="Nome" 
                   value={values.name} 
                   placeholder="Escreva seu nome" 
                   onChange={handleChange('name')} 
                 />
-                <Helper style={styles.erro} type="error" visible={errors.name && touched.name}>
+                <Helper type="error" visible={errors.name && touched.name}>
                   {errors.name}
                 </Helper>
-                <Input 
-                  name="gender"
-                  label="Gênero" 
-                  value={values.gender} 
-                  placeholder="Escreva seu gênero" 
-                  onChange={handleChange('gender')} 
+                <Picker 
+                  ref={selectGenderRef}
+                  openModal={openGenderModal}
+                  label={gendersMap[values.gender] || "Gênero"}
+                  options={gendersOptions}
+                  onSelectedOption={value => setFieldValue('gender', value)}
+                  errors={errors.gender}
+                  touched={touched.gender}
                 />
-                <Helper style={styles.erro} type="error" visible={errors.gender && touched.gender}>
-                  {errors.gender}
-                </Helper>
                 <PhoneNumberInput 
-                  name="phone"
                   label="Telefone"
                   value={values.phone}
                   placeholder="(XX) X XXXX-XXXX" 
                   onChange={handleChange('phone')} 
                 />
-                <Helper style={styles.erro} type="error" visible={errors.phone && touched.phone}>
+                <Helper type="error" visible={errors.phone && touched.phone}>
                   {errors.phone}
                 </Helper>
                 <Input 
-                  name="email"
                   label="Email"
                   value={values.email} 
                   type="email-address"
                   placeholder="Escreva seu email" 
                   onChange={handleChange('email')} 
                 />
-                <Helper style={styles.erro} type="error" visible={errors.email && touched.email}>
+                <Helper type="error" visible={errors.email && touched.email}>
                   {errors.email}
                 </Helper>
                 <Input 
-                  name="confirmEmail"
                   label="Confirmar email"
                   value={values.confirmEmail} 
                   type="email-address"
                   placeholder="Escreva seu email" 
                   onChange={handleChange('confirmEmail')} 
                 />
-                <Helper style={styles.erro} type="error" visible={errors.confirmEmail && touched.confirmEmail}>
+                <Helper type="error" visible={errors.confirmEmail && touched.confirmEmail}>
                   {errors.confirmEmail}
                 </Helper>
                 <Input 
-                  name="password"
                   label="Senha"
                   value={values.password} 
                   placeholder="Escreva sua senha"
                   secureTextEntry={true}
                   onChange={handleChange('password')} 
                 />
-                <Helper style={styles.erro} type="error" visible={errors.password && touched.password}>
+                <Helper type="error" visible={errors.password && touched.password}>
                   {errors.password}
                 </Helper>
                 <Input 
-                  name="confirmPassword"
                   label="Confirmar senha"
                   value={values.confirmPassword} 
                   placeholder="Escreva sua senha novamente"
                   secureTextEntry={true}
                   onChange={handleChange('confirmPassword')} 
                 />
-                <Helper style={styles.erro} type="error" visible={errors.confirmPassword && touched.confirmPassword}>
+                <Helper type="error" visible={errors.confirmPassword && touched.confirmPassword}>
                   {errors.confirmPassword}
                 </Helper>
-                <CustomInput 
-                  name="country"
-                  label="País" 
-                  value={values.country} 
-                  placeholder="Escreva seu país" 
-                  onChange={handleChange('country')} 
+                <Picker 
+                  ref={selectContryRef}
+                  openModal={openContryModal}
+                  label={contriesMap[values.country] || "País"}
+                  options={contriesOptions}
+                  onSelectedOption={value => setFieldValue('country', value)}
+                  errors={errors.country}
+                  touched={touched.country}
                 />
-                <Helper style={styles.erro} type="error" visible={errors.country && touched.country}>
-                  {errors.country}
-                </Helper>
-                <CustomInput 
-                  name="state"
-                  label="Estado" 
-                  value={values.state} 
-                  placeholder="Escreva seu estado" 
-                  onChange={handleChange('state')} 
+                <Picker 
+                  ref={selectStateRef}
+                  openModal={openStateModal}
+                  label={statesMap[values.state] || "Estado"}
+                  options={statesOptions}
+                  onSelectedOption={value => setFieldValue('state', value)}
+                  errors={errors.state}
+                  touched={touched.state}
                 />
-                <Helper style={styles.erro} type="error" visible={errors.state && touched.state}>
-                  {errors.state}
-                </Helper>
-                {/* <CustomPicker 
-                  value={values.gender}
-                  items={{
-                    "M": "Masculino",
-                    "F": "Feminino"
-                  }}
-                  onChange={handleChange('gender')}
-                /> */}
                 <Button
                   onPress={handleSubmit}
                   variant="flat"
@@ -240,18 +245,5 @@ const SignUpView = () => {
     </>
   )
 };
-
-const styles = StyleSheet.create({
-  logoView: {
-    height: 300,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  erro: {
-    textAlign: 'right',
-    width: 300,
-  }
-});
 
 export default SignUpView;
