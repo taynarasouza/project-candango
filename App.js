@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { NativeRouter, Link, Route } from 'react-router-native';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, AppRegistry } from 'react-native';
-import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { Provider as PaperProvider } from 'react-native-paper';
 
 // Import Views
 import LoginView from "./src/views/LoginView";
