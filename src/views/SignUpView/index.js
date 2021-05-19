@@ -45,9 +45,51 @@ const SignUpView = () => {
     "O": "Outro",
   }
 
+  const contriesMap = {
+    "BR": "Brasil",
+  }
+
+  const statesMap = {
+    "AC": "Acre",
+    "AL": "Alagoas",
+    "AP": "Amapá",
+    "AM": "Amazonas",
+    "BA": "Bahia",
+    "CE": "Ceará",
+    "DF": "Distrito Federal",
+    "ES": "Espírito Santo",
+    "GO": "Goiás",
+    "MA": "Maranhão",
+    "MT": "Mato Grosso",
+    "MS": "Mato Grosso do Sul",
+    "MG": "Minas Gerais",
+    "PA": "Pará",
+    "PB": "Paraíba",
+    "PR": "Paraná",
+    "PE": "Pernambuco",
+    "PI": "Piauí",
+    "RJ": "Rio de Janeiro",
+    "RN": "Rio Grande do Norte",
+    "RS": "Rio Grande do Sul",
+    "RO": "Rondônia",
+    "RR": "Roraima",
+    "SC": "Santa Catarina",
+    "SP": "São Paulo",
+    "SE": "Sergipe",
+    "TO": "Tocantins"
+  }
+
   let selectGender;
   const openGenderModal = () => selectGender.show();
   const selectGenderRef = ref => selectGender = ref;
+
+  let selectContry;
+  const openContryModal = () => selectContry.show();
+  const selectContryRef = ref => selectContry = ref;
+
+  let selectState;
+  const openStateModal = () => selectState.show();
+  const selectStateRef = ref => selectState = ref;
 
   const schemaValidation = Yup.object().shape({
     name: Yup.string().required("Campo obrigatório."),
@@ -207,24 +249,54 @@ const SignUpView = () => {
                 <Helper type="error" visible={errors.confirmPassword && touched.confirmPassword}>
                   {errors.confirmPassword}
                 </Helper>
-                <CustomInput 
-                  label="País" 
-                  value={values.country} 
-                  placeholder="Escreva seu país" 
-                  onChange={handleChange('country')} 
+                <Picker 
+                  ref={selectContryRef}
+                  openModal={openContryModal}
+                  label={contriesMap[values.country] || "País"}
+                  options={[
+                    { label: 'Brasil', value: 'BR' },
+                  ]}
+                  onSelectedOption={value => setFieldValue('country', value)}
+                  errors={errors.country}
+                  touched={touched.country}
                 />
-                <Helper type="error" visible={errors.country && touched.country}>
-                  {errors.country}
-                </Helper>
-                <CustomInput 
-                  label="Estado" 
-                  value={values.state} 
-                  placeholder="Escreva seu estado" 
-                  onChange={handleChange('state')} 
+                <Picker 
+                  ref={selectStateRef}
+                  openModal={openStateModal}
+                  label={statesMap[values.state] || "Estado"}
+                  options={[
+                    { label: "Acre", value: "AC" },
+                    { label: "Alagoas", value: "AL" },
+                    { label: "Amapá", value: "AP" },
+                    { label: "Amazonas", value: "AM" },
+                    { label: "Bahia", value: "BA" },
+                    { label: "Ceará", value: "CE" },
+                    { label: "Distrito Federal", value: "DF" },
+                    { label: "Espírito Santo", value: "ES" },
+                    { label: "Goiás", value: "GO" },
+                    { label: "Maranhão", value: "MA" },
+                    { label: "Mato Grosso", value: "MT" },
+                    { label: "Mato Grosso do Sul", value: "MS" },
+                    { label: "Minas Gerais", value: "MG" },
+                    { label: "Pará", value: "PA" },
+                    { label: "Paraíba", value: "PB" },
+                    { label: "Paraná", value: "PR" },
+                    { label: "Pernambuco", value: "PE" },
+                    { label: "Piauí", value: "PI" },
+                    { label: "Rio de Janeiro", value: "RJ" },
+                    { label: "Rio Grande do Norte", value: "RN" },
+                    { label: "Rio Grande do Sul", value: "RS" },
+                    { label: "Rondônia", value: "RO" },
+                    { label: "Roraima", value: "RR" },
+                    { label: "Santa Catarina", value: "SC" },
+                    { label: "São Paulo", value: "SP" },
+                    { label: "Sergipe", value: "SE" },
+                    { label: "Tocantins", value: "TO" }
+                ]}
+                  onSelectedOption={value => setFieldValue('state', value)}
+                  errors={errors.state}
+                  touched={touched.state}
                 />
-                <Helper type="error" visible={errors.state && touched.state}>
-                  {errors.state}
-                </Helper>
                 <Button
                   onPress={handleSubmit}
                   variant="flat"
