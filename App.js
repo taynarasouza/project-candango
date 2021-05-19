@@ -6,12 +6,17 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 // Import Views
-import LoginView from "./src/views/LoginView";
-import PasswordView from "./src/views/PasswordView";
-import SignUpView from "./src/views/SignUpView";
-import HomeView from "./src/views/HomeView";
-import NewPasswordView from './src/views/NewPasswordView';
+import {
+  LoginView,
+  PasswordView,
+  SignUpView,
+  HomeView,
+  NewPasswordView,
+  BagView,
+  ProfileView
+} from "./src/views";
 
+import { Routes } from "./src/utils/constants";
 import { theme } from "./src/utils/theme";
 
 function App() {
@@ -35,17 +40,24 @@ function App() {
           <Route exact path={Routes.Login}>
             <LoginView onLoad={handleLoading}/>
           </Route>
-          <Route exact path="/signup">
+          <Route exact path={Routes.SignUp}>
             <SignUpView />
           </Route>
-          <Route exact path="/password">
+          <Route exact path={Routes.Password}>
             <PasswordView />
           </Route>
-          <Route exact path="/password/generate">
+          <Route exact path={Routes.NewPassword}>
             <NewPasswordView/>
           </Route>
-          <Route exact path="/home">
+
+          <Route exact path={Routes.Home}>
             <HomeView />
+          </Route>
+          <Route exact path={Routes.Profile}>
+            <ProfileView />
+          </Route>
+          <Route exact path={Routes.Bag}>
+            <BagView />
           </Route>
         </View>
         <StatusBar style="auto" />
