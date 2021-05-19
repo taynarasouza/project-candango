@@ -32,20 +32,22 @@ const LoginView = ({onLoad}) => {
 
   const handleLogin = (values) => {
     onLoad(true);
-    login(values.email, values.senha)
-      .then(res => {
-        if (res == null) {
-          Alert.alert("Erro ao efetuar login");
-          return;
-        }
-        onLoad(false);
-        history.push("/home");
-      })
-      .catch(err => {
-        onLoad(false);
-        Alert.alert("Erro ao efetuar login");
-        console.error(err);
-      });
+    setTimeout(() => onLoad(false), 1000);
+    setTimeout(() => history.push("/home"), 1100);
+    // login(values.email, values.senha)
+    //   .then(res => {
+    //     if (res == null) {
+    //       Alert.alert("Erro ao efetuar login");
+    //       return;
+    //     }
+    //     onLoad(false);
+    //     history.push("/home");
+    //   })
+    //   .catch(err => {
+    //     onLoad(false);
+    //     Alert.alert("Erro ao efetuar login");
+    //     console.error(err);
+    //   });
   };
 
   return (
