@@ -6,6 +6,22 @@ import {BackButton} from 'react-router-native';
 
 import { Routes } from "../../utils/constants";
 
+const Menu = ({open, actions, onClick}) => {
+  return (
+    <Provider>
+      <Portal>
+        <FAB.Group
+          fabStyle={{backgroundColor: "#000099"}}
+          open={open}
+          icon={open ? 'close' : 'menu'}
+          actions={actions}
+          onStateChange={onClick}
+        />
+      </Portal>
+    </Provider>
+  )
+}
+
 const HomeView = () => {
   const history = useHistory();
   const [openMenu, setOpenMenu] = useState(false);
@@ -55,17 +71,11 @@ const HomeView = () => {
   return (
     <View style={{flex: 1, borderWidth: 1, borderColor: "black"}}>
       {/* Menu FAB */}
-      <Provider>
-        <Portal>
-          <FAB.Group
-            fabStyle={{backgroundColor: "#000099"}}
-            open={openMenu}
-            icon={openMenu ? 'close' : 'menu'}
-            actions={actions}
-            onStateChange={handleMenu}
-          />
-        </Portal>
-      </Provider>
+      <Menu 
+        open={openMenu}
+        actions={actions}
+        onClick={handleMenu}
+      />
     </View>
   )
 };
