@@ -151,4 +151,85 @@ const HomeView = () => {
   )
 };
 
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    backgroundColor: "white",
+    alignItems: 'center'
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20
+  },
+  mapStyle: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  },
+  mapOptionsContainer: {
+    position: "absolute",
+    bottom: 30,
+    left: 30,
+    width: 100,
+    height: 100,
+    borderColor: "red",
+    zIndex: 1000
+  },
+  disabled: {
+    backgroundColor: "rgba(0,0,0,.15)"
+  },
+  // Modal information about marker
+  centerView: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center"
+  },
+  modal: {
+    height: "53%",
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    padding: 10,
+    shadowColor: "rgb(0,0,0)",
+    shadowOffset: {
+      width: 0,
+      height: -3
+    },
+    shadowOpacity: .65,
+    shadowRadius: 2
+  },
+  titleContainer: {
+    padding: 5,
+    width: "100%",
+    marginBottom: 5
+  },
+  title: {
+    fontSize: 24
+  },
+  scrollView: {
+    padding: 5,
+    width: "100%",
+    minHeight: 500,
+    maxHeight: 800,
+    borderWidth: 1,
+    borderColor: "black"
+  },
+  scrollText: {
+    fontSize: 18,
+    textAlign: "justify"
+  },
+  questionContainer: {
+    padding: 5,
+    width: "100%",
+    flex: 1
+  },
+  question: {
+    fontSize: 18,
+    paddingBottom: 10
+  }
+});
+
 export default HomeView;
