@@ -60,8 +60,8 @@ const LoginView = ({onLoad}) => {
           <Form
             validationSchema={schemaValidation}
             initialValues={{ 
-              email: '', 
-              password: '', 
+              email: 'admin@gmail.com', 
+              password: 'adminroot', 
             }}
             onSubmit={values => handleLogin(values)}
           >
