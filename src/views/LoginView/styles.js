@@ -2,6 +2,7 @@ import styled from 'styled-components/native';
 import { Platform } from 'react-native';
 import { Formik } from 'formik';
 import { TextInput, HelperText, Button as ButtonPaper } from 'react-native-paper';
+import { CustomInput } from "../../components/Fields";
 
 export const Wrapper = styled.ImageBackground.attrs({
     blurRadius: 10,
@@ -17,7 +18,7 @@ export const Container = styled.KeyboardAvoidingView.attrs({
     justify-content: space-between;
 `;
 export const LogoContainer = styled.View`
-    width: 100%;
+    width: 80%;
     min-height: 300px;
     flex-grow: 1;
     justify-content: center;
@@ -35,9 +36,9 @@ export const Form = styled(Formik)`
 `;
 
 export const FormContainer = styled.View`
-    padding: 30px 0;
+    padding: 32px 0;
     width: 100%;
-    background: rgba(255, 255, 255, .65);
+    background: rgba(255, 255, 255, 0.9);
     justify-content: center;
     align-items: center;
     border-top-right-radius: 15px;
@@ -45,7 +46,7 @@ export const FormContainer = styled.View`
     box-shadow: 0px -5px 5px #000;
 `;
 
-export const Input = styled(TextInput).attrs({
+export const Input = styled(CustomInput).attrs({
     autoCapitalize: "none",
 })`
     width: 325px;
@@ -57,15 +58,15 @@ export const Helper = styled(HelperText).attrs({
     type: "error"
 })`
     text-align: right;
-    width: 350px;
+    width: 310px;
 `;
 
 export const ForgotPasswordButton = styled.TouchableOpacity`
-    margin: 10px 0;
+    margin: 16px 0;
 `;
 
 export const ForgotPasswordText = styled.Text`
-    font-size: 15px;
+    font-size: 16px;
     color: rgba(0, 9, 153, 0.9);
 `;
 
@@ -75,7 +76,7 @@ export const Button = styled(ButtonPaper).attrs({
         width: 325,
     }
 })`
-    margin: 10px 0px;
-    border-radius: 30px;
+    margin: 8px 0px;
+    border-radius: 32px;
     justify-content: center;
 `;

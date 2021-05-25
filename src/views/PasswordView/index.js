@@ -36,7 +36,7 @@ const PasswordView = () => {
     if (!email.length) {
       setError({
         show: true,
-        text: "Não pode ficar vazio"
+        text: "Campo obrigatório."
       });
       return;
     }
@@ -44,7 +44,7 @@ const PasswordView = () => {
     if(!validadeEmail(email)) {
       setError({
         show: true,
-        text: "Email inválido"
+        text: "Email inválido."
       });
       return;
     }

@@ -17,7 +17,7 @@ import {
 import { Alert } from "react-native";
 import logo from "../../assets/logo.png";
 import background3 from "../../assets/brasilia-16.jpg";
-import { login } from "../../utils/api";
+import api from '../../services/api';
 
 const LoginView = ({onLoad}) => {
   const history = useHistory();
@@ -30,10 +30,23 @@ const LoginView = ({onLoad}) => {
       .required("Preencha este campo."),
   });
 
-  const handleLogin = (values) => {
-    onLoad(true);
-    setTimeout(() => onLoad(false), 1000);
-    setTimeout(() => history.push("/home"), 1100);
+  const handleLogin = ({ email, password }) => {
+    // onLoad(true);
+    // setTimeout(() => onLoad(false), 1000);
+    // setTimeout(() => history.push("/home"), 1100);
+
+    api.post(`/signin`, {
+        eml_usuario: email,
+        pwd_usuario: password,
+    }).then(res => {
+        history.push("/home")
+
+      }).catch(function (error) {
+      if (error.response) {
+        Alert.alert("Falha no login", error.response.data.error);
+      }
+    });
+
     // login(values.email, values.senha)
     //   .then(res => {
     //     if (res == null) {
@@ -77,10 +90,10 @@ const LoginView = ({onLoad}) => {
             <>
               <Input
                 label="Email"
-                keyboardType="email-address"
+                type="email-address"
                 placeholder="Digite seu email"
                 value={values.email}
-                onChangeText={handleChange('email')}
+                onChange={handleChange('email')}
               />
               <Helper visible={errors.email && touched.email}>
                 {errors.email}
@@ -90,7 +103,7 @@ const LoginView = ({onLoad}) => {
                 secureTextEntry={true}
                 placeholder="Digite sua senha"
                 value={values.password}
-                onChangeText={handleChange('password')}
+                onChange={handleChange('password')}
               />
               <Helper visible={errors.password && touched.password}>
                 {errors.password}

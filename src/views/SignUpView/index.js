@@ -27,9 +27,6 @@ import {
 
 import Button from "../../components/Button";
 import { 
-  EmailField, 
-  PasswordField, 
-  CustomInput, 
   Picker, 
 } from "../../components/Fields";
 

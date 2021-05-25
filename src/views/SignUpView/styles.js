@@ -6,11 +6,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
 import { MaterialIcons } from '@expo/vector-icons';
 
 import { 
-  EmailField, 
-  PasswordField, 
   PhoneInput, 
   CustomInput, 
-  CustomPicker,
 } from "../../components/Fields";
 
 
