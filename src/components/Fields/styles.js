@@ -5,14 +5,6 @@ import { Avatar, HelperText } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { 
-  EmailField, 
-  PasswordField, 
-  PhoneInput, 
-  CustomInput, 
-  CustomPicker,
-} from "../../components/Fields";
-
 export const Picker = styled.TouchableOpacity`
     justify-content: space-between;
     align-items: center;
