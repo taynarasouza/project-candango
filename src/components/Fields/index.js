@@ -19,6 +19,7 @@ const Input = ({render, type, placeholder, label, value, onChange, style, secure
     <TextInput
       render={render} //Para fazer a mask funcionar
       mode="outlined"
+      value={value}
       label={label}
       keyboardType={type}
       placeholder={placeholder}
@@ -59,10 +60,16 @@ export const
     )
   },
 
-  PhoneInput = ({value, label = "Telefone", placeholder = "Telefone", onChange}) => {
+  PhoneInput = ({
+    value,
+    label = "Telefone",
+    placeholder = "Telefone",
+    onChange
+  }) => {
     return (
       <Input
         label={label}
+        value={value}
         type="phone-pad"
         placeholder={placeholder}
         onChange={onChange}
@@ -81,12 +88,20 @@ export const
     )
   },
 
-  CustomInput = ({secureTextEntry, type, value, label, placeholder = "Placeholder", onChange}) => {
+  CustomInput = ({
+    secureTextEntry,
+    type,
+    value,
+    label,
+    placeholder = "Placeholder",
+    onChange
+  }) => {
     return (
       <Input
-          type={type}
-          label={label}
-          secureTextEntry={secureTextEntry}
+        value={value}
+        type={type}
+        label={label}
+        secureTextEntry={secureTextEntry}
         placeholder={placeholder}
         onChange={onChange}
       />
