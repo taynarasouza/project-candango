@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-native';
 import {
-  StyleSheet,
   Alert,
 } from 'react-native';
 import { Appbar } from 'react-native-paper';
-import { ModalSelectList } from 'react-native-modal-select-list';
 import * as Yup from 'yup';
 
 import {
@@ -16,7 +14,7 @@ import {
   statesOptions,
   statesMap,
 } from '../../utils/pickerList';
-import { cadastrar } from "../../utils/api";
+import api from '../../services/api';
 
 import {
   Wrapper,
@@ -95,18 +93,27 @@ const SignUpView = () => {
     state,
     country
   }) => {
+    api.post(`/signup`, {
+        nme_usuario: name,
+        gen_usuario: gender,
+        tlf_usuario: phone,
+        eml_usuario: email,
+        pwd_usuario: password,
+        pais_usuario: country,
+        est_usuario: state,
+    }).then(res => {
+        Alert.alert("Sucesso!", res.data.msg, [
+          {
+            text: "OK",
+            onPress: () => history.push("/home")
+          },
+        ],);
 
-      cadastrar(name, gender, phone, email, password, state, country)
-        .then(res => {
-          Alert.alert(res.msg);
-
-          if(res.status == '200')
-            history.push("/home");
-
-      }).catch(err => {
-        Alert.alert('Erro!', "Contate a equipe do CanganGO");
-        console.error(err);
-      });
+      }).catch(function (error) {
+      if (error.response) {
+        Alert.alert("Falha no cadastro", error.response.data.error);
+      }
+    });
   }
 
   const handleGoTo = path =>
@@ -130,8 +137,8 @@ const SignUpView = () => {
               confirmEmail: '', 
               password: '', 
               confirmPassword: '',
-              state: '',
               country: '',
+              state: '',
             }}
             onSubmit={values => handleSubmitForm(values)}
           >
@@ -146,8 +153,7 @@ const SignUpView = () => {
               setFieldValue,
             }) => (
               <>
-                <Input 
-                  label="Nome" 
+                <Input label="Nome" 
                   value={values.name} 
                   placeholder="Escreva seu nome" 
                   onChange={handleChange('name')} 
@@ -167,7 +173,7 @@ const SignUpView = () => {
                 <PhoneNumberInput 
                   label="Telefone"
                   value={values.phone}
-                  placeholder="(XX) X XXXX-XXXX" 
+                  placeholder="(XX) XXXXX-XXXX" 
                   onChange={handleChange('phone')} 
                 />
                 <Helper type="error" visible={errors.phone && touched.phone}>

@@ -1,9 +1,9 @@
-const host = "http://candango.com/api";
+const host = "http://candango.ngrok.io/api/candango";
 
 
 export const
   login = (email, senha) =>
-    fetch(`${host}/candango/signin`, {
+    fetch(`${host}/signin`, {
       method: "POST",
       headers: {
         Accept: 'application/json',
@@ -26,7 +26,7 @@ export const
     .catch(err => console.error(err)),
 
   cadastrar = (name, gender, phone, email, password, state, country) =>
-    fetch(`${host}/candango/signup`, {
+    fetch(`${host}/signup`, {
       method: "POST",
       headers: {
         Accept: 'application/json',
@@ -34,10 +34,10 @@ export const
       },
       body: JSON.stringify({
         "nme_usuario": name,
+        "gen_usuario": gender,
+        "tlf_usuario": phone,
         "eml_usuario": email,
         "pwd_usuario": password,
-        "tlf_usuario": phone,
-        "gen_usuario": gender,
         "est_usuario": state,
         "pais_usuario": country,
       })
@@ -46,7 +46,7 @@ export const
     .catch(err => console.error(err)),
 
   recoverPassword = eml_usuario =>
-    fetch(`${host}/candango/forgotPassword`, {
+    fetch(`${host}/forgotPassword`, {
       method: "POST",
       headers: {
         "Accept": "application/json",
@@ -60,7 +60,7 @@ export const
       .catch(err => console.error(err)),
 
   changePassword = (eml_usuario, cod_recuperar_senha, nova_senha) =>
-    fetch(`${host}/candango/changePassword`, {
+    fetch(`${host}/changePassword`, {
       method: "POST",
       headers: {
         "Accept": "application/json",
@@ -76,7 +76,7 @@ export const
     .catch(err => console.error(err)),
 
   getPoints = () =>
-    fetch(`${host}/candango/pontos-turisticos`, {
+    fetch(`${host}/pontos-turisticos`, {
       method: "GET",
       headers: {
         Accept: 'application/json',
@@ -87,7 +87,7 @@ export const
     .catch(err => console.error(err)),
 
   getCircuits = () =>
-    fetch(`${host}/candango/circuitos`, {
+    fetch(`${host}/circuitos`, {
       method: "GET",
       headers: {
         Accept: 'application/json',
@@ -98,7 +98,7 @@ export const
     .catch(err => console.error(err)),
 
   getMedals = () =>
-    fetch(`${host}/candango/medalhas`, {
+    fetch(`${host}/medalhas`, {
       method: "GET",
       headers: {
         Accept: 'application/json',
@@ -109,7 +109,7 @@ export const
     .catch(err => console.error(err)),
 
   getUserMedals = (id) =>
-    fetch(`${host}/candango/medalhas-usuario`, {
+    fetch(`${host}/medalhas-usuario`, {
       method: "POST",
       body: JSON.stringify({idtUsuario: id}),
       headers: {
