@@ -21,6 +21,7 @@ import api from '../../services/api';
 
 const LoginView = ({onLoad}) => {
   const history = useHistory();
+  const [loading, setLoading] = useState(false);
 
   const schemaValidation = Yup.object().shape({
     email: Yup.string()
@@ -34,7 +35,7 @@ const LoginView = ({onLoad}) => {
     // onLoad(true);
     // setTimeout(() => onLoad(false), 1000);
     // setTimeout(() => history.push("/home"), 1100);
-
+    setLoading(true);
     api.post(`/signin`, {
         eml_usuario: email,
         pwd_usuario: password,
@@ -45,6 +46,8 @@ const LoginView = ({onLoad}) => {
       if (error.response) {
         Alert.alert("Falha no login", error.response.data.error);
       }
+    }).finally(() => {
+      setLoading(false);
     });
 
     // login(values.email, values.senha)
@@ -112,7 +115,13 @@ const LoginView = ({onLoad}) => {
                 <ForgotPasswordText>Esqueceu sua senha?</ForgotPasswordText>
               </ForgotPasswordButton>
               
-              <Button mode="contained" onPress={handleSubmit}> Entrar </Button>
+              <Button
+                mode="contained"
+                onPress={handleSubmit}
+                loading={loading}
+              > 
+                Entrar 
+              </Button>
               <Button mode="text" onPress={() => history.push("/signup")} >
                 Cadastrar
               </Button>
