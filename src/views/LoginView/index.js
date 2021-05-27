@@ -49,21 +49,6 @@ const LoginView = ({onLoad}) => {
     }).finally(() => {
       setLoading(false);
     });
-
-    // login(values.email, values.senha)
-    //   .then(res => {
-    //     if (res == null) {
-    //       Alert.alert("Erro ao efetuar login");
-    //       return;
-    //     }
-    //     onLoad(false);
-    //     history.push("/home");
-    //   })
-    //   .catch(err => {
-    //     onLoad(false);
-    //     Alert.alert("Erro ao efetuar login");
-    //     console.error(err);
-    //   });
   };
 
   return (
@@ -76,8 +61,10 @@ const LoginView = ({onLoad}) => {
           <Form
             validationSchema={schemaValidation}
             initialValues={{ 
-              email: 'admin@gmail.com', 
-              password: 'adminroot', 
+              // email: 'teste@example.com', 
+              // password: '12345678', 
+              email: '', 
+              password: '', 
             }}
             onSubmit={values => handleLogin(values)}
           >
@@ -97,8 +84,10 @@ const LoginView = ({onLoad}) => {
                 placeholder="Digite seu email"
                 value={values.email}
                 onChange={handleChange('email')}
+                touched={touched.email}
+                onBlur={handleBlur('email')}
               />
-              <Helper visible={errors.email && touched.email}>
+              <Helper visible={Boolean(errors.email && touched.email)}>
                 {errors.email}
               </Helper>
               <Input
@@ -107,8 +96,10 @@ const LoginView = ({onLoad}) => {
                 placeholder="Digite sua senha"
                 value={values.password}
                 onChange={handleChange('password')}
+                touched={touched.password}
+                onBlur={handleBlur('password')}
               />
-              <Helper visible={errors.password && touched.password}>
+              <Helper visible={Boolean(errors.password && touched.password)}>
                 {errors.password}
               </Helper>
               <ForgotPasswordButton onPress={() => history.push("/password")}>
@@ -119,6 +110,7 @@ const LoginView = ({onLoad}) => {
                 mode="contained"
                 onPress={handleSubmit}
                 loading={loading}
+                // disabled={Object.keys(errors).length > 0 }
               > 
                 Entrar 
               </Button>
