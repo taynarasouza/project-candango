@@ -37,8 +37,8 @@ const LoginView = ({onLoad}) => {
     // setTimeout(() => history.push("/home"), 1100);
     setLoading(true);
     api.post(`/signin`, {
-        eml_usuario: email,
-        pwd_usuario: password,
+        email,
+        password,
     }).then(res => {
         history.push("/home")
 
@@ -46,7 +46,7 @@ const LoginView = ({onLoad}) => {
       if (error.response) {
         Alert.alert("Falha no login", error.response.data.error);
       }
-    }).finally(() => {
+    }).finally(function () {
       setLoading(false);
     });
   };
@@ -61,10 +61,10 @@ const LoginView = ({onLoad}) => {
           <Form
             validationSchema={schemaValidation}
             initialValues={{ 
-              // email: 'teste@example.com', 
-              // password: '12345678', 
-              email: '', 
-              password: '', 
+              email: 'teste@example.com', 
+              password: '12345678', 
+              // email: '', 
+              // password: '', 
             }}
             onSubmit={values => handleLogin(values)}
           >
@@ -114,7 +114,10 @@ const LoginView = ({onLoad}) => {
               > 
                 Entrar 
               </Button>
-              <Button mode="text" onPress={() => history.push("/signup")} >
+              <Button
+                mode="text"
+                onPress={() => history.push("/signup")} 
+              >
                 Cadastrar
               </Button>
             </>
