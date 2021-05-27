@@ -1,9 +1,19 @@
 import styled from 'styled-components/native';
 import { Platform } from 'react-native';
 import { Formik } from 'formik';
-import { Avatar, HelperText } from 'react-native-paper';
+import { TextInput, HelperText } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 import { MaterialIcons } from '@expo/vector-icons';
+
+export const InputText = styled(TextInput)`
+    background-color: rgba(255, 255, 255, .9);
+    border-radius: 10px;
+    width: 300px;
+    height: 50px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 16px;
+`;
 
 export const Picker = styled.TouchableOpacity`
     justify-content: space-between;
