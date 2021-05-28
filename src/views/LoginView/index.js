@@ -39,16 +39,19 @@ const LoginView = ({onLoad}) => {
     api.post(`/signin`, {
         email,
         password,
-    }).then(res => {
-        history.push("/home")
-
-      }).catch(function (error) {
-      if (error.response) {
-        Alert.alert("Falha no login", error.response.data.error);
-      }
-    }).finally(function () {
-      setLoading(false);
-    });
+      })
+      .then(response => response.data.json)
+      .then(res => {
+        //TODO: receber payload: [], message: "", status: int 1 : sucesso || -1 : erro
+        setLoading(false);
+        setTimeout(() => history.push("/home"), 100);
+      })
+      .catch(error => {
+        if (error.response)
+          Alert.alert("Falha no login", error.response.data.error);
+        
+          setLoading(false);
+      });
   };
 
   return (
@@ -61,7 +64,7 @@ const LoginView = ({onLoad}) => {
           <Form
             validationSchema={schemaValidation}
             initialValues={{ 
-              email: 'teste@example.com', 
+              email: 'teste@example.com',
               password: '12345678', 
               // email: '', 
               // password: '', 
