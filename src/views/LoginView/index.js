@@ -32,26 +32,25 @@ const LoginView = ({onLoad}) => {
   });
 
   const handleLogin = ({ email, password }) => {
-    // onLoad(true);
-    // setTimeout(() => onLoad(false), 1000);
-    // setTimeout(() => history.push("/home"), 1100);
     setLoading(true);
-    api.post(`/signin`, {
-        email,
-        password,
-      })
-      .then(response => response.data.json)
-      .then(res => {
-        //TODO: receber payload: [], message: "", status: int 1 : sucesso || -1 : erro
-        setLoading(false);
-        setTimeout(() => history.push("/home"), 100);
-      })
-      .catch(error => {
-        if (error.response)
-          Alert.alert("Falha no login", error.response.data.error);
+    setTimeout(() => setLoading(false), 1000);
+    setTimeout(() => history.push("/home"), 1100);
+    // api.post(`/signin`, {
+    //     email,
+    //     password,
+    //   })
+    //   .then(response => response.data.json)
+    //   .then(res => {
+    //     //TODO: receber payload: [], message: "", status: int 1 : sucesso || -1 : erro
+    //     setLoading(false);
+    //     setTimeout(() => history.push("/home"), 100);
+    //   })
+    //   .catch(error => {
+    //     if (error.response)
+    //       Alert.alert("Falha no login", error.response.data.error);
         
-          setLoading(false);
-      });
+    //       setLoading(false);
+    //   });
   };
 
   return (
