@@ -5,6 +5,7 @@ import PasswordView from "./PasswordView";
 import NewPasswordView from "./NewPasswordView";
 import ProfileView from "./ProfileView";
 import BagView from "./BagView";
+import MarkerView from "./MarkerView";
 
 export {
   LoginView,
@@ -13,5 +14,6 @@ export {
   NewPasswordView,
   HomeView,
   ProfileView,
-  BagView
+  BagView,
+  MarkerView
 };
