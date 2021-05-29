@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-native';
-import { View, Text, StyleSheet, Dimensions, Modal, ScrollView, Alert, Image, TouchableHighlight, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Modal, ScrollView, Alert, Image, TouchableHighlight } from 'react-native';
 import { FAB, Portal, Provider, Button } from 'react-native-paper';
 
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MarkerView from "../MarkerView";
 
 import { Routes } from "../../utils/constants";
 
@@ -27,7 +28,13 @@ const Menu = ({open, actions, onClick}) => {
 
 const HomeView = () => {
   const history = useHistory();
+  
   const [openMenu, setOpenMenu] = useState(false);
+  const [modal, setModal] = useState({
+    open: false,
+    title: "",
+    text: ""
+  });
 
   const handleMenu = ({open}) =>
     setOpenMenu(open);
@@ -39,6 +46,24 @@ const HomeView = () => {
       text
     });
   };
+
+  const handleDirectUser = () => {
+    Alert.alert("Sim!");
+    setModal({
+      open: false,
+      title: "",
+      text: ""
+    });
+  };
+
+  const handleClose = () => {
+    Alert.alert("Não!")
+    setModal({
+      open: false,
+      title: "",
+      text: ""
+    });
+  }
 
   const actions = [
     { icon: 'exit-to-app',
@@ -147,6 +172,15 @@ const HomeView = () => {
         actions={actions}
         onClick={handleMenu}
       />
+
+      <MarkerView 
+        open={modal.open}
+        name={modal.title} 
+        description={modal.text}
+        image={markers[0].ft_ponto_turistico}
+        onDirectUser={handleDirectUser}
+        onClose={handleClose}
+      />
     </View>
   )
 };
@@ -186,12 +220,13 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   modal: {
-    height: "53%",
+    // height: "53%",
+    // flex: 1,
     width: "100%",
     display: "flex",
     alignItems: "center",
     backgroundColor: "#FFFFFF",
-    borderRadius: 10,
+    // borderRadius: 10,
     padding: 10,
     shadowColor: "rgb(0,0,0)",
     shadowOffset: {
@@ -199,7 +234,7 @@ const styles = StyleSheet.create({
       height: -3
     },
     shadowOpacity: .65,
-    shadowRadius: 2
+    shadowRadius: 2,
   },
   titleContainer: {
     padding: 5,
@@ -212,8 +247,8 @@ const styles = StyleSheet.create({
   scrollView: {
     padding: 5,
     width: "100%",
-    minHeight: 500,
-    maxHeight: 800,
+    // minHeight: 300,
+    // maxHeight: 400,
     borderWidth: 1,
     borderColor: "black"
   },
