@@ -148,14 +148,18 @@ const SignUpView = () => {
               touched,
               isValid,
               setFieldValue,
+              setFieldTouched,
             }) => (
               <>
                 <Input label="Nome" 
                   value={values.name} 
                   placeholder="Escreva seu nome" 
-                  onChange={handleChange('name')} 
+                  onChange={handleChange('name')}
+                  onBlur={handleBlur('name')}
+                  touched={touched.name}
                 />
-                <Helper type="error" visible={errors.name && touched.name}>
+                {/* Tive que adicionar o Boolean() pois não tava pegando o touched undefined como false */}
+                <Helper type="error" visible={Boolean(errors.name && touched.name)}>
                   {errors.name}
                 </Helper>
                 <Picker 
@@ -173,7 +177,7 @@ const SignUpView = () => {
                   placeholder="(XX) XXXXX-XXXX" 
                   onChange={handleChange('phone')} 
                 />
-                <Helper type="error" visible={errors.phone && touched.phone}>
+                <Helper type="error" visible={Boolean(errors.phone && touched.phone)}>
                   {errors.phone}
                 </Helper>
                 <Input 
@@ -183,7 +187,7 @@ const SignUpView = () => {
                   placeholder="Escreva seu email" 
                   onChange={handleChange('email')} 
                 />
-                <Helper type="error" visible={errors.email && touched.email}>
+                <Helper type="error" visible={Boolean(errors.email && touched.email)}>
                   {errors.email}
                 </Helper>
                 <Input 
@@ -193,7 +197,7 @@ const SignUpView = () => {
                   placeholder="Escreva seu email" 
                   onChange={handleChange('confirmEmail')} 
                 />
-                <Helper type="error" visible={errors.confirmEmail && touched.confirmEmail}>
+                <Helper type="error" visible={Boolean(errors.confirmEmail && touched.confirmEmail)}>
                   {errors.confirmEmail}
                 </Helper>
                 <Input 
@@ -203,7 +207,7 @@ const SignUpView = () => {
                   secureTextEntry={true}
                   onChange={handleChange('password')} 
                 />
-                <Helper type="error" visible={errors.password && touched.password}>
+                <Helper type="error" visible={Boolean(errors.password && touched.password)}>
                   {errors.password}
                 </Helper>
                 <Input 
@@ -213,7 +217,7 @@ const SignUpView = () => {
                   secureTextEntry={true}
                   onChange={handleChange('confirmPassword')} 
                 />
-                <Helper type="error" visible={errors.confirmPassword && touched.confirmPassword}>
+                <Helper type="error" visible={Boolean(errors.confirmPassword && touched.confirmPassword)}>
                   {errors.confirmPassword}
                 </Helper>
                 <Picker 
