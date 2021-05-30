@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useHistory } from 'react-router-native';
 import * as Yup from 'yup';
 import {
@@ -22,6 +22,8 @@ import api from '../../services/api';
 const LoginView = ({onLoad}) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
+
+  const passwordRef = useRef();
 
   const schemaValidation = Yup.object().shape({
     email: Yup.string()
@@ -88,6 +90,8 @@ const LoginView = ({onLoad}) => {
                 onChange={handleChange('email')}
                 touched={touched.email}
                 onBlur={handleBlur('email')}
+                returnKeyType="next"
+                onSubmitEditing={() => passwordRef.current.focus()}
               />
               <Helper visible={Boolean(errors.email && touched.email)}>
                 {errors.email}
@@ -96,10 +100,13 @@ const LoginView = ({onLoad}) => {
                 label="Senha"
                 secureTextEntry={true}
                 placeholder="Digite sua senha"
+                ref={passwordRef}
                 value={values.password}
                 onChange={handleChange('password')}
                 touched={touched.password}
                 onBlur={handleBlur('password')}
+                returnKeyType="send"
+                onSubmitEditing={() => handleSubmit()}
               />
               <Helper visible={Boolean(errors.password && touched.password)}>
                 {errors.password}

@@ -11,10 +11,11 @@ import {
   Helper,
 } from './styles';
 
-export const CustomInput = ({type, onChange, ...props}) => {
+export const CustomInput = React.forwardRef(({type, onChange, ...props}, ref) => {
   return (
     <InputText
       {...props}
+      ref={ref}
       mode="outlined"
       keyboardType={type}
       autocomplete="off"
@@ -22,7 +23,7 @@ export const CustomInput = ({type, onChange, ...props}) => {
       onChangeText={text => onChange(text)}
     />
   )
-};
+});
 
 export const
 
