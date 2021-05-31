@@ -10,7 +10,12 @@ export const Wrapper = styled.ImageBackground.attrs({
     flex: 1;
 `;
 
-export const Container = styled.KeyboardAvoidingView.attrs({
+export const Container = styled.View`
+    flex: 1;
+    align-items: center;
+`;
+
+export const KeyboardView = styled.KeyboardAvoidingView.attrs({
     behavior: Platform.OS === "ios" ? "padding" : "height",
 })`
     flex: 1;
@@ -19,8 +24,7 @@ export const Container = styled.KeyboardAvoidingView.attrs({
 `;
 export const LogoContainer = styled.View`
     width: 80%;
-    min-height: 300px;
-    flex-grow: 1;
+    flex: 1;
     justify-content: center;
     align-items: center;
 `;
@@ -31,13 +35,13 @@ export const Logo = styled.Image.attrs({
     width: 100%;
 `;
 
-export const Form = styled(Formik)`
-    flex: 1;
-`;
+export const Form = styled(Formik)``;
 
 export const FormContainer = styled.View`
-    padding: 32px 0;
+    flex: 1;
     width: 100%;
+    min-height: 250px;
+    max-height: 450px;
     background: rgba(255, 255, 255, 0.9);
     justify-content: center;
     align-items: center;
@@ -49,8 +53,9 @@ export const FormContainer = styled.View`
 export const Input = styled(CustomInput).attrs({
     autoCapitalize: "none",
 })`
-    width: 325px;
-    height: 60px;
+    width: 90%;
+    max-width: 325px;
+    height: 64px;
     font-size: 16px;
 `;
 
@@ -70,12 +75,10 @@ export const ForgotPasswordText = styled.Text`
     color: rgba(0, 9, 153, 0.9);
 `;
 
-export const Button = styled(ButtonPaper).attrs({
-    contentStyle: {
-        height: 50,
-        width: 325,
-    }
-})`
+export const Button = styled(ButtonPaper)`
+    width: 90%;
+    max-width: 325px;
+    height: 50px;
     margin: 8px 0px;
     border-radius: 32px;
     justify-content: center;
