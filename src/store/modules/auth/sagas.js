@@ -30,8 +30,8 @@ export function* signIn({payload}) {
 
     // history.push("/home");
 
-  } catch (err) {
-    Alert.alert('Falha na autenticação', 'verifique seus dados');
+  } catch (error) {
+    Alert.alert('Falha na autenticação', error.response.data.error);
     console.tron.log("err", err);
     yield put(signFailure());
   }
