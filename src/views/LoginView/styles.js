@@ -18,9 +18,11 @@ export const Container = styled.View`
 export const KeyboardView = styled.KeyboardAvoidingView.attrs({
     behavior: Platform.OS === "ios" ? "padding" : "height",
 })`
+    width: 100%;
     flex: 1;
     align-items: center;
     justify-content: space-between;
+    padding: 15px 0px;
 `;
 export const LogoContainer = styled.View`
     width: 80%;

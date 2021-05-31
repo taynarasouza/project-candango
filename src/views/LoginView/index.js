@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import {
   Wrapper,
   Container,
+  KeyboardView,
   LogoContainer,
   Logo,
   Form,
@@ -73,7 +74,7 @@ const LoginView = ({onLoad}) => {
             touched,
             isValid,
           }) => (
-            <>
+            <KeyboardView>
               <Input
                 label="Email"
                 type="email-address"
@@ -121,7 +122,7 @@ const LoginView = ({onLoad}) => {
               >
                 Cadastrar
               </Button>
-            </>
+            </KeyboardView>
           )}
           </Form>
         </FormContainer>
