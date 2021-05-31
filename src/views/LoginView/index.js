@@ -15,12 +15,18 @@ import {
   Button,
 } from './styles';
 import { Alert } from "react-native";
+import {useDispatch, useSelector} from 'react-redux';
+
 import logo from "../../assets/logo.png";
 import background3 from "../../assets/brasilia-16.jpg";
+
 import api from '../../services/api';
+
+import {signInRequest} from '../../store/modules/auth/actions';
 
 const LoginView = ({onLoad}) => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
   const passwordRef = useRef();
@@ -34,25 +40,11 @@ const LoginView = ({onLoad}) => {
   });
 
   const handleLogin = ({ email, password }) => {
-    setLoading(true);
-    setTimeout(() => setLoading(false), 1000);
-    setTimeout(() => history.push("/home"), 1100);
-    // api.post(`/signin`, {
-    //     email,
-    //     password,
-    //   })
-    //   .then(response => response.data.json)
-    //   .then(res => {
-    //     //TODO: receber payload: [], message: "", status: int 1 : sucesso || -1 : erro
-    //     setLoading(false);
-    //     setTimeout(() => history.push("/home"), 100);
-    //   })
-    //   .catch(error => {
-    //     if (error.response)
-    //       Alert.alert("Falha no login", error.response.data.error);
-        
-    //       setLoading(false);
-    //   });
+    // setLoading(true);
+    // setTimeout(() => setLoading(false), 1000);
+    // setTimeout(() => history.push("/home"), 1100);
+    dispatch(signInRequest(email, password));
+    history.push("/home");
   };
 
   return (

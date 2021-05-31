@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-native';
 import { View, Text, StyleSheet, Dimensions, Modal, ScrollView, Alert, Image, TouchableHighlight } from 'react-native';
 import { FAB, Portal, Provider, Button } from 'react-native-paper';
+import {useDispatch, useSelector} from 'react-redux';
 
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+
+import {signOut} from '../../store/modules/auth/actions';
+
 import MarkerView from "../MarkerView";
 
 import { Routes } from "../../utils/constants";
@@ -28,6 +32,7 @@ const Menu = ({open, actions, onClick}) => {
 
 const HomeView = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
   
   const [openMenu, setOpenMenu] = useState(false);
   const [modal, setModal] = useState({
@@ -68,7 +73,7 @@ const HomeView = () => {
   const actions = [
     { icon: 'exit-to-app',
       label: 'Sair',
-      onPress: () => history.push(Routes.Login),
+      onPress: () => { dispatch(signOut()); history.push(Routes.Login); }, //history.push(Routes.Login),
       small: false,
       style: {
         backgroundColor: "#000099"
