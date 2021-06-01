@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Alert,
-} from 'react-native';
-import { Appbar } from 'react-native-paper';
+import {useDispatch, useSelector} from 'react-redux';
 import * as Yup from 'yup';
 
 import {
@@ -13,7 +10,8 @@ import {
   statesOptions,
   statesMap,
 } from '../../utils/pickerList';
-import api from '../../services/api';
+
+import {signUpRequest} from '../../store/modules/auth/actions';
 
 import {
   Wrapper,
@@ -30,15 +28,9 @@ import {
 } from "../../components/Fields";
 
 const SignUpView = ({ navigation }) => {
-  const [values, setValues] = useState({
-    name: '',
-    email: '',
-    confirmEmail: '',
-    phone: '',
-    password: '',
-    confirmPassword: '',
-    gender: '',
-  });
+  const dispatch = useDispatch();
+
+  const loading = useSelector(state => state.auth.loading);
 
   let selectGender;
   const openGenderModal = () => selectGender.show();
@@ -88,31 +80,8 @@ const SignUpView = ({ navigation }) => {
     state,
     country
   }) => {
-    api.post(`/signup`, {
-        nme_usuario: name,
-        gen_usuario: gender,
-        tlf_usuario: phone,
-        eml_usuario: email,
-        pwd_usuario: password,
-        pais_usuario: country,
-        est_usuario: state,
-    }).then(res => {
-        Alert.alert("Sucesso!", res.data.msg, [
-          {
-            text: "OK",
-            onPress: () => history.push("/home")
-          },
-        ],);
-
-      }).catch(function (error) {
-      if (error.response) {
-        Alert.alert("Falha no cadastro", error.response.data.error);
-      }
-    });
+    dispatch(signUpRequest(name, gender, phone, email, password, state, country));
   }
-
-  const handleGoTo = path =>
-    history.push(path);
 
   return (
     <>

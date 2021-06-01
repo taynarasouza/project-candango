@@ -41,18 +41,29 @@ export function* signIn({payload}) {
 
 export function* signUp({payload}) {
   try {
-    const {name, email, password} = payload;
+    const {name, gender, phone, email, password, state, country} = payload;
 
-    yield call(api.post, 'users', {
+    const response = yield call(api.post, 'signup', {
       name,
+      gender,
+      phone,
       email,
       password,
+      state,
+      country
     });
 
-    //history.push('/');
     Alert.alert('Cadastro realizado com sucesso!');
-  } catch (err) {
-    Alert.alert('Falha no cadastro', 'verifique seus dados');
+
+    const { usuarioInfo } = response.data;
+    const { headers } = response;
+
+    let cookieHeader = headers["set-cookie"][0];
+    let cookie = cookieHeader.split('; ')[0];
+
+    yield put(signInSuccess(cookie, usuarioInfo));
+  } catch (error) {
+    Alert.alert('Falha no cadastro', error.response.data.error);
     yield put(signFailure());
   }
 }
