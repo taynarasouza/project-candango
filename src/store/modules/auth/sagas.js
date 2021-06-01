@@ -22,9 +22,13 @@ export function* signIn({payload}) {
     let cookieHeader = headers["set-cookie"][0];
     let cookie = cookieHeader.split('; ')[0];
 
+    // console.tron.log(headers);
+
     // // Seta o token no Header Authorization, necessário na api
-    // api.defaults.headers.Authorization = `Bearer ${cookie}`;
-    api.defaults.headers['Cookie'] = cookie;
+    // api.defaults.headers.Authorization = `Bearer ${token}`;
+    // api.defaults.headers['Cookie'] = cookie;
+    // // api.defaults.headers['cookie'] = cookie;
+    // // api.defaults.headers.Authorization = cookie;
 
     yield put(signInSuccess(cookie, usuarioInfo));
 
@@ -32,7 +36,6 @@ export function* signIn({payload}) {
 
   } catch (error) {
     Alert.alert('Falha na autenticação', error.response.data.error);
-    console.tron.log("err", err);
     yield put(signFailure());
   }
 }
