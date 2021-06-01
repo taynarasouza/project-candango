@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NativeRouter, Link, Route } from 'react-router-native';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, AppRegistry } from 'react-native';
@@ -29,10 +29,34 @@ import {store, persistor} from './src/store';
 
 function App() {
   const [spinner, setSpinner] = useState(false);
+  const [position, setPosition] = useState({
+    latitude: 0,
+    longitude: 0
+  });
 
   const handleLoading = loading => {
     setSpinner(loading);
   };
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        console.log("--- My position ---");
+        console.log(position);
+        console.log("-------------------")
+        setPosition({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        });
+      },
+      error => console.error(error),
+      { 
+        enableHighAccuracy: false, 
+        timeout: 200000, 
+        maximumAge: 1000 
+      },
+    );
+  }, []);
 
   return (
     <PaperProvider theme={theme}>
@@ -61,7 +85,7 @@ function App() {
               </Route>
 
               <Route exact path={Routes.Home}>
-                <HomeView />
+                <HomeView position={position} />
               </Route>
               <Route exact path={Routes.Profile}>
                 <ProfileView />
