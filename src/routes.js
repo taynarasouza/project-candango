@@ -13,7 +13,7 @@ import BagView from './views/BagView';
 import MarkerView from './views/MarkerView';
 import ProfileView from './views/ProfileView';
 
-export default (signedIn = false) =>
+export default (signedIn = false, position = undefined) =>
   createAppContainer(
     createSwitchNavigator(
       {
@@ -37,7 +37,12 @@ export default (signedIn = false) =>
         ),
         App: createStackNavigator(
           {
-            HomeView,
+            HomeView: {
+              screen: HomeView,
+              initialRouteParams: {
+                position
+              }
+            },
             BagView,
             ProfileView,
             MarkerView,

@@ -1,12 +1,7 @@
-import React, { useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  Alert
-} from 'react-native';
-import { FAB, Portal, Provider } from 'react-native-paper';
-import {useDispatch, } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Dimensions, Modal, ScrollView, Alert, Image, TouchableHighlight } from 'react-native';
+import { FAB, Portal, Provider, Button } from 'react-native-paper';
+import {useDispatch, useSelector} from 'react-redux';
 
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 
@@ -34,9 +29,14 @@ const Menu = ({open, actions, onClick}) => {
   )
 }
 
-const HomeView = ({ navigation }) => {
+const HomeView = ({navigation}) => {
   const dispatch = useDispatch();
+
+  let position = navigation.getParam('position');
+
+  console.tron.log(position);
   
+  const [openMenu, setOpenMenu] = useState(false);
   const [modal, setModal] = useState({
     open: false,
     title: "",
@@ -75,7 +75,7 @@ const HomeView = ({ navigation }) => {
   const actions = [
     { icon: 'exit-to-app',
       label: 'Sair',
-      onPress: () => { dispatch(signOut()); },
+      onPress: () => { dispatch(signOut()); history.push(Routes.Login); }, //history.push(Routes.Login),
       small: false,
       style: {
         backgroundColor: "#000099"
@@ -282,6 +282,7 @@ const styles = StyleSheet.create({
 });
 
 HomeView.navigationOptions = ({navigation}) => ({
+  title: 'Login',
   headerShown: false,
 });
 
