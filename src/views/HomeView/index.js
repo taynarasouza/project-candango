@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-native';
 import { View, Text, StyleSheet, Dimensions, Modal, ScrollView, Alert, Image, TouchableHighlight } from 'react-native';
 import { FAB, Portal, Provider, Button } from 'react-native-paper';
@@ -30,7 +30,7 @@ const Menu = ({open, actions, onClick}) => {
   )
 }
 
-const HomeView = () => {
+const HomeView = ({position}) => {
   const history = useHistory();
   const dispatch = useDispatch();
   
@@ -108,16 +108,19 @@ const HomeView = () => {
     },
   ];
 
-  const position = {
-    latitude: -15.814358099371333, 
-    longitude: -47.98246049051098
-  };
+  // const position = {
+  //   latitude: -15.814358099371333, 
+  //   longitude: -47.98246049051098
+  // };
 
   const initialRegion = {
-    ...position,
+    latitude: -15.814358099371333,
+    longitude: -47.98246049051098,
     latitudeDelta: 0.155,
-    longitudeDelta: 0.255
+    longitudeDelta: 0.155
   }
+
+  console.log(initialRegion);
 
   const markers = [
     {
@@ -133,16 +136,20 @@ const HomeView = () => {
   return (
     <View style={{flex: 1, borderWidth: 1, borderColor: "black"}}>
       <MapView
-        // provider={PROVIDER_GOOGLE}
+        provider={PROVIDER_GOOGLE}
         // mapType={Platform.OS === "android" ? "none" : "standard"}
-        initialRegion={initialRegion}
+        initialRegion={{
+          ...position,
+          latitudeDelta: 0.155,
+          longitudeDelta: 0.155
+        }}
         loadingEnabled={true}
         toolbarEnabled={true}
         minZoomLevel={11}
         maxZoomLevel={20}
         showsUserLocation={true}
         followsUserLocation={false}
-        showsMyLocationButton={true}
+        showsMyLocationButton={false}
         pitchEnabled={true}
         style={styles.mapStyle}
       >
