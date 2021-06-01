@@ -75,7 +75,7 @@ const HomeView = ({navigation}) => {
   const actions = [
     { icon: 'exit-to-app',
       label: 'Sair',
-      onPress: () => { dispatch(signOut()); history.push(Routes.Login); }, //history.push(Routes.Login),
+      onPress: () => dispatch(signOut()), //history.push(Routes.Login),
       small: false,
       style: {
         backgroundColor: "#000099"

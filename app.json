@@ -2,7 +2,7 @@
   "expo": {
     "name": "candango",
     "slug": "candango",
-    "version": "1.0.0",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./src/assets/icon.png",
     "splash": {
@@ -10,7 +10,6 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "sourceExts": [ "js", "json", "ts", "tsx", "jsx"],
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -25,7 +24,8 @@
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.sempreceub.candango"
+      "package": "com.sempreceub.candango",
+      "versionCode": 3
     },
     "web": {
       "favicon": "./src/assets/favicon.png"
