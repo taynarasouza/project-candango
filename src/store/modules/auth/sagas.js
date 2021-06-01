@@ -1,5 +1,4 @@
 import {all, takeLatest, call, put} from 'redux-saga/effects';
-import { useHistory } from 'react-router-native';
 import {Alert} from 'react-native';
 
 import {signInSuccess, signFailure} from './actions';

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-native';
 import { View, Text, StyleSheet, Dimensions, Modal, ScrollView, Alert, Image, TouchableHighlight } from 'react-native';
 import { FAB, Portal, Provider, Button } from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
@@ -30,8 +29,7 @@ const Menu = ({open, actions, onClick}) => {
   )
 }
 
-const HomeView = () => {
-  const history = useHistory();
+const HomeView = ({ navigation }) => {
   const dispatch = useDispatch();
   
   const [openMenu, setOpenMenu] = useState(false);
@@ -73,7 +71,7 @@ const HomeView = () => {
   const actions = [
     { icon: 'exit-to-app',
       label: 'Sair',
-      onPress: () => { dispatch(signOut()); history.push(Routes.Login); }, //history.push(Routes.Login),
+      onPress: () => { dispatch(signOut()); },
       small: false,
       style: {
         backgroundColor: "#000099"
@@ -82,7 +80,7 @@ const HomeView = () => {
     {
       icon: 'bag-personal',
       label: 'Mochila',
-      onPress: () => history.push(Routes.Bag),
+      onPress: () => navigation.navigate(Routes.Bag),
       small: false,
       style: {
         backgroundColor: "#000099"
@@ -100,7 +98,7 @@ const HomeView = () => {
     {
       icon: 'account',
       label: 'Perfil',
-      onPress: () => history.push(Routes.Profile),
+      onPress: () => navigation.navigate(Routes.Profile),
       small: false,
       style: {
         backgroundColor: "#000099"
@@ -270,6 +268,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     paddingBottom: 10
   }
+});
+
+HomeView.navigationOptions = ({navigation}) => ({
+  headerShown: false,
 });
 
 export default HomeView;

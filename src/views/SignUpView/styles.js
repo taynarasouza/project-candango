@@ -1,9 +1,10 @@
 import styled from 'styled-components/native';
 import { Platform } from 'react-native';
 import { Formik } from 'formik';
-import { Avatar, HelperText } from 'react-native-paper';
+import { HelperText } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 import { MaterialIcons } from '@expo/vector-icons';
+import { Button as ButtonPaper } from 'react-native-paper';
 
 import { 
   PhoneInput, 
@@ -12,9 +13,7 @@ import {
 
 
 export const Wrapper = styled.SafeAreaView`
-    height: 100%;
-    width: 100%;
-    flex-grow: 1;
+    flex: 1;
     background: #fff;
 `;
 
@@ -24,13 +23,16 @@ export const Container = styled(KeyboardAwareScrollView).attrs({
     showsVerticalScrollIndicator: false,
 })`
     padding-top: 20px;
-    margin-bottom: 60px;
+    /* margin-bottom: 60px; */
 `;
 
 export const Form = styled(Formik)`
 `;
 
-export const Input = styled(CustomInput)``;
+export const Input = styled(CustomInput)`
+    /* border-width: 1px;
+    border-color: ${props => props.errors ? "red" : "white"}; */
+`;
 
 export const PhoneNumberInput = styled(PhoneInput)``;
 
@@ -66,4 +68,18 @@ export const PickerClose = styled(MaterialIcons).attrs({
 export const Helper = styled(HelperText)`
     text-align: right;
     width: 300px;
+`;
+
+export const Button = styled(ButtonPaper).attrs({
+    contentStyle: {
+        height: 50,
+    }
+})`
+    width: 90%;
+    max-width: 325px;
+    height: 50px;
+    /* margin: 16px 0px; */
+    margin-bottom: 48px;
+    border-radius: 32px;
+    justify-content: center;
 `;

@@ -2,8 +2,6 @@ import React from "react";
 import { View,StyleSheet, ScrollView } from "react-native";
 import { Appbar, BottomNavigation,Avatar,Text, Card  } from "react-native-paper";
 
-import { useHistory } from "react-router-native";
-
 const CircuitsView = () => <Text>Circuitos</Text>;
 
 
@@ -38,7 +36,7 @@ const medals = [
 
 ];
 
-const MedalsView = () =>  {
+const MedalsView = ({ navigation }) =>  {
   return (
     <>
       <View style={{flexDirection: 'row', justifyContent:"space-around" , padding:15}}>
@@ -142,8 +140,7 @@ const InfoView = () =>  {
 };
 
 /** ------------------- INFORMAÇÕES FIM ----------------- */
-export default function BagView() {
-  const history = useHistory();
+export default function BagView({ navigation }) {
 
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
@@ -159,16 +156,14 @@ export default function BagView() {
   });
 
   return (
-    <>
-      <Appbar.Header style={{backgroundColor: "#F5F5F5"}}>
-        <Appbar.BackAction onPress={() => history.push("/home")} />
-        <Appbar.Content title="Mochila" />
-      </Appbar.Header>
-      <BottomNavigation
-        navigationState={{ index, routes }}
-        onIndexChange={setIndex}
-        renderScene={renderScene}
-      />
-    </>
+    <BottomNavigation
+      navigationState={{ index, routes }}
+      onIndexChange={setIndex}
+      renderScene={renderScene}
+    />
   )
 }
+
+BagView.navigationOptions = ({ navigation }) => ({
+  title: 'Mochila',
+});

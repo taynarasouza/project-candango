@@ -1,5 +1,4 @@
 import React from 'react';
-import { useHistory } from 'react-router-native';
 import {
   View,
   StyleSheet,
@@ -15,11 +14,12 @@ import { Appbar, HelperText } from 'react-native-paper';
 import Button from "../../components/Button";
 import { EmailField, PasswordField } from "../../components/Fields";
 
+import Routes from '../../utils/constants';
+
 import { validadeEmail } from "../../utils";
 import { recoverPassword } from "../../utils/api";
 
-const PasswordView = () => {
-  const history = useHistory();
+const PasswordView = ({ navigation }) => {
   const [email, setEmail] = React.useState("");
   const [error, setError] = React.useState({
     show: false,
@@ -59,17 +59,14 @@ const PasswordView = () => {
           return;
         }
 
-        history.push("/password/generate", {email});
+        // history.push("/password/generate", {email});
+        navigation.navigate(Routes.NewPassword, {email});
       })
       .catch(err => console.error(err));
   };
 
   return (
     <>
-      <Appbar.Header style={{backgroundColor: "#F5F5F5"}}>
-        <Appbar.BackAction onPress={() => handleGoTo("/")} />
-        <Appbar.Content title="Esqueci minha senha" />
-      </Appbar.Header>
       {/*<ScrollView>*/}
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -114,6 +111,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   }
+});
+
+PasswordView.navigationOptions = ({ navigation }) => ({
+  title: 'Esqueci minha senha',
 });
 
 export default PasswordView;

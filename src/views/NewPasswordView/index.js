@@ -1,5 +1,4 @@
 import React from 'react';
-import { useHistory } from 'react-router-native';
 import {
   View,
   StyleSheet,
@@ -17,8 +16,9 @@ import { CustomInput } from "../../components/Fields";
 
 import { changePassword } from "../../utils/api";
 
-const NewPasswordView = () => {
-  const history = useHistory();
+import Routes from '../../utils/constants';
+
+const NewPasswordView = ({ navigation }) => {
   const email = history.location.state && Object.keys(history.location.state).length > 0 && history.location.state.email;
 
   const [codigo, setCodigo] = React.useState({
@@ -57,10 +57,7 @@ const NewPasswordView = () => {
       error: false,
       helper: ""
     });
-
-  const handleGoTo = path =>
-    history.push(path);
-
+    
   const handlePress = () => {
     if (!codigo.value.length) {
       setCodigo(prev => ({
@@ -107,17 +104,12 @@ const NewPasswordView = () => {
           Alert.alert("Erro ao criar nova senha");
           return;
         }
-        history.push("/login");
+        navigation.navigate(Routes.Login);
       });
   };
 
   return (
     <>
-      <Appbar.Header style={{backgroundColor: "#F5F5F5"}}>
-        <Appbar.BackAction onPress={() => handleGoTo("/password")} />
-        <Appbar.Content title="Criar nova senha" />
-      </Appbar.Header>
-      {/*<ScrollView>*/}
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}
@@ -179,6 +171,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   }
+});
+
+NewPasswordView.navigationOptions = ({ navigation }) => ({
+  title: 'Criar nova senha',
 });
 
 export default NewPasswordView;

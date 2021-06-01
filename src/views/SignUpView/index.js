@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-native';
 import {
   Alert,
 } from 'react-native';
@@ -23,15 +22,14 @@ import {
   Input,
   PhoneNumberInput,
   Helper,
+  Button,
 } from './styles';
 
-import Button from "../../components/Button";
 import { 
   Picker, 
 } from "../../components/Fields";
 
-const SignUpView = () => {
-  const history = useHistory();
+const SignUpView = ({ navigation }) => {
   const [values, setValues] = useState({
     name: '',
     email: '',
@@ -118,10 +116,6 @@ const SignUpView = () => {
 
   return (
     <>
-      <Appbar.Header style={{backgroundColor: "#F5F5F5"}}>
-        <Appbar.BackAction onPress={() => handleGoTo("/")} />
-        <Appbar.Content title="Cadastro" />
-      </Appbar.Header>
       <Wrapper>
         <Container>
           <Form
@@ -240,10 +234,10 @@ const SignUpView = () => {
                 />
                 <Button
                   onPress={handleSubmit}
-                  variant="flat"
-                  label="Cadastrar"
-                  fullWidth
-                />
+                  mode="contained"
+                >
+                  Cadastrar
+                </Button>
               </>
               )}
           </Form>
@@ -252,5 +246,9 @@ const SignUpView = () => {
     </>
   )
 };
+
+SignUpView.navigationOptions = ({navigation}) => ({
+  title: 'Cadastro',
+});
 
 export default SignUpView;

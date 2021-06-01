@@ -1,13 +1,13 @@
 import React, { useState, useRef } from 'react';
-import { useHistory } from 'react-router-native';
 import * as Yup from 'yup';
 import {
-  Wrapper,
+  Background,
   Container,
   KeyboardView,
   LogoContainer,
   Logo,
   Form,
+  FormBox,
   FormContainer,
   Input,
   Helper,
@@ -25,10 +25,11 @@ import api from '../../services/api';
 
 import {signInRequest} from '../../store/modules/auth/actions';
 
-const LoginView = ({onLoad}) => {
-  const history = useHistory();
+import { Routes } from "../../utils/constants";
+
+const LoginView = ({navigation}) => {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+  const loading = useSelector(state => state.auth.loading);
 
   const passwordRef = useRef();
 
@@ -45,16 +46,14 @@ const LoginView = ({onLoad}) => {
     // setTimeout(() => setLoading(false), 1000);
     // setTimeout(() => history.push("/home"), 1100);
     dispatch(signInRequest(email, password));
-    history.push("/home");
+    // history.push(Routes.Home);
   };
 
   return (
-    <Wrapper source={background3}>
-      <Container>
-        <LogoContainer>
-          <Logo source={logo}/>
-        </LogoContainer>
-        <FormContainer>
+    <Background source={background3}>
+      <KeyboardView>
+        <Logo source={logo}/>
+        <FormBox>
           <Form
             validationSchema={schemaValidation}
             initialValues={{ 
@@ -65,16 +64,10 @@ const LoginView = ({onLoad}) => {
             }}
             onSubmit={values => handleLogin(values)}
           >
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            errors,
-            touched,
-            isValid,
+          {({ 
+            handleChange, handleBlur, handleSubmit, values, errors, touched,
           }) => (
-            <KeyboardView>
+            <FormContainer>
               <Input
                 label="Email"
                 type="email-address"
@@ -104,7 +97,7 @@ const LoginView = ({onLoad}) => {
               <Helper visible={Boolean(errors.password && touched.password)}>
                 {errors.password}
               </Helper>
-              <ForgotPasswordButton onPress={() => history.push("/password")}>
+              <ForgotPasswordButton onPress={() => navigation.navigate(Routes.Password)}>
                 <ForgotPasswordText>Esqueceu sua senha?</ForgotPasswordText>
               </ForgotPasswordButton>
               
@@ -112,23 +105,28 @@ const LoginView = ({onLoad}) => {
                 mode="contained"
                 onPress={handleSubmit}
                 loading={loading}
-                // disabled={Object.keys(errors).length > 0 }
+                disabled={Object.keys(errors).length > 0 }
               > 
                 Entrar 
               </Button>
               <Button
-                mode="text"
-                onPress={() => history.push("/signup")} 
+                // mode="text"
+                onPress={() => navigation.navigate(Routes.SignUp)} 
               >
                 Cadastrar
               </Button>
-            </KeyboardView>
+            </FormContainer>
           )}
           </Form>
-        </FormContainer>
-      </Container>
-    </Wrapper>
+        </FormBox>
+      </KeyboardView>
+    </Background>
   )
 };
+
+LoginView.navigationOptions = ({navigation}) => ({
+  title: 'Login',
+  headerShown: false,
+});
 
 export default LoginView;

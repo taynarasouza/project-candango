@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet, Modal, ScrollView, Image, View, Text, TouchableHighlight } from "react-native";
 import { Appbar, Button } from "react-native-paper";
-import { useHistory } from "react-router-native";
 
 import Description from "./description";
 
@@ -34,7 +33,6 @@ const Local = ({local}) => {
 
 
 function MarkerView({open, image, name, description, onDirectUser, onClose}) {
-  const history = useHistory();
   return (
     <Modal
       animationType="slide"
