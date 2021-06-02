@@ -137,7 +137,7 @@ const HomeView = ({navigation}) => {
 
   return (
     <View style={{flex: 1, borderWidth: 1, borderColor: "black"}}>
-      <MapView
+      {/* <MapView
         provider={PROVIDER_GOOGLE}
         // mapType={Platform.OS === "android" ? "none" : "standard"}
         initialRegion={{
@@ -179,7 +179,7 @@ const HomeView = ({navigation}) => {
             />
           )
         })}
-      </MapView>
+      </MapView> */}
       {/* Menu FAB */}
       <Menu 
         open={openMenu}
