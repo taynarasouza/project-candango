@@ -93,7 +93,10 @@ const InfoView = () =>  {
     {key: 3, bagdeText: 'Novo',  msgTitle: 'Novidades' ,msgDesc: 'Nova funcionalidade implementada no perfil de Usuario funcionalidade implementada no perfil de Usuario'},
     {key: 4, bagdeText: 'Novo',  msgTitle: 'Novidades' ,msgDesc: 'Para tornarmos sua experiencia em Brasília mais inesquecível, atualizamos algumas funcionalidades no sistema de Premiação '},
     {key: 5, bagdeText: 'Novo',  msgTitle: 'Sistema' ,msgDesc: 'Sistema de Ranking indísponivel, em breve está novamente disponivel,agradecemos a compreensão!'},
-    {key: 6, bagdeText: 'Novo',  msgTitle: 'Sistema' ,msgDesc: 'Está disponivel a nova versao do aplicativo , atualize agora mesmo!'}
+    {key: 6, bagdeText: 'Novo',  msgTitle: 'Sistema' ,msgDesc: 'Está disponivel a nova versao do aplicativo , atualize agora mesmo!'},
+    {key: 7, bagdeText: 'Novo',  msgTitle: 'Sistema' ,msgDesc: 'Está disponivel a nova versao do aplicativo , atualize agora mesmo!'},
+    {key: 8, bagdeText: 'Novo',  msgTitle: 'Sistema' ,msgDesc: 'Está disponivel a nova versao do aplicativo , atualize agora mesmo!'},
+    {key: 9, bagdeText: 'Novo',  msgTitle: 'Sistema' ,msgDesc: 'Está disponivel a nova versao do aplicativo , atualize agora mesmo!'},
   ]
   const [expanded, setExpanded] = React.useState(true);
   const handlePress = () => setExpanded(!expanded);
@@ -102,7 +105,7 @@ const InfoView = () =>  {
       <View style={{flexDirection: 'row', justifyContent:"space-around" , padding:10}}>
         <Text style={styles.title}>Informações</Text>
       </View>
-      <View >
+      <ScrollView >
         <FlatList
               data={bdMsg}
               keyExtractor={item=>item.key}
@@ -113,7 +116,7 @@ const InfoView = () =>  {
                   <Paragraph style={styleText.textItemDesc}> {item.msgDesc}</Paragraph>
               </Card>}
         />
-        </View>
+        </ScrollView>
      
     </>
 
