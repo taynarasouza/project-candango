@@ -1,9 +1,11 @@
 import React from "react";
-import { View,StyleSheet, ScrollView } from "react-native";
-import { Appbar, BottomNavigation,Avatar,Text, Card  } from "react-native-paper";
+import { View,StyleSheet, ScrollView, FlatList } from "react-native";
+import { Appbar, BottomNavigation,Avatar,Text, Card, Paragraph, Title, Badge  } from "react-native-paper";
 
+/** -------------------CIRCUITOS INICIO ----------------- */
 const CircuitsView = () => <Text>Circuitos</Text>;
 
+/** -------------------CIRCUITOS FIM ----------------- */
 
 /** -------------------MEDALHAS INICIO ----------------- */
 
@@ -85,60 +87,80 @@ const styles = StyleSheet.create ({
 /** -------------------MEDALHAS FIM ----------------- */
 /** ------------------- INFORMAÇÕES INICIO ----------------- */
 const InfoView = () =>  {
+  const bdMsg=[
+    {key: 1, bagdeText: 'Novo',  msgTitle: 'Sistema' ,msgDesc: 'Atualização acontecerá no dia 06/06/2021 de 2h as 9h'},
+    {key: 2, bagdeText: 'Novo',  msgTitle: 'Novidades' ,msgDesc: 'Novos pontos turisticos foram adicionados,aventureiros rumo a novas conquistas'},
+    {key: 3, bagdeText: 'Novo',  msgTitle: 'Novidades' ,msgDesc: 'Nova funcionalidade implementada no perfil de Usuario funcionalidade implementada no perfil de Usuario'},
+    {key: 4, bagdeText: 'Novo',  msgTitle: 'Novidades' ,msgDesc: 'Para tornarmos sua experiencia em Brasília mais inesquecível, atualizamos algumas funcionalidades no sistema de Premiação '},
+    {key: 5, bagdeText: 'Novo',  msgTitle: 'Sistema' ,msgDesc: 'Sistema de Ranking indísponivel, em breve está novamente disponivel,agradecemos a compreensão!'},
+    {key: 6, bagdeText: 'Novo',  msgTitle: 'Sistema' ,msgDesc: 'Está disponivel a nova versao do aplicativo , atualize agora mesmo!'}
+  ]
   const [expanded, setExpanded] = React.useState(true);
   const handlePress = () => setExpanded(!expanded);
   return (
     <>
-      <View style={{flexDirection: 'row', justifyContent:"space-around" , padding:15}}>
+      <View style={{flexDirection: 'row', justifyContent:"space-around" , padding:10}}>
         <Text style={styles.title}>Informações</Text>
+      </View>
+      <View >
+        <FlatList
+              data={bdMsg}
+              keyExtractor={item=>item.key}
+              renderItem={({item}) => 
+              <Card style={styleText.textItem}>
+                  <Badge  style={styleText.textItemBadge}>{item.bagdeText}</Badge>
+                  <Title style={styleText.textItemTitle}> {item.msgTitle}</Title> 
+                  <Paragraph style={styleText.textItemDesc}> {item.msgDesc}</Paragraph>
+              </Card>}
+        />
         </View>
-<View>
-  <ScrollView>
-    <Card onPress={() => {}}  >
-      <Card.Title
-      title="Novidades"
-      subtitle="Nova funcionalidade implementada no perfil de Usuario"
-      left={(props) => <Avatar.Icon {...props} icon="chat-alert" />}
-
-      /> 
-    </Card>
-    
-    <Card  onPress={() => { }} style={{backgroundColor: "#EAEDED" }}>
-      
-      <Card.Title
-        
-          title="Sistema"
-          subtitle="Ranking de pontuação indísponivel"
-          left={(props) => <Avatar.Icon {...props} icon="chat-alert" />}
-          
-      />
-    </Card>
-    
-    <Card onPress={() => { }}  >
-      <Card.Title 
-          title="Sistema"
-          subtitle="Atualização 2.0"
-          left={(props) => <Avatar.Icon {...props} icon="chat-alert" />}
-          
-      />
-    </Card>
-    <Card onPress={() => { }}  style={{backgroundColor: "#EAEDED"}}>
-      <Card.Title
-          title="Sistema"
-          subtitle="Atualização 2.0"
-          left={(props) => <Avatar.Icon {...props} icon="chat-alert" />}
-          
-      />
-    </Card>
-    </ScrollView>
-  </View>
      
     </>
 
   
   );
 };
+/*------------------------------------STYLES ----------------------------------------*/
+const styleText =StyleSheet.create({
+  textItem:{
+    padding:15,
+    marginVertical: 3,
+    marginHorizontal: 30,
+  },
+  textItemTitle:{
+    flex:1,
+    fontSize:20,
+    color:'#34495e',
+    fontWeight:"bold",
+    textAlign: "justify",
+    alignItems:"flex-start",
+    
+  },
+  textItemDesc:{
+    flex:1,
+    fontSize:16,
+    color:'#34495e',
+    fontWeight:"bold",
+    textAlign: "justify",
 
+    
+  },
+  textItemBadge:{
+    fontSize:10,
+    color:'#fff',
+    height:30,
+    textAlign: "right",
+    backgroundColor: "#00ff00"
+    },
+  textItemViewed:{
+    padding:15,
+    marginVertical: 3,
+    marginHorizontal: 1,
+  
+    },
+
+
+})
 /** ------------------- INFORMAÇÕES FIM ----------------- */
 export default function BagView({ navigation }) {
 
