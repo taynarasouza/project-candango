@@ -93,7 +93,7 @@ const HomeView = ({navigation}) => {
     {
       icon: 'bell',
       label: 'Notificações',
-      onPress: () => console.log('Notificações'),
+      onPress: () => navigation.navigate(Routes.NotifyView),
       small: false,
       style: {
         backgroundColor: "#000099"

@@ -1,9 +1,17 @@
 import React from "react";
 import { View,StyleSheet, ScrollView, FlatList } from "react-native";
-import { Appbar, BottomNavigation,Avatar,Text, Card, Paragraph, Title, Badge  } from "react-native-paper";
+import { Appbar, BottomNavigation,Avatar,Text, Card, Paragraph, Title, Badge,Surface  } from "react-native-paper";
+
 
 /** -------------------CIRCUITOS INICIO ----------------- */
-const CircuitsView = () => <Text>Circuitos</Text>;
+const CircuitsView = ({ navigation }) =>  {return (
+  <>
+    <View style={{flexDirection: 'row', justifyContent:"space-around" , padding:15}}>
+      <Text style={styles.title}>Circuitos</Text>
+    </View>
+    </>
+  );
+}
 
 /** -------------------CIRCUITOS FIM ----------------- */
 
@@ -58,112 +66,84 @@ const MedalsView = ({ navigation }) =>  {
   );
 }
 
-
-const styles = StyleSheet.create ({
-  title:{
-    fontSize:25,
-    color:'blue',
-
-
-  },
-  view : {
-    marginTop : 20,
-    marginLeft : 20,
-    width:'100%',
-    display:'flex',
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent:'flex-start',
-    alignItems: "center"
-  },
-  item: {
-    marginRight : 20,
-    marginTop: 20,
-    shadowOpacity: .8,
-    shadowColor: "#9e9e9e",
-    shadowRadius: 3
-  }
-});
 /** -------------------MEDALHAS FIM ----------------- */
 /** ------------------- INFORMAÇÕES INICIO ----------------- */
 const InfoView = () =>  {
-  const bdMsg=[
-    {key: 1, bagdeText: 'Novo',  msgTitle: 'Sistema' ,msgDesc: 'Atualização acontecerá no dia 06/06/2021 de 2h as 9h'},
-    {key: 2, bagdeText: 'Novo',  msgTitle: 'Novidades' ,msgDesc: 'Novos pontos turisticos foram adicionados,aventureiros rumo a novas conquistas'},
-    {key: 3, bagdeText: 'Novo',  msgTitle: 'Novidades' ,msgDesc: 'Nova funcionalidade implementada no perfil de Usuario funcionalidade implementada no perfil de Usuario'},
-    {key: 4, bagdeText: 'Novo',  msgTitle: 'Novidades' ,msgDesc: 'Para tornarmos sua experiencia em Brasília mais inesquecível, atualizamos algumas funcionalidades no sistema de Premiação '},
-    {key: 5, bagdeText: 'Novo',  msgTitle: 'Sistema' ,msgDesc: 'Sistema de Ranking indísponivel, em breve está novamente disponivel,agradecemos a compreensão!'},
-    {key: 6, bagdeText: 'Novo',  msgTitle: 'Sistema' ,msgDesc: 'Está disponivel a nova versao do aplicativo , atualize agora mesmo!'},
-    {key: 7, bagdeText: 'Novo',  msgTitle: 'Sistema' ,msgDesc: 'Está disponivel a nova versao do aplicativo , atualize agora mesmo!'},
-    {key: 8, bagdeText: 'Novo',  msgTitle: 'Sistema' ,msgDesc: 'Está disponivel a nova versao do aplicativo , atualize agora mesmo!'},
-    {key: 9, bagdeText: 'Novo',  msgTitle: 'Sistema' ,msgDesc: 'Está disponivel a nova versao do aplicativo , atualize agora mesmo!'},
-  ]
-  const [expanded, setExpanded] = React.useState(true);
-  const handlePress = () => setExpanded(!expanded);
+ 
   return (
     <>
       <View style={{flexDirection: 'row', justifyContent:"space-around" , padding:10}}>
         <Text style={styles.title}>Informações</Text>
       </View>
-      <ScrollView >
-        <FlatList
-              data={bdMsg}
-              keyExtractor={item=>item.key}
-              renderItem={({item}) => 
-              <Card style={styleText.textItem}>
-                  <Badge  style={styleText.textItemBadge}>{item.bagdeText}</Badge>
-                  <Title style={styleText.textItemTitle}> {item.msgTitle}</Title> 
-                  <Paragraph style={styleText.textItemDesc}> {item.msgDesc}</Paragraph>
-              </Card>}
-        />
-        </ScrollView>
-     
+      <View style={{flexDirection: 'row', justifyContent:"center" , padding:10}}>
+
+        <Surface style={styles.surface}>
+
+        <Title style={styles.titleVersion}>Versão </Title>
+        <Paragraph style={styles.descVersion}>1.0</Paragraph>
+
+        <Title style={styles.titleVersion}>Email </Title>
+        <Paragraph style={styles.descVersion}>candangoapp@gmail.com </Paragraph>
+
+        </Surface>
+      </View>
+
+
+
     </>
 
   
   );
 };
+
 /*------------------------------------STYLES ----------------------------------------*/
-const styleText =StyleSheet.create({
-  textItem:{
-    padding:15,
-    marginVertical: 3,
-    marginHorizontal: 30,
-  },
-  textItemTitle:{
-    flex:1,
-    fontSize:20,
-    color:'#34495e',
-    fontWeight:"bold",
-    textAlign: "justify",
-    alignItems:"flex-start",
-    
-  },
-  textItemDesc:{
-    flex:1,
-    fontSize:16,
-    color:'#34495e',
-    fontWeight:"bold",
-    textAlign: "justify",
-
-    
-  },
-  textItemBadge:{
-    fontSize:10,
-    color:'#fff',
-    height:30,
-    textAlign: "right",
-    backgroundColor: "#00ff00"
-    },
-  textItemViewed:{
-    padding:15,
-    marginVertical: 3,
-    marginHorizontal: 1,
+const styles =StyleSheet.create({
   
+  titleVersion:{
+    fontSize:15, 
+    textAlign:'center', 
+    fontStyle:'italic', 
+    color:'#808080'
     },
+  descVersion:{
+      fontSize:20 , 
+      textAlign:'center', 
+      color:'#4F4F4F'
+    },
+  surface: {  
+      height: 200,
+      width: '80%',
+      justifyContent: 'center',
+      elevation: 5,
+      borderRadius: 20
+     
 
+    },
+/*------ Medalha Styles ----*/
 
-})
+      title:{
+        fontSize:25,
+        color:'blue'
+      },
+
+      view : {
+        marginTop : 20,
+        marginLeft : 20,
+        width:'100%',
+        display:'flex',
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent:'flex-start',
+        alignItems: "center"
+      },
+      item: {
+        marginRight : 20,
+        marginTop: 20,
+        shadowOpacity: .8,
+        shadowColor: "#9e9e9e",
+        shadowRadius: 3
+      }
+    });
 /** ------------------- INFORMAÇÕES FIM ----------------- */
 export default function BagView({ navigation }) {
 
