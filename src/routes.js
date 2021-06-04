@@ -13,6 +13,7 @@ import HomeView from './views/HomeView';
 import BagView from './views/BagView';
 import MarkerView from './views/MarkerView';
 import ProfileView from './views/ProfileView';
+import NotifyView from './views/NotifyView';
 
 export default (signedIn = false, position = undefined) =>
   createAppContainer(
@@ -24,6 +25,7 @@ export default (signedIn = false, position = undefined) =>
             SignUpView,
             PasswordView,
             NewPasswordView,
+            NotifyView
           },
           {
             defaultNavigationOptions: {
@@ -48,6 +50,7 @@ export default (signedIn = false, position = undefined) =>
             BagView,
             ProfileView,
             MarkerView,
+            NotifyView
           },
           {
             defaultNavigationOptions: {

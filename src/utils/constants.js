@@ -7,5 +7,6 @@ export const Routes = {
   Profile: "ProfileView",
   Bag: "BagView",
   Medals: "MedalsView",
-  Messages: "MessagesView"
+  Messages: "MessagesView",
+  NotifyView: "NotifyView"
 }; 
