@@ -23,7 +23,7 @@ import background3 from "../../assets/brasilia-16.jpg";
 
 import api from '../../services/api';
 
-import {signInRequest} from '../../store/modules/auth/actions';
+import {signInRequest, signInSuccess} from '../../store/modules/auth/actions';
 
 import { Routes } from "../../utils/constants";
 
@@ -110,7 +110,13 @@ const LoginView = ({navigation}) => {
                 Entrar 
               </Button>
               <Button
-                // mode="text"
+                mode="contained"
+                onPress={() => dispatch(signInSuccess("", ""))}
+                loading={loading}
+              > 
+                Entrar sem requisição
+              </Button>
+              <Button
                 onPress={() => navigation.navigate(Routes.SignUp)} 
               >
                 Cadastrar

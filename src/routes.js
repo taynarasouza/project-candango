@@ -8,6 +8,7 @@ import SignUpView from './views/SignUpView';
 import PasswordView from './views/PasswordView';
 import NewPasswordView from './views/NewPasswordView';
 
+import TestView from './views/TestView';
 import HomeView from './views/HomeView';
 import BagView from './views/BagView';
 import MarkerView from './views/MarkerView';
@@ -37,6 +38,7 @@ export default (signedIn = false, position = undefined) =>
         ),
         App: createStackNavigator(
           {
+            TestView,
             HomeView: {
               screen: HomeView,
               initialRouteParams: {
