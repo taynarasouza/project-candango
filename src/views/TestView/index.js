@@ -76,14 +76,14 @@ const TestView = ({navigation}) => {
         justifyContent: 'space-around',
     }}
     >
-            {/* <Text>Tela de teste, sem o mapa.</Text>
+            <Text>Tela de teste, sem o mapa.</Text>
             <Button
                 mode="contained"
                 onPress={() => navigation.navigate(Routes.Home)}
-                disabled={true}
+                // disabled={true}
             >
-                Ir para tela do mapa (ainda não funcional)
-            </Button> */}
+                Ir para tela do mapa
+            </Button>
       <Menu 
         open={openMenu}
         actions={actions}
