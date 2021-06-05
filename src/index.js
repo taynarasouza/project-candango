@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import createRouter from './routes';
 
 export default function Index() {
-    const [spinner, setSpinner] = useState(false);
     const [position, setPosition] = useState({
         latitude: 0,
         longitude: 0
