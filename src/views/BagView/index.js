@@ -1,7 +1,20 @@
-import React from "react";
-import { View,StyleSheet, ScrollView, FlatList } from "react-native";
-import { Appbar, BottomNavigation,Avatar,Text, Card, Paragraph, Title, Badge,Surface  } from "react-native-paper";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, ScrollView, FlatList } from "react-native";
+import {
+  BottomNavigation,
+  Text,
+  Paragraph,
+  Title,
+  Surface
+ } from "react-native-paper";
 
+import {
+  MedalContainer,
+  Medal,
+  MedalCover,
+} from './styles';
+
+import api from '../../services/api';
 
 /** -------------------CIRCUITOS INICIO ----------------- */
 const CircuitsView = ({ navigation }) =>  {return (
@@ -13,56 +26,100 @@ const CircuitsView = ({ navigation }) =>  {return (
   );
 }
 
+
+
 /** -------------------CIRCUITOS FIM ----------------- */
 
 /** -------------------MEDALHAS INICIO ----------------- */
 
-const Medal = ({src, hasMedal}) => {
-  let style = {};
-  if (hasMedal)
-    style = {opacity: .2};
-  return (
-    <View style={styles.item}>
-      <Avatar.Image
-       {...style}
-         source={src}
+// const Medal = ({src, hasMedal}) => {
+//   let style = {};
+//   if (hasMedal)
+//     style = {opacity: .2};
+//   return (
+//     <View style={styles.item}>
+//       <Avatar.Image
+//        {...style}
+//          source={src}
        
-      />
-    </View>
-  )
-};
+//       />
+//     </View>
+//   )
+// };
 
-const medals = [
-  {id: 1, src:{uri: 'http://candango.ngrok.io/api/candango/imagem/catedral'}},
-  {id: 2, src:{uri: 'http://candango.ngrok.io/api/candango/imagem/congresso'}},
-  {id: 3, src:{uri: 'http://candango.ngrok.io/api/candango/imagem/dombosco'}},
-  {id: 4, src:{uri: 'http://candango.ngrok.io/api/candango/imagem/estadio'}},
-  {id: 5, src:{uri: 'http://candango.ngrok.io/api/candango/imagem/igrejinha'}},
-  {id: 6, src:{uri: 'http://candango.ngrok.io/api/candango/imagem/memorialjk'}},
-  {id: 7, src:{uri: 'http://candango.ngrok.io/api/candango/imagem/museu'}},
-  {id: 8, src:{uri: 'http://candango.ngrok.io/api/candango/imagem/parquedacidade'}},
-  {id: 9, src:{uri: 'http://candango.ngrok.io/api/candango/imagem/semmedalha'}},
-  {id: 10, src:{uri: 'http://candango.ngrok.io/api/candango/imagem/torredetv'}},
-
+const medals_const = [
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/catedral'}, hasMedal: true },
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/congresso'}},
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/dombosco'}, hasMedal: true },
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/estadio'}},
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/igrejinha'}, hasMedal: true },
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/memorialjk'}},
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/museu'}, hasMedal: true },
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/parquedacidade'}, hasMedal: true },
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/torredetv'}},
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/catedral'}, hasMedal: true },
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/congresso'}},
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/dombosco'}, hasMedal: true },
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/estadio'}},
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/igrejinha'}, hasMedal: true },
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/memorialjk'}},
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/museu'}, hasMedal: true },
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/parquedacidade'}, hasMedal: true },
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/torredetv'}},
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/catedral'}, hasMedal: true },
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/congresso'}},
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/dombosco'}, hasMedal: true },
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/estadio'}},
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/igrejinha'}, hasMedal: true },
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/memorialjk'}},
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/museu'}, hasMedal: true },
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/parquedacidade'}, hasMedal: true },
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/torredetv'}},
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/catedral'}, hasMedal: true },
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/congresso'}},
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/dombosco'}, hasMedal: true },
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/estadio'}},
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/igrejinha'}, hasMedal: true },
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/memorialjk'}},
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/museu'}, hasMedal: true },
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/parquedacidade'}, hasMedal: true },
+  {id: String(Math.random()), src:{uri: 'http://candango.ngrok.io/api/candango/imagem/torredetv'}},
 ];
 
 const MedalsView = ({ navigation }) =>  {
+  const [medals, setMedals ] = useState(medals_const);
+
+  useEffect(() => {
+    // async function getMedals() {
+    //   const response = await api.post(`/medalhasUsuario`);
+      
+    //   setMedals(response.data.medals);
+    // }
+    
+    // getMedals();
+  }, []);
+
   return (
-    <>
+    <MedalContainer>
       <View style={{flexDirection: 'row', justifyContent:"space-around" , padding:15}}>
         <Text style={styles.title}>Medalhas</Text>
       </View>
         
       <ScrollView contentContainerStyle={styles.view}>
           {medals.map((medal, i) => (
-            <Medal
-              key={medal.id}
-              src={medal.src}
+            <Medal source={medal.src}>
+              <MedalCover hasMedal={medal.hasMedal}>
+
+              </MedalCover>
+            </Medal>
+            // <Medal
+            //   key={medal.id}
+            //   src={medal.src}
             
-            />
+            // />
           ))}
       </ScrollView>
-    </>
+    </MedalContainer>
   );
 }
 
@@ -130,11 +187,13 @@ const styles =StyleSheet.create({
         marginTop : 20,
         marginLeft : 20,
         width:'100%',
+        // height: '100%',
         display:'flex',
         flexDirection: "row",
         flexWrap: "wrap",
         justifyContent:'flex-start',
-        alignItems: "center"
+        alignItems: "center",
+        // backgroundColor: 'red',
       },
       item: {
         marginRight : 20,
