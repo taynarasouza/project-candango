@@ -11,7 +11,7 @@ import MarkerView from "../MarkerView";
 
 import { Routes } from "../../utils/constants";
 
-const GOOGLE_API_KEY = "AIzaSyCmM8BNpCSEhtCy9NdOMeDQlwWmBSMwAfU";
+const GOOGLE_API_KEY = "AIzaSyB90RnyJ2NDSeoXAuIEGfv8viCx_BrCo28";
 
 const Menu = ({open, actions, onClick}) => {
   return (
