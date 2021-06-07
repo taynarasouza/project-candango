@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 
 import { Avatar, Container } from './styles';
 
-export const ProfileXp = ({ percent, size, imageUrl }) => {
+export const ProfileXp = ({ percent, size, imageUrl, style }) => {
   return (
-    <Container>
+    <Container style={style}>
         <ProgressCircle
             percent={percent}
             radius={size}

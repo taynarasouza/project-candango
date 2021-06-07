@@ -21,19 +21,25 @@ import {
   PhoneNumberInput,
   Helper,
   Button,
-  XpCircle,
-  Image,
+  ProfileContainer,
+  ProfileAvatarXp,
+  ProfileInfo,
+  ProfileName,
+  ProfileXpContainer,
+  ProfileLevel,
+  ProfileXpProgress,
 } from './styles';
 
 import { 
   Picker, 
 } from "../../components/Fields";
-
-import { ProfileXp } from '../../components/ProfileXp';
+import { isRequired } from 'react-native/Libraries/DeprecatedPropTypes/DeprecatedColorPropType';
 
 const ProfileView = ({ navigation }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.profile);
+  
+  console.log(user);
 
   let selectGender;
   const openGenderModal = () => selectGender.show();
@@ -89,11 +95,20 @@ const ProfileView = ({ navigation }) => {
   return (
       <Wrapper>
         <Container>
-          <ProfileXp
-            size={50}
-            percent={30}
-            imageUrl={'https://randomuser.me/api/portraits/lego/0.jpg'}
-          />
+          <ProfileContainer>
+            <ProfileAvatarXp
+              size={50}
+              percent={30}
+              imageUrl={'https://randomuser.me/api/portraits/lego/0.jpg'}
+            />
+            <ProfileInfo>
+              <ProfileName>{user.nome}</ProfileName>
+              <ProfileXpContainer>
+                <ProfileLevel>Level {user.level}</ProfileLevel>
+                <ProfileXpProgress>{'30' || user.quantidadeExpAtual}/100</ProfileXpProgress>
+              </ProfileXpContainer>
+            </ProfileInfo>
+          </ProfileContainer>
           <Form
             validationSchema={schemaValidation}
             initialValues={{ 

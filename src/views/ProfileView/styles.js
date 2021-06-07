@@ -5,7 +5,7 @@ import { HelperText } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Button as ButtonPaper } from 'react-native-paper';
-import ProgressCircle from 'react-native-progress-circle';
+import { ProfileXp } from '../../components/ProfileXp';
 
 import { 
   PhoneInput, 
@@ -27,21 +27,40 @@ export const Container = styled(KeyboardAwareScrollView).attrs({
     /* margin-bottom: 60px; */
 `;
 
-export const XpCircle = styled(ProgressCircle).attrs({
-    radius: 50,
-    borderWidth: 8,
-    color: "#3399FF",
-    shadowColor: "#999",
-    bgColor: "#fff"
-})`
-    margin: 10px;
+export const ProfileContainer = styled.View`
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 `;
 
-export const Image = styled.Image`
-    flex:1;
-    height: 100%;
-    width: 100%;
-    border-radius: 30px;
+export const ProfileXpContainer = styled.View`
+    flex-direction: row;
+    align-items: center;
+`;
+
+export const ProfileAvatarXp = styled(ProfileXp)`
+    margin-right: 15px;
+    align-items: flex-end;
+`;
+
+export const ProfileInfo = styled.View`
+    flex: 1;
+`;
+
+export const ProfileName = styled.Text`
+    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 4px;
+`;
+
+export const ProfileLevel = styled.Text`
+    font-size: 20px;
+`;
+
+export const ProfileXpProgress = styled.Text`
+    font-size: 14px;
+    margin-left: 4px;
 `;
 
 export const Form = styled(Formik)`
