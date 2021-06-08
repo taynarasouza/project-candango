@@ -2,6 +2,10 @@ import produce from 'immer';
 
 const INITIAL_STATE = {
   profile: null,
+  position: {
+    latitude: null,
+    longitude: null
+  }
 };
 
 export default function user(state = INITIAL_STATE, action) {
@@ -19,6 +23,11 @@ export default function user(state = INITIAL_STATE, action) {
 
       case '@auth/SIGN_OUT': {
         draft.profile = null;
+        break;
+      }
+
+      case '@user/SET_POSITION': {
+        draft.position = { ...action.payload.position };
         break;
       }
 
