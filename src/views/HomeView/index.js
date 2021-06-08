@@ -10,6 +10,7 @@ import {signOut} from '../../store/modules/auth/actions';
 import MarkerView from "../MarkerView";
 
 import { Routes } from "../../utils/constants";
+import { setUserPosition } from '../../store/modules/user/actions';
 
 const GOOGLE_API_KEY = "AIzaSyB90RnyJ2NDSeoXAuIEGfv8viCx_BrCo28";
 
@@ -31,10 +32,33 @@ const Menu = ({open, actions, onClick}) => {
 
 const HomeView = ({navigation}) => {
   const dispatch = useDispatch();
+  const position = useSelector(state => state.user.position);
 
-  let position = navigation.getParam('position');
+  // Effect para resgatar a posicao do usuario 
+  // e disparar a acao para salvar a posicao na store
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+          dispatch(setUserPosition({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          }));
+      },
+      error => console.error(error),
+      { 
+          enableHighAccuracy: false, 
+          timeout: 200000, 
+          maximumAge: 1000 
+      },
+    );
 
-  console.log(position);
+    return () => {
+      dispatch(setUserPosition({
+        latitude: null,
+        longitude: null
+      }));
+    }
+  }, []);
   
   const [openMenu, setOpenMenu] = useState(false);
   const [modal, setModal] = useState({
@@ -116,13 +140,10 @@ const HomeView = ({navigation}) => {
   // };
 
   const initialRegion = {
-    latitude: -15.814358099371333,
-    longitude: -47.98246049051098,
+    ...position,
     latitudeDelta: 0.155,
     longitudeDelta: 0.155
   }
-
-  console.log(initialRegion);
 
   const markers = [
     {
@@ -137,49 +158,47 @@ const HomeView = ({navigation}) => {
 
   return (
     <View style={{flex: 1, borderWidth: 1, borderColor: "black"}}>
-      <MapView
-        provider={PROVIDER_GOOGLE}
-        // mapType={Platform.OS === "android" ? "none" : "standard"}
-        initialRegion={{
-          ...position,
-          latitudeDelta: 0.155,
-          longitudeDelta: 0.155
-        }}
-        loadingEnabled={true}
-        toolbarEnabled={true}
-        minZoomLevel={11}
-        maxZoomLevel={20}
-        showsUserLocation={true}
-        followsUserLocation={false}
-        showsMyLocationButton={false}
-        pitchEnabled={true}
-        style={styles.mapStyle}
-      >
-        {markers.map(marker => {
-          let color = "red";
-          const latitude = parseFloat(marker.geo_lat_ponto_turistico);
-          const longitude = parseFloat(marker.geo_long_ponto_turistico);
+      {position.latitude != null && position.longitude != null && (
+        <MapView
+          provider={PROVIDER_GOOGLE}
+          // mapType={Platform.OS === "android" ? "none" : "standard"}
+          initialRegion={initialRegion}
+          loadingEnabled={true}
+          toolbarEnabled={true}
+          minZoomLevel={11}
+          maxZoomLevel={20}
+          showsUserLocation={true}
+          followsUserLocation={false}
+          showsMyLocationButton={false}
+          pitchEnabled={true}
+          style={styles.mapStyle}
+        >
+          {markers.map(marker => {
+            let color = "red";
+            const latitude = parseFloat(marker.geo_lat_ponto_turistico);
+            const longitude = parseFloat(marker.geo_long_ponto_turistico);
 
-          return (
-            <Marker
-              key={marker.id_ponto_turistico}
-              pinColor={color}
-              coordinate={{
-                latitude,
-                longitude 
-              }}
-              onPress={e => {
-                const coordinates = e.nativeEvent.coordinate;
-                handlePressMarker(
-                  coordinates,
-                  marker.nme_ponto_turistico,
-                  marker.dsc_ponto_turistico
-                )
-              }}
-            />
-          )
-        })}
-      </MapView>
+            return (
+              <Marker
+                key={marker.id_ponto_turistico}
+                pinColor={color}
+                coordinate={{
+                  latitude,
+                  longitude 
+                }}
+                onPress={e => {
+                  const coordinates = e.nativeEvent.coordinate;
+                  handlePressMarker(
+                    coordinates,
+                    marker.nme_ponto_turistico,
+                    marker.dsc_ponto_turistico
+                  )
+                }}
+              />
+            )
+          })}
+        </MapView>
+      )}
       {/* Menu FAB */}
       <Menu 
         open={openMenu}
