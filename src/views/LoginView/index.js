@@ -4,6 +4,7 @@ import {
   Background,
   Container,
   KeyboardView,
+  DismissKeyboardView,
   LogoContainer,
   Logo,
   Form,
@@ -18,8 +19,8 @@ import {
 import { Alert } from "react-native";
 import {useDispatch, useSelector} from 'react-redux';
 
-import logo from "../../assets/logo.png";
-import background3 from "../../assets/brasilia-16.jpg";
+import logo from "../../../assets/images/logo.png";
+import background3 from "../../../assets/images/brasilia-16.jpg";
 
 import api from '../../services/api';
 
@@ -42,11 +43,7 @@ const LoginView = ({navigation}) => {
   });
 
   const handleLogin = ({ email, password }) => {
-    // setLoading(true);
-    // setTimeout(() => setLoading(false), 1000);
-    // setTimeout(() => history.push("/home"), 1100);
     dispatch(signInRequest(email, password));
-    // history.push(Routes.Home);
   };
 
   return (
@@ -108,13 +105,6 @@ const LoginView = ({navigation}) => {
                 disabled={Object.keys(errors).length > 0 }
               > 
                 Entrar 
-              </Button>
-              <Button
-                mode="contained"
-                onPress={() => dispatch(signInSuccess("", ""))}
-                loading={loading}
-              > 
-                Entrar sem requisição
               </Button>
               <Button
                 onPress={() => navigation.navigate(Routes.SignUp)} 
