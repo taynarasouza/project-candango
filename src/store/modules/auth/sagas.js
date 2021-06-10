@@ -55,13 +55,13 @@ export function* signUp({payload}) {
 
     Alert.alert('Cadastro realizado com sucesso!');
 
-    const { usuarioInfo } = response.data;
+    const { userInfo } = response.data;
     const { headers } = response;
 
     let cookieHeader = headers["set-cookie"][0];
     let cookie = cookieHeader.split('; ')[0];
 
-    yield put(signInSuccess(cookie, usuarioInfo));
+    yield put(signInSuccess(cookie, userInfo));
   } catch (error) {
     Alert.alert('Falha no cadastro', error.response.data.error);
     yield put(signFailure());
