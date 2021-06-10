@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions, Modal, ScrollView, Alert, Image, TouchableHighlight } from 'react-native';
+import React, { useState, useEffect, Fragment } from 'react';
+import { View, Text, StyleSheet, Dimensions, TextInput, Modal, ScrollView, Alert, Image, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { FAB, Portal, Provider, Button } from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker, Circle, PROVIDER_GOOGLE } from 'react-native-maps';
 
 import {signOut} from '../../store/modules/auth/actions';
 
@@ -13,6 +13,12 @@ import { Routes } from "../../utils/constants";
 import { setUserPosition } from '../../store/modules/user/actions';
 
 const GOOGLE_API_KEY = "AIzaSyB90RnyJ2NDSeoXAuIEGfv8viCx_BrCo28";
+
+const { width, height } = Dimensions.get('window');
+
+const ASPECT_RATIO = width / height;
+const LATITUDE_DELTA = 0.0922;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const Menu = ({open, actions, onClick}) => {
   return (
@@ -44,11 +50,11 @@ const HomeView = ({navigation}) => {
             longitude: position.coords.longitude
           }));
       },
-      error => console.error(error),
+      error => Alert.alert("Position", JSON.stringify(error)),
       { 
-          enableHighAccuracy: false, 
-          timeout: 200000, 
-          maximumAge: 1000 
+          enableHighAccuracy: true, 
+          timeout: 2000, 
+          maximumAge: 3600000 
       },
     );
 
@@ -141,8 +147,8 @@ const HomeView = ({navigation}) => {
 
   const initialRegion = {
     ...position,
-    latitudeDelta: 0.155,
-    longitudeDelta: 0.155
+    latitudeDelta: LATITUDE_DELTA,
+    longitudeDelta: LONGITUDE_DELTA
   }
 
   const markers = [
@@ -157,64 +163,89 @@ const HomeView = ({navigation}) => {
   ]
 
   return (
-    <View style={{flex: 1, borderWidth: 1, borderColor: "black"}}>
-      {position.latitude != null && position.longitude != null && (
-        <MapView
-          provider={PROVIDER_GOOGLE}
-          // mapType={Platform.OS === "android" ? "none" : "standard"}
-          initialRegion={initialRegion}
-          loadingEnabled={true}
-          toolbarEnabled={true}
-          minZoomLevel={11}
-          maxZoomLevel={20}
-          showsUserLocation={true}
-          followsUserLocation={false}
-          showsMyLocationButton={false}
-          pitchEnabled={true}
-          style={styles.mapStyle}
-        >
-          {markers.map(marker => {
-            let color = "red";
-            const latitude = parseFloat(marker.geo_lat_ponto_turistico);
-            const longitude = parseFloat(marker.geo_long_ponto_turistico);
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={{...StyleSheet.absoluteFillObject}}>
+        {position.latitude != null && position.longitude != null && (
+          <>
+            <MapView
+              provider={PROVIDER_GOOGLE}
+              // mapType={Platform.OS === "android" ? "none" : "standard"}
+              initialRegion={initialRegion}
+              loadingEnabled={true}
+              toolbarEnabled={false}
+              minZoomLevel={5}
+              maxZoomLevel={15}
+              showsUserLocation={true}
+              followsUserLocation={true}
+              showsMyLocationButton={false}
+              pitchEnabled={true}
+              style={styles.mapStyle}
+            >
+              {markers.map(marker => {
+                let color = "red";
+                const latitude = parseFloat(marker.geo_lat_ponto_turistico);
+                const longitude = parseFloat(marker.geo_long_ponto_turistico);
 
-            return (
-              <Marker
-                key={marker.id_ponto_turistico}
-                pinColor={color}
-                coordinate={{
-                  latitude,
-                  longitude 
-                }}
-                onPress={e => {
-                  const coordinates = e.nativeEvent.coordinate;
-                  handlePressMarker(
-                    coordinates,
-                    marker.nme_ponto_turistico,
-                    marker.dsc_ponto_turistico
-                  )
-                }}
-              />
-            )
-          })}
-        </MapView>
-      )}
-      {/* Menu FAB */}
-      <Menu 
-        open={openMenu}
-        actions={actions}
-        onClick={handleMenu}
-      />
+                return (
+                  <Fragment key={marker.id_ponto_turistico}>
+                    <Marker
+                      key={marker.id_ponto_turistico}
+                      pinColor={color}
+                      coordinate={{
+                        latitude,
+                        longitude 
+                      }}
+                      onPress={e => {
+                        const coordinates = e.nativeEvent.coordinate;
+                        handlePressMarker(
+                          coordinates,
+                          marker.nme_ponto_turistico,
+                          marker.dsc_ponto_turistico
+                        )
+                      }}
+                    />
+                    <Circle 
+                      center={{
+                        latitude,
+                        longitude 
+                      }}
+                      fillColor="rgba(135,206,235, .5)"
+                      strokeColor="rgba(135,206,235, .8)"
+                      strokeWidth={1}
+                      radius={250}
+                      zIndex={99999999999999999999999999999999999}
+                    />
+                  </Fragment>
+                )
+              })}
+            </MapView>
+            {/* <View style={{position: "absolute", left: 0, right: 0, top: 80, display: "flex", alignItems: "center", justifyContent: "center"}}>
+              <View style={{backgroundColor: "white", borderRadius: 30, width: width - 80, shadowColor: "rgba(0,0,0,.4)", shadowOpacity: .8, shadowRadius: 6, shadowOffset: { width: 0, height: 0}, height: 45, padding: 10, display: "flex", alignItems: "center", justifyContent: "center"}}>
+                <TextInput 
+                  placeholder="Pesquisar localização"
+                  style={{width: "100%", paddingHorizontal: 10, fontSize: 16}}
+                />
+              </View>
+            </View> */}
+          </>
+        )}
+        {/* Menu FAB */}
+        <Menu 
+          open={openMenu}
+          actions={actions}
+          onClick={handleMenu}
+        />
 
-      <MarkerView 
-        open={modal.open}
-        name={modal.title} 
-        description={modal.text}
-        image={markers[0].ft_ponto_turistico}
-        onDirectUser={handleDirectUser}
-        onClose={handleClose}
-      />
-    </View>
+        <MarkerView 
+          open={modal.open}
+          name={modal.title} 
+          description={modal.text}
+          image={markers[0].ft_ponto_turistico}
+          onDirectUser={handleDirectUser}
+          onClose={handleClose}
+        />
+      </View>
+    </TouchableWithoutFeedback>
   )
 };
 
@@ -231,8 +262,7 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   mapStyle: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    ...StyleSheet.absoluteFillObject,
   },
   mapOptionsContainer: {
     position: "absolute",
