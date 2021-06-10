@@ -12,6 +12,7 @@ import {
 } from '../../utils/pickerList';
 
 import { updateProfileRequest } from '../../store/modules/user/actions';
+import { signOut } from '../../store/modules/auth/actions'
 
 import {
   Wrapper,
@@ -34,7 +35,6 @@ import {
 import { 
   Picker, 
 } from "../../components/Fields";
-import { Alert } from 'react-native';
 
 const ProfileView = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -188,6 +188,12 @@ const ProfileView = ({ navigation }) => {
                   )}
                 >
                   Salvar
+                </Button>
+                <Button
+                  onPress={() => dispatch(signOut())}
+                  color={"rgb(255, 0, 0)"}
+                >
+                  Sair
                 </Button>
               </FormContainer>
               )}

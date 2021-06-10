@@ -27,6 +27,7 @@ export const Container = styled(KeyboardAwareScrollView).attrs({
 
 export const ProfileContainer = styled.View`
     flex: 1;
+    padding: 0 36px;
     flex-direction: row;
     align-items: center;
     justify-content: center;
@@ -39,6 +40,7 @@ export const ProfileXpContainer = styled.View`
 `;
 
 export const ProfileAvatarXp = styled(ProfileXp)`
+    max-width: 100px;
     margin-right: 15px;
     align-items: flex-end;
 `;
@@ -85,13 +87,13 @@ export const Helper = styled(HelperText)`
 export const Button = styled(ButtonPaper).attrs({
     contentStyle: {
         height: 50,
-    }
+    },
 })`
     width: 90%;
     max-width: 325px;
     height: 50px;
     /* margin: 16px 0px; */
-    margin-bottom: 48px;
+    margin-bottom: 24px;
     border-radius: 32px;
     justify-content: center;
 `;

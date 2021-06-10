@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 
 import {
-  MedalContainer,
+  Container,
   Medal,
   MedalCover,
 
@@ -24,8 +24,10 @@ const BagView = ({ navigation }) => {
     getMedals();
   }, []);
 
+  console.log(medals);
+
   return (
-    <MedalContainer>
+    <Container>
       <ScrollView contentContainerStyle={styles.view}>
           {medals && medals.map((medal, i) => (
             <Medal source={{ uri: medal.img }}>
@@ -35,7 +37,7 @@ const BagView = ({ navigation }) => {
             </Medal>
           ))}
       </ScrollView>
-    </MedalContainer>
+    </Container>
   );
 }
 

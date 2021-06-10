@@ -111,9 +111,10 @@ const HomeView = ({navigation}) => {
         backgroundColor: "#000099"
       }
     },
-    { icon: 'exit-to-app',
-      label: 'Sair',
-      onPress: () => dispatch(signOut()), //history.push(Routes.Login),
+    {
+      icon: 'bell',
+      label: 'Notificações',
+      onPress: () => navigation.navigate(Routes.NotifyView),
       small: false,
       style: {
         backgroundColor: "#000099"
@@ -123,15 +124,6 @@ const HomeView = ({navigation}) => {
       icon: 'bag-personal',
       label: 'Mochila',
       onPress: () => navigation.navigate(Routes.Bag),
-      small: false,
-      style: {
-        backgroundColor: "#000099"
-      }
-    },
-    {
-      icon: 'bell',
-      label: 'Notificações',
-      onPress: () => navigation.navigate(Routes.NotifyView),
       small: false,
       style: {
         backgroundColor: "#000099"
