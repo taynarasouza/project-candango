@@ -46,7 +46,7 @@ export const
     .catch(err => console.error(err)),
 
   recoverPassword = eml_usuario =>
-    fetch(`${host}/forgotPassword`, {
+    fetch(`${host}/user/forgotPassword`, {
       method: "POST",
       headers: {
         "Accept": "application/json",
@@ -60,7 +60,7 @@ export const
       .catch(err => console.error(err)),
 
   changePassword = (eml_usuario, cod_recuperar_senha, nova_senha) =>
-    fetch(`${host}/changePassword`, {
+    fetch(`${host}/user/changePassword`, {
       method: "POST",
       headers: {
         "Accept": "application/json",
