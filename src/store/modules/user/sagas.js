@@ -6,24 +6,30 @@ import api from '../../../services/api';
 import {updateProfileSuccess, updateProfileFailure} from './actions';
 
 export function* updateProfile({payload}) {
-  // try {
-  //   const {name, email, ...rest} = payload.data;
+  try {
+    const { 
+      name, gender, phone, email, password, state, country 
+    } = payload.data;
 
-  //   const profile = {
-  //     name,
-  //     email,
-  //     ...(rest.oldPassword ? rest : {}),
-  //   };
+    const response = yield call(api.put, 'user', {
+      name,
+      gender,
+      phone,
+      email,
+      password,
+      state,
+      country
+    });
 
-  //   const response = yield call(api.put, 'users', profile);
+    Alert.alert('Perfil atualizado com sucesso!');
 
-  //   Alert.alert('Sucesso', 'Perfil atualizado com sucesso!');
+    const { userInfo } = response.data;
 
-  //   yield put(updateProfileSuccess(response.data));
-  // } catch (err) {
-  //   Alert.alert('Erro', 'Erro ao atualizar perfil, confira seus dados!');
-  //   yield put(updateProfileFailure());
-  // }
+    yield put(updateProfileSuccess(userInfo));
+  } catch (error) {
+    Alert.alert('Falha ao atualizar perfil', error.response.data.error);
+    yield put(updateProfileFailure());
+  }
 }
 
 export default all([takeLatest('@user/UPDATE_PROFILE_REQUEST', updateProfile)]);

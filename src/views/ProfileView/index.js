@@ -11,36 +11,36 @@ import {
   statesMap,
 } from '../../utils/pickerList';
 
-import {signUpRequest} from '../../store/modules/auth/actions';
+import { updateProfileRequest } from '../../store/modules/user/actions';
 
 import {
   Wrapper,
   Container,
+  ProfileContainer,
+  ProfileXpContainer,
+  ProfileAvatarXp,
+  ProfileInfo,
+  ProfileName,
+  ProfileLevel,
+  ProfileXpProgress,
+  FormContainer,
   Form,
   Input,
   PhoneNumberInput,
   Helper,
   Button,
-  ProfileContainer,
-  ProfileAvatarXp,
-  ProfileInfo,
-  ProfileName,
-  ProfileXpContainer,
-  ProfileLevel,
-  ProfileXpProgress,
 } from './styles';
 
 import { 
   Picker, 
 } from "../../components/Fields";
-import { isRequired } from 'react-native/Libraries/DeprecatedPropTypes/DeprecatedColorPropType';
+import { Alert } from 'react-native';
 
 const ProfileView = ({ navigation }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.profile);
+  const loading = useSelector(state => state.user.loading);
   
-  console.log(user);
-
   let selectGender;
   const openGenderModal = () => selectGender.show();
   const selectGenderRef = ref => selectGender = ref;
@@ -64,33 +64,25 @@ const ProfileView = ({ navigation }) => {
     phone: Yup.string()
       .required("Campo obrigatório.")
       .min(14, ({ min }) => `Deve conter pelo menos 10 digitos.`), 
-    confirmEmail: Yup.string()
-      .required("Campo obrigatório.")
-      .oneOf([Yup.ref('email')], "Os emails não conferem."),
-    password: Yup.string()
-      .required("Campo obrigatório!")
-      .min(8, ({ min }) => `A senha deve ter pelo menos ${min} caracteres.`),
-    confirmPassword: Yup.string()
-      .required("Campo obrigatório!")
-      .oneOf([Yup.ref('password')], "As senhas não conferem."),
+    // confirmEmail: Yup.string()
+    //   .required("Campo obrigatório.")
+    //   .oneOf([Yup.ref('email')], "Os emails não conferem."),
+    // password: Yup.string()
+    //   .required("Campo obrigatório!")
+    //   .min(8, ({ min }) => `A senha deve ter pelo menos ${min} caracteres.`),
+    // confirmPassword: Yup.string()
+    //   .required("Campo obrigatório!")
+    //   .oneOf([Yup.ref('password')], "As senhas não conferem."),
     state: Yup.string()
       .required("Campo obrigatório!")
       .max(2, "Apenas 2 letras."),
     country: Yup.string()
       .required("Campo obrigatório!"),
   });
-
-  const handleSubmitForm = ({
-    name,
-    gender,
-    phone,
-    email,
-    password,
-    state,
-    country
-  }) => {
-    dispatch(signUpRequest(name, gender, phone, email, password, state, country));
-  }
+  
+  const handleUpdateUser = (data) => {
+    dispatch(updateProfileRequest(data));
+  };
 
   return (
       <Wrapper>
@@ -119,29 +111,20 @@ const ProfileView = ({ navigation }) => {
               country: user.country,
               state: user.state,
             }}
-            onSubmit={values => handleSubmitForm(values)}
+            onSubmit={values => handleUpdateUser(values)}
           >
-            {({
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              values,
-              errors,
-              touched,
-              isValid,
-              setFieldValue,
-              setFieldTouched,
+            {({ 
+              handleChange, handleSubmit, values, errors, touched, setFieldValue
             }) => (
-              <>
+              <FormContainer>
                 <Input label="Nome" 
                   value={values.name} 
                   placeholder="Escreva seu nome" 
                   onChange={handleChange('name')}
-                  onBlur={handleBlur('name')}
                   touched={touched.name}
                 />
                 {/* Tive que adicionar o Boolean() pois não tava pegando o touched undefined como false */}
-                <Helper type="error" visible={Boolean(errors.name && touched.name)}>
+                <Helper type="error" visible={errors.name && touched.name}>
                   {errors.name}
                 </Helper>
                 <Picker 
@@ -162,7 +145,7 @@ const ProfileView = ({ navigation }) => {
                 <Helper type="error" visible={Boolean(errors.phone && touched.phone)}>
                   {errors.phone}
                 </Helper>
-                <Input 
+                {/* <Input 
                   label="Email"
                   value={values.email} 
                   type="email-address"
@@ -171,7 +154,7 @@ const ProfileView = ({ navigation }) => {
                 />
                 <Helper type="error" visible={Boolean(errors.email && touched.email)}>
                   {errors.email}
-                </Helper>
+                </Helper> */}
                 <Picker 
                   ref={selectContryRef}
                   openModal={openContryModal}
@@ -191,12 +174,22 @@ const ProfileView = ({ navigation }) => {
                   touched={touched.state}
                 />
                 <Button
+                  // onPress={handleSubmit}
                   onPress={handleSubmit}
                   mode="contained"
+                  loading={loading}
+                  disabled={loading || (
+                      values.name == user.name &&
+                      values.gender == user.gender &&
+                      values.phone == user.phone &&
+                      values.email == user.email &&
+                      values.country == user.country &&
+                      values.state == user.state
+                  )}
                 >
-                  Cadastrar
+                  Salvar
                 </Button>
-              </>
+              </FormContainer>
               )}
           </Form>
         </Container>
