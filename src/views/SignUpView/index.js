@@ -102,23 +102,14 @@ const SignUpView = ({ navigation }) => {
             }}
             onSubmit={values => handleSubmitForm(values)}
           >
-            {({
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              values,
-              errors,
-              touched,
-              isValid,
-              setFieldValue,
-              setFieldTouched,
+            {({ 
+              handleChange, handleSubmit, values, errors, touched, setFieldValue
             }) => (
               <>
                 <Input label="Nome" 
                   value={values.name} 
                   placeholder="Escreva seu nome" 
                   onChange={handleChange('name')}
-                  onBlur={handleBlur('name')}
                   touched={touched.name}
                 />
                 {/* Tive que adicionar o Boolean() pois não tava pegando o touched undefined como false */}
