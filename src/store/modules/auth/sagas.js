@@ -15,7 +15,7 @@ export function* signIn({payload}) {
       password,
     });
 
-    const { usuarioInfo } = response.data;
+    const { userInfo } = response.data;
     const { headers } = response;
 
     let cookieHeader = headers["set-cookie"][0];
@@ -29,7 +29,7 @@ export function* signIn({payload}) {
     // // api.defaults.headers['cookie'] = cookie;
     // // api.defaults.headers.Authorization = cookie;
 
-    yield put(signInSuccess(cookie, usuarioInfo));
+    yield put(signInSuccess(cookie, userInfo));
 
     // history.push("/home");
 

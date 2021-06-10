@@ -102,22 +102,22 @@ const ProfileView = ({ navigation }) => {
               imageUrl={'https://randomuser.me/api/portraits/lego/0.jpg'}
             />
             <ProfileInfo>
-              <ProfileName>{user.nome}</ProfileName>
+              <ProfileName>{user.name}</ProfileName>
               <ProfileXpContainer>
                 <ProfileLevel>Level {user.level}</ProfileLevel>
-                <ProfileXpProgress>{'30' || user.quantidadeExpAtual}/100</ProfileXpProgress>
+                {/* <ProfileXpProgress>{'30' || user.currentAmountExp}/100</ProfileXpProgress> */}
               </ProfileXpContainer>
             </ProfileInfo>
           </ProfileContainer>
           <Form
             validationSchema={schemaValidation}
             initialValues={{ 
-              name: user.nome,
-              gender: user.genero,
-              phone: user.telefone,
+              name: user.name,
+              gender: user.gender,
+              phone: user.phone,
               email: user.email, 
-              country: user.pais,
-              state: user.estado,
+              country: user.country,
+              state: user.state,
             }}
             onSubmit={values => handleSubmitForm(values)}
           >
