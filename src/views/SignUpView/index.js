@@ -97,7 +97,7 @@ const SignUpView = ({ navigation }) => {
               confirmEmail: '', 
               password: '', 
               confirmPassword: '',
-              country: '',
+              country: 'BR',
               state: '',
             }}
             onSubmit={values => handleSubmitForm(values)}
@@ -202,8 +202,10 @@ const SignUpView = ({ navigation }) => {
                   touched={touched.state}
                 />
                 <Button
-                  onPress={handleSubmit}
                   mode="contained"
+                  onPress={handleSubmit}
+                  loading={loading}
+                  disabled={Object.keys(errors).length > 0 || loading}
                 >
                   Cadastrar
                 </Button>

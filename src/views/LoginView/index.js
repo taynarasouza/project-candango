@@ -102,7 +102,7 @@ const LoginView = ({navigation}) => {
                 mode="contained"
                 onPress={handleSubmit}
                 loading={loading}
-                disabled={Object.keys(errors).length > 0 }
+                disabled={Object.keys(errors).length > 0 || loading}
               > 
                 Entrar 
               </Button>

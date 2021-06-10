@@ -32,6 +32,7 @@ export const ProfileContainer = styled.View`
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    margin-bottom: 24px;
 `;
 
 export const ProfileXpContainer = styled.View`

@@ -78,7 +78,7 @@ export const Button = styled(ButtonPaper).attrs({
     width: 90%;
     max-width: 325px;
     height: 50px;
-    /* margin: 16px 0px; */
+    margin-top: 24px;
     margin-bottom: 48px;
     border-radius: 32px;
     justify-content: center;
