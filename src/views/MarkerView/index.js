@@ -1,8 +1,9 @@
 import React from "react";
 import { StyleSheet, Modal, ScrollView, Image, View, Text, TouchableHighlight } from "react-native";
-import { Appbar, Button } from "react-native-paper";
+import { Appbar } from "react-native-paper";
 
 import Description from "./description";
+import { Button } from "./styles";
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -66,11 +67,11 @@ function MarkerView({open, image, name, description, onDirectUser, onClose}) {
               
               <View style={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
                 
-                <Button style={{width: "100%", marginBottom: 10}} icon="directions" mode="contained" onPress={() => onDirectUser()}>
+                <Button icon="directions" mode="contained" onPress={() => onDirectUser()}>
                   Quero ir
                 </Button>
 
-                <Button style={{width: "100%"}} icon="directions" mode="contained" onPress={() => onClose()}>
+                <Button icon="directions" mode="contained" onPress={() => onClose()}>
                   Não quero ir
                 </Button>
 
