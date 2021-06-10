@@ -103,6 +103,14 @@ const HomeView = ({navigation}) => {
   }
 
   const actions = [
+    { icon: 'information',
+      label: 'Informações',
+      onPress: () => navigation.navigate(Routes.Info),
+      small: false,
+      style: {
+        backgroundColor: "#000099"
+      }
+    },
     { icon: 'exit-to-app',
       label: 'Sair',
       onPress: () => dispatch(signOut()), //history.push(Routes.Login),

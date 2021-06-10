@@ -8,12 +8,12 @@ import SignUpView from './views/SignUpView';
 import PasswordView from './views/PasswordView';
 import NewPasswordView from './views/NewPasswordView';
 
-import TestView from './views/TestView';
 import HomeView from './views/HomeView';
 import BagView from './views/BagView';
 import MarkerView from './views/MarkerView';
 import ProfileView from './views/ProfileView';
 import NotifyView from './views/NotifyView';
+import InfoView from './views/InfoView';
 
 export default (signedIn = false) =>
   createAppContainer(
@@ -44,7 +44,7 @@ export default (signedIn = false) =>
             BagView,
             ProfileView,
             MarkerView,
-            NotifyView
+            InfoView
           },
           {
             defaultNavigationOptions: {

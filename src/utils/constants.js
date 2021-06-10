@@ -8,5 +8,6 @@ export const Routes = {
   Bag: "BagView",
   Medals: "MedalsView",
   Messages: "MessagesView",
-  NotifyView: "NotifyView"
+  NotifyView: "NotifyView",
+  Info: "InfoView",
 }; 
