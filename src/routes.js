@@ -24,8 +24,7 @@ export default (signedIn = false) =>
             LoginView,
             SignUpView,
             PasswordView,
-            NewPasswordView,
-            NotifyView
+            NewPasswordView
           },
           {
             defaultNavigationOptions: {
@@ -44,7 +43,8 @@ export default (signedIn = false) =>
             BagView,
             ProfileView,
             MarkerView,
-            InfoView
+            InfoView,
+            NotifyView
           },
           {
             defaultNavigationOptions: {
