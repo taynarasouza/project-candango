@@ -30,7 +30,7 @@ const BagView = ({ navigation }) => {
     <Container>
       <ScrollView contentContainerStyle={styles.view}>
           {medals && medals.map((medal, i) => (
-            <Medal source={{ uri: medal.img }}>
+            <Medal source={{ uri: medal.img }} key={medal.id}>
               <MedalCover hasMedal={medal.hasMedal}>
 
               </MedalCover>
