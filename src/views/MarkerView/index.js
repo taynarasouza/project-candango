@@ -33,7 +33,8 @@ const Local = ({local}) => {
 
 
 
-function MarkerView({open, image, name, description, onDirectUser, onClose}) {
+function MarkerView({open, marker, onDirectUser, onClose}) {
+  const { name = "", description = "", urlImg = "" } = marker;
   return (
     <Modal
       animationType="slide"
@@ -50,7 +51,7 @@ function MarkerView({open, image, name, description, onDirectUser, onClose}) {
           <View style={styles.imageContainer}>
             <Image 
               source={{
-                uri: image
+                uri: urlImg
               }} 
               style={styles.image}/>
           </View>
