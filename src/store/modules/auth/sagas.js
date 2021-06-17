@@ -2,6 +2,7 @@ import {all, takeLatest, call, put} from 'redux-saga/effects';
 import {Alert} from 'react-native';
 
 import {signInSuccess, signFailure} from './actions';
+import {setMarkers} from '../markers/actions';
 
 import api from './../../../services/api';
 //import history from '~/services/history';
@@ -15,7 +16,7 @@ export function* signIn({payload}) {
       password,
     });
 
-    const { userInfo } = response.data;
+    const { user, attractions } = response.data;
     const { headers } = response;
 
     let cookieHeader = headers["set-cookie"][0];
@@ -29,13 +30,18 @@ export function* signIn({payload}) {
     // // api.defaults.headers['cookie'] = cookie;
     // // api.defaults.headers.Authorization = cookie;
 
-    yield put(signInSuccess(cookie, userInfo));
+    const markers = attractions["pontos turisticos"].map(a => ({...a}));
+    console.log(markers);
+
+    yield put(setMarkers(attractions["pontos turisticos"]));
+    yield put(signInSuccess(cookie, user));
 
     // history.push("/home");
 
   } catch (error) {
     Alert.alert('Falha na autenticação', error.response.data.error);
     yield put(signFailure());
+    yield put(setMarkers([]));
   }
 }
 
