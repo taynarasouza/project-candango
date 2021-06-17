@@ -4,6 +4,7 @@ import { FAB, Portal, Provider, Button } from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 
 import MapView, { Marker, Circle, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapViewDirections from 'react-native-maps-directions';
 
 import {signOut} from '../../store/modules/auth/actions';
 
@@ -11,14 +12,25 @@ import MarkerView from "../MarkerView";
 
 import { Routes } from "../../utils/constants";
 import { setUserPosition } from '../../store/modules/user/actions';
+import { setMarkers } from '../../store/modules/markers/actions';
+
+import { FabPosition, FabCancel } from "./styles";
 
 const GOOGLE_API_KEY = "AIzaSyB90RnyJ2NDSeoXAuIEGfv8viCx_BrCo28";
 
 const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
-const LATITUDE_DELTA = 0.0922;
+const LATITUDE_DELTA = 0.1722;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+const INITIAL_LATITUDE = -15.793542565926458; 
+const INITIAL_LONGITUDE = -47.88287557901528;
+const initialRegion = {
+  latitude: INITIAL_LATITUDE,
+  longitude: INITIAL_LONGITUDE,
+  latitudeDelta: LATITUDE_DELTA,
+  longitudeDelta: LONGITUDE_DELTA
+}
 
 const Menu = ({open, actions, onClick}) => {
   return (
@@ -39,16 +51,42 @@ const Menu = ({open, actions, onClick}) => {
 const HomeView = ({navigation}) => {
   const dispatch = useDispatch();
   const position = useSelector(state => state.user.position);
+  const markers = useSelector(state => state.markers.markers);
+  const mapRef = React.useRef();
+
+  const [destination, setDestination] = React.useState({
+    // start || pause || stop
+    status: "stop",
+    coordinates: {
+      latitude: null,
+      longitude: null
+    }
+  });
 
   // Effect para resgatar a posicao do usuario 
   // e disparar a acao para salvar a posicao na store
   useEffect(() => {
+    getUserPosition();    
+
+    return () => {
+      dispatch(
+        setUserPosition({
+          latitude: null,
+          longitude: null
+        })
+      );
+    }
+  }, []);
+
+  const getUserPosition = () => {
     navigator.geolocation.getCurrentPosition(
       position => {
-          dispatch(setUserPosition({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-          }));
+          dispatch(
+            setUserPosition({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude
+            })
+          );
       },
       error => Alert.alert("Position", JSON.stringify(error)),
       { 
@@ -57,50 +95,102 @@ const HomeView = ({navigation}) => {
           maximumAge: 3600000 
       },
     );
-
-    return () => {
-      dispatch(setUserPosition({
-        latitude: null,
-        longitude: null
-      }));
-    }
-  }, []);
+  }
   
   const [openMenu, setOpenMenu] = useState(false);
   const [modal, setModal] = useState({
     open: false,
-    title: "",
-    text: ""
+    payload: {}
   });
 
   const handleMenu = ({open}) =>
     setOpenMenu(open);
 
-  const handlePressMarker = (coordinates, title, text) => {
+  const handlePressMarker = (coordinates, marker) => {
+    setDestination({ 
+      status: "stop", 
+      coordinates
+    });
     setModal({
       open: true,
-      title,
-      text
+      payload: marker
     });
   };
 
   const handleDirectUser = () => {
-    Alert.alert("Sim!");
-    setModal({
+    setDestination(d => ({ 
+      status: "start", 
+      coordinates: {
+        longitude: d.coordinates.longitude,
+        latitude: d.coordinates.latitude
+      }
+    }));
+    setModal(m => ({
       open: false,
-      title: "",
-      text: ""
-    });
+      payload: m.payload 
+    }));
   };
 
   const handleClose = () => {
-    Alert.alert("Não!")
-    setModal({
+    setDestination(d => ({ 
+      status: "stop", 
+      coordinates: {
+        longitude: null,
+        latitude: null
+      } 
+    }));
+    setModal(m => ({
       open: false,
-      title: "",
-      text: ""
-    });
+      payload: {} 
+    }));
   }
+
+  const handleReadyDirections = result => {
+    mapRef.current.fitToCoordinates(
+      result.coordinates,
+      {
+        edgePadding: {
+          right: (width / 20),
+          bottom: (height / 20),
+          left: (width / 20),
+          top: (height / 20)
+        }
+      }
+    )
+
+    setTimeout(() => {
+      handleGoToMyPosition(0, 0);
+    }, 100);
+  }
+
+  const handleCancelDestination = () => {
+    mapRef.current.animateToRegion({ 
+      ...destination.coordinates, 
+      latitudeDelta: LATITUDE_DELTA, 
+      longitudeDelta: LONGITUDE_DELTA 
+    }, 1000);
+
+    setTimeout(() => {
+      setDestination({ 
+        status: "stop", 
+        coordinates: { 
+          latitude: null, 
+          longitude: null
+        }
+      });
+    }, 150);
+  }
+
+  const handleGoToMyPosition = (latitudeDelta = LATITUDE_DELTA, longitudeDelta = LONGITUDE_DELTA) => {
+    mapRef.current.animateToRegion({ 
+      ...position, 
+      latitudeDelta: latitudeDelta,
+      longitudeDelta: longitudeDelta
+    }, 1000);
+  }
+
+  const handleErrorDirections = errorMessage =>
+    Alert.alert(errorMessage);
 
   const actions = [
     { icon: 'information',
@@ -140,56 +230,35 @@ const HomeView = ({navigation}) => {
     },
   ];
 
-  // const position = {
-  //   latitude: -15.814358099371333, 
-  //   longitude: -47.98246049051098
-  // };
-
-  const initialRegion = {
-    ...position,
-    latitudeDelta: LATITUDE_DELTA,
-    longitudeDelta: LONGITUDE_DELTA
-  }
-
-  const markers = [
-    {
-      id_ponto_turistico: 1, 
-      geo_lat_ponto_turistico: -15.798571528520338, 
-      geo_long_ponto_turistico: -47.90770454351407, 
-      nme_ponto_turistico: "Parque da Cidade Sarah Kubitschek", 
-      dsc_ponto_turistico: "O Parque da Cidade é um parque multiuso localizado na Asa Sul, em Brasília, no Distrito Federal. Foi fundado em 11 de outubro de 1978 e possui 420 hectares (4 200 000 m²), sendo considerado o maior parque urbano da América Latina[carece de fontes]. Trata-se de um dos principais e mais extensos centros de lazer ao ar livre da cidade, concentrando quadras de esportes, lagos artificiais, parque de diversões, centro hípico e pistas de caminhada, patinação e ciclismo. O parque é considerado patrimônio de Brasília. Originalmente recebeu o nome de Rogério Pithon Farias, um jovem - filho do então governador - que morreu em um acidente de carro.[1] Foi renomeado para Parque Dona Sarah Kubitschek em 1997.[2] O parque ganhou fama nacional por meio da música Eduardo e Mônica do grupo brasiliense Legião Urbana.[3]",
-      ft_ponto_turistico: "https://lh5.googleusercontent.com/p/AF1QipPzf4mMU6p9-ciyBK79dZkaJ8XKkfBc48CQrOvf=w426-h240-k-no"
-    },
-  ]
-
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={{...StyleSheet.absoluteFillObject}}>
-        {position.latitude != null && position.longitude != null && (
           <>
             <MapView
+              ref={mapRef}
               provider={PROVIDER_GOOGLE}
               // mapType={Platform.OS === "android" ? "none" : "standard"}
               initialRegion={initialRegion}
               loadingEnabled={true}
               toolbarEnabled={false}
-              minZoomLevel={5}
+              minZoomLevel={0}
               maxZoomLevel={15}
               showsUserLocation={true}
               followsUserLocation={true}
               showsMyLocationButton={false}
               pitchEnabled={true}
               style={styles.mapStyle}
-            >
-              {markers.map(marker => {
+              onMapReady={getUserPosition}
+            > 
+              {markers && markers.map((marker, i) => {
                 let color = "red";
-                const latitude = parseFloat(marker.geo_lat_ponto_turistico);
-                const longitude = parseFloat(marker.geo_long_ponto_turistico);
+                const latitude = parseFloat(marker.Local.Latitude);
+                const longitude = parseFloat(marker.Local.Longitude);
 
                 return (
-                  <Fragment key={marker.id_ponto_turistico}>
+                  <Fragment key={marker.codLocal}>
                     <Marker
-                      key={marker.id_ponto_turistico}
+                      key={marker.codLocal}
                       pinColor={color}
                       coordinate={{
                         latitude,
@@ -199,8 +268,7 @@ const HomeView = ({navigation}) => {
                         const coordinates = e.nativeEvent.coordinate;
                         handlePressMarker(
                           coordinates,
-                          marker.nme_ponto_turistico,
-                          marker.dsc_ponto_turistico
+                          marker
                         )
                       }}
                     />
@@ -213,11 +281,24 @@ const HomeView = ({navigation}) => {
                       strokeColor="rgba(135,206,235, .8)"
                       strokeWidth={1}
                       radius={250}
-                      zIndex={99999999999999999999999999999999999}
+                      zIndex={100}
                     />
                   </Fragment>
                 )
               })}
+
+              {destination.status === "start" && (
+                <MapViewDirections
+                  mode="DRIVING"
+                  origin={position}
+                  destination={destination.coordinates}
+                  apikey={GOOGLE_API_KEY}
+                  strokeWidth={4}
+                  strokeColor="#000099"
+                  onReady={handleReadyDirections}
+                  onError={handleErrorDirections}
+                />
+              )}
             </MapView>
             {/* <View style={{position: "absolute", left: 0, right: 0, top: 80, display: "flex", alignItems: "center", justifyContent: "center"}}>
               <View style={{backgroundColor: "white", borderRadius: 30, width: width - 80, shadowColor: "rgba(0,0,0,.4)", shadowOpacity: .8, shadowRadius: 6, shadowOffset: { width: 0, height: 0}, height: 45, padding: 10, display: "flex", alignItems: "center", justifyContent: "center"}}>
@@ -228,19 +309,23 @@ const HomeView = ({navigation}) => {
               </View>
             </View> */}
           </>
+
+        <FabPosition onPress={() => handleGoToMyPosition()} />
+        {destination.status === "start" && (
+          <FabCancel label="Cancelar" onPress={() => handleCancelDestination()} />
         )}
         {/* Menu FAB */}
-        <Menu 
-          open={openMenu}
-          actions={actions}
-          onClick={handleMenu}
-        />
+        {destination.status !== "start" && (
+          <Menu 
+            open={openMenu}
+            actions={actions}
+            onClick={handleMenu}
+          />
+        )}
 
         <MarkerView 
           open={modal.open}
-          name={modal.title} 
-          description={modal.text}
-          image={markers[0].ft_ponto_turistico}
+          marker={modal.payload}
           onDirectUser={handleDirectUser}
           onClose={handleClose}
         />
