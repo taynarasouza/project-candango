@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, Alert } from "react-native";
 
 import {
   Container,
+  MedalContainer,
   Medal,
   MedalCover,
-
+  Scroll,
+  MedalModal,
+  ModalMedalImage,
+  ModalMedalDescription,
+  CloseModal,
 } from './styles';
 
 import api from '../../services/api';
@@ -13,6 +18,8 @@ import api from '../../services/api';
 
 const BagView = ({ navigation }) => {
   const [medals, setMedals ] = useState([]);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedMedal, setSelectedMedal] = useState({});
 
   useEffect(() => {
     async function getMedals() {
@@ -24,49 +31,39 @@ const BagView = ({ navigation }) => {
     getMedals();
   }, []);
 
+  const handleMedalPress = (medal) => {
+    setModalVisible(!isModalVisible);
+    setSelectedMedal(medal);
+  };
+
   console.log(medals);
 
   return (
     <Container>
-      <ScrollView contentContainerStyle={styles.view}>
+      <Scroll>
           {medals && medals.map((medal, i) => (
-            <Medal source={{ uri: medal.img }} key={medal.id}>
-              <MedalCover hasMedal={medal.hasMedal}>
-
-              </MedalCover>
-            </Medal>
+            <MedalContainer key={medal.id} onPress={() => handleMedalPress(medal)}>
+              <Medal source={{ uri: medal.img }}>
+                <MedalCover hasMedal={medal.hasMedal} />
+              </Medal>
+            </MedalContainer>
           ))}
-      </ScrollView>
+      </Scroll>
+      <MedalModal isVisible={isModalVisible}>
+          <ModalMedalImage source={{ uri: selectedMedal.img }}/>
+          <ModalMedalDescription>
+            {selectedMedal.name}
+          </ModalMedalDescription>
+          <CloseModal
+            mode="contained" 
+            onPress={() => 
+            setModalVisible(false)}>
+            Fechar
+          </CloseModal>
+      </MedalModal>
     </Container>
   );
 }
-
-const styles =StyleSheet.create({
-      title:{
-        fontSize:25,
-        color:'blue'
-      },
-
-      view : {
-        marginTop : 20,
-        marginLeft : 20,
-        width:'100%',
-        // height: '100%',
-        display:'flex',
-        flexDirection: "row",
-        flexWrap: "wrap",
-        justifyContent:'flex-start',
-        alignItems: "center",
-        // backgroundColor: 'red',
-      },
-      item: {
-        marginRight : 20,
-        marginTop: 20,
-        shadowOpacity: .8,
-        shadowColor: "#9e9e9e",
-        shadowRadius: 3
-      }
-    });
 
 BagView.navigationOptions = ({ navigation }) => ({
   title: 'Medalhas',
