@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Routes } from "../../utils/constants";
+
 import {
   Container,
   Scroll,
@@ -21,9 +23,10 @@ import {
 
 const SingleCircuitView = ({ navigation }) => {
   let circuit = navigation.getParam('circuit');
+  let { attractions } = circuit;
 
   const handleStartCircuit = () => {
-
+    navigation.navigate(Routes.Home, { attractions });
   };
 
   return (
@@ -51,8 +54,9 @@ const SingleCircuitView = ({ navigation }) => {
           </CircuitInfo>
 
           <About>Sobre o circuito</About>
-          <Description>{circuit.description}</Description>
+          <Description>{circuit.circuitDesc}</Description>
         </Content>
+
         <Button
           mode="contained" 
           icon="navigation"
