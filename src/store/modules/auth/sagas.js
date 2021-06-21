@@ -30,10 +30,7 @@ export function* signIn({payload}) {
     // // api.defaults.headers['cookie'] = cookie;
     // // api.defaults.headers.Authorization = cookie;
 
-    const markers = attractions["pontos turisticos"].map(a => ({...a}));
-    console.log(markers);
-
-    yield put(setMarkers(attractions["pontos turisticos"]));
+    yield put(setMarkers(attractions));
     yield put(signInSuccess(cookie, user));
 
     // history.push("/home");
@@ -61,13 +58,13 @@ export function* signUp({payload}) {
 
     Alert.alert('Cadastro realizado com sucesso!');
 
-    const { userInfo } = response.data;
+    const { user } = response.data;
     const { headers } = response;
 
     let cookieHeader = headers["set-cookie"][0];
     let cookie = cookieHeader.split('; ')[0];
 
-    yield put(signInSuccess(cookie, userInfo));
+    yield put(signInSuccess(cookie, user));
   } catch (error) {
     Alert.alert('Falha no cadastro', error.response.data.error);
     yield put(signFailure());
