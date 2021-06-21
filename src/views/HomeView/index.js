@@ -354,48 +354,6 @@ const HomeView = ({navigation}) => {
               onMapReady={getUserPosition}
               // onUserLocationChange={_setUserPosition}
             >
-              <Fragment key={99}>
-                <Marker
-                  pinColor={"blue"}
-                  coordinate={{
-                    latitude: -15.815580,
-                    longitude: -47.982582
-                  }}
-                  onPress={e => {
-                    const coordinates = e.nativeEvent.coordinate;
-                    MarkerController(
-                      coordinates,
-                      {
-                        "Local": {
-                          "CEP": "70354-400",
-                          "Endereco": "EQS 307/308, s/n, SHCS, Brasília - DF",
-                          "Latitude": "-15.815580",
-                          "Longitude": "-47.982582",
-                        },
-                        "codAttractionFather": null,
-                        "codAttractionType": 1,
-                        "codLocal": 99,
-                        "description": "A Igreja Nossa Senhora de Fátima, também conhecida como Igrejinha da 307/308 Sul, foi o primeiro templo católico em alvenaria a ser erguido em Brasília, inaugurado em 28 de junho de 1958.",
-                        "exp": 30,
-                        "microAttraction": false,
-                        "name": "Igreja Nossa Senhora de Fátima (Igrejinha)",
-                        "urlImg": null,
-                      }
-                    )
-                  }}
-                />
-                <Circle 
-                  center={{
-                    latitude: -15.815580, 
-                    longitude: -47.982582
-                  }}
-                  fillColor="rgba(135,206,235, .5)"
-                  strokeColor="rgba(135,206,235, .8)"
-                  strokeWidth={1}
-                  radius={MARKER_RADIUS}
-                  zIndex={100}
-                />
-              </Fragment>
               {markers && markers.map((marker, i) => {
                 let color = "red";
                 const latitude = parseFloat(marker.Local.Latitude);
