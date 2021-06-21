@@ -14,6 +14,8 @@ import MarkerView from './views/MarkerView';
 import ProfileView from './views/ProfileView';
 import NotifyView from './views/NotifyView';
 import InfoView from './views/InfoView';
+import CircuitsView from './views/CircuitsView';
+import SingleCircuitView from './views/SingleCircuitView';
 
 export default (signedIn = false) =>
   createAppContainer(
@@ -44,7 +46,9 @@ export default (signedIn = false) =>
             ProfileView,
             MarkerView,
             InfoView,
-            NotifyView
+            NotifyView,
+            CircuitsView,
+            SingleCircuitView
           },
           {
             defaultNavigationOptions: {
