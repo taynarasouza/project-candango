@@ -6,13 +6,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import MapView, { Marker, Circle, PROVIDER_GOOGLE } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 
-import {signOut} from '../../store/modules/auth/actions';
-
-import MarkerView from "../MarkerView";
+import MarkerView from "../MarkerView"; 
+import GetMedalView from "../GetMedalView";
 
 import { Routes } from "../../utils/constants";
 import { setUserPosition } from '../../store/modules/user/actions';
-import { setMarkers } from '../../store/modules/markers/actions';
+import api from "../../services/api";
 
 import { FabPosition, FabCancel } from "./styles";
 
@@ -30,6 +29,19 @@ const initialRegion = {
   longitude: INITIAL_LONGITUDE,
   latitudeDelta: LATITUDE_DELTA,
   longitudeDelta: LONGITUDE_DELTA
+}
+
+const MARKER_RADIUS = 150; // Radius in meters
+
+function haversine_distance(mk1, mk2) {
+  var R = 6371.0710; // Radius of the Earth in kilometers
+  var rlat1 = mk1.latitude * (Math.PI/180); // Convert degrees to radians
+  var rlat2 = mk2.latitude * (Math.PI/180); // Convert degrees to radians
+  var difflat = rlat2-rlat1; // Radian difference (latitudes)
+  var difflon = (mk2.longitude-mk1.longitude) * (Math.PI/180); // Radian difference (longitudes)
+
+  var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat/2)*Math.sin(difflat/2)+Math.cos(rlat1)*Math.cos(rlat2)*Math.sin(difflon/2)*Math.sin(difflon/2)));
+  return d;
 }
 
 const Menu = ({open, actions, onClick}) => {
@@ -54,7 +66,15 @@ const HomeView = ({navigation}) => {
   const markers = useSelector(state => state.markers.markers);
   const mapRef = React.useRef();
 
-  const [destination, setDestination] = React.useState({
+  const [ComponentGMV, setComponentGMV] = useState({
+    open: false,
+    payload: {
+      name: "",
+      exp: 0,
+      urlImg: "http://anokha.world/images/not-found.png"
+    }
+  });
+  const [destination, setDestination] = useState({
     // start || pause || stop
     status: "stop",
     coordinates: {
@@ -78,6 +98,10 @@ const HomeView = ({navigation}) => {
     }
   }, []);
 
+  // useEffect(() => {
+
+  // }, []);
+
   const getUserPosition = () => {
     navigator.geolocation.getCurrentPosition(
       position => {
@@ -96,6 +120,12 @@ const HomeView = ({navigation}) => {
       },
     );
   }
+
+  const _setUserPosition = e => {
+    const coordinates = e.nativeEvent.coordinate;
+    dispatch(setUserPosition(coordinates));
+    // console.log(coordinates);
+  }
   
   const [openMenu, setOpenMenu] = useState(false);
   const [modal, setModal] = useState({
@@ -105,6 +135,46 @@ const HomeView = ({navigation}) => {
 
   const handleMenu = ({open}) =>
     setOpenMenu(open);
+
+  // Controller responsavel por qual acao fazer:
+  // 1: destination status stop && !isNear  => Abrir MarkerView
+  // 2: destination status stop && isNear   => Abrir GetMedalView
+  // 3: destination status start && !isNear => Faz nada
+  // 4: destination status start && isNear  => Abrir GetMedalView
+  const MarkerController = (coordinates, marker) => {
+    // verifica a distancia entre o usuario e o ponto turistico desejado
+    // e seta o estado para informar se esta perto ou nao do ponto
+    // constante distance referente a distancia do player para o ponto
+    // multiplado por 1000 para conversao para metros para verificacao com a
+    // constante MARKER_RADIUS
+    const distance = Math.round(haversine_distance(position, coordinates) * 1000); // metros
+    const isnear = (distance <= MARKER_RADIUS);
+    const { status } = destination;
+
+    // Acao 1
+    if (status === "stop" && !isnear) {
+      handlePressMarker(coordinates, marker);
+      return;
+    }
+    // Acao 2 ou Acao 4
+    if ((status === "stop" && isnear) || (status === "start" && isnear)) {
+      setComponentGMV({
+        open: true,
+        payload: { marker }
+      });
+      return;
+    }
+
+    // console.log("-----------------");
+    // console.log({
+    //   coordinates,
+    //   marker,
+    //   destination,
+    //   distance,
+    //   isnear
+    // });
+    // console.log("-----------------\n");
+  }
 
   const handlePressMarker = (coordinates, marker) => {
     setDestination({ 
@@ -192,6 +262,28 @@ const HomeView = ({navigation}) => {
   const handleErrorDirections = errorMessage =>
     Alert.alert(errorMessage);
 
+  const handleSetUserMedal = () => {
+    api.post("/medals/user", { 
+      attractionCode: ComponentGMV.payload.marker.codLocal 
+    })
+    .then(() => setComponentGMV({
+      open: false,
+      payload: {
+        name: "",
+        exp: 0,
+        urlImg: "http://anokha.world/images/not-found.png"
+      }
+    }))
+    .catch(() => setComponentGMV({
+      open: false,
+      payload: {
+        name: "",
+        exp: 0,
+        urlImg: "http://anokha.world/images/not-found.png"
+      }
+    }))
+  }
+
   const actions = [
     { icon: 'information',
       label: 'Informações',
@@ -250,7 +342,7 @@ const HomeView = ({navigation}) => {
               initialRegion={initialRegion}
               loadingEnabled={true}
               toolbarEnabled={false}
-              minZoomLevel={0}
+              // minZoomLevel={0}
               maxZoomLevel={15}
               showsUserLocation={true}
               followsUserLocation={true}
@@ -258,6 +350,7 @@ const HomeView = ({navigation}) => {
               pitchEnabled={true}
               style={styles.mapStyle}
               onMapReady={getUserPosition}
+              // onUserLocationChange={_setUserPosition}
             > 
               {markers && markers.map((marker, i) => {
                 let color = "red";
@@ -275,7 +368,7 @@ const HomeView = ({navigation}) => {
                       }}
                       onPress={e => {
                         const coordinates = e.nativeEvent.coordinate;
-                        handlePressMarker(
+                        MarkerController(
                           coordinates,
                           marker
                         )
@@ -289,7 +382,7 @@ const HomeView = ({navigation}) => {
                       fillColor="rgba(135,206,235, .5)"
                       strokeColor="rgba(135,206,235, .8)"
                       strokeWidth={1}
-                      radius={250}
+                      radius={MARKER_RADIUS}
                       zIndex={100}
                     />
                   </Fragment>
@@ -309,6 +402,8 @@ const HomeView = ({navigation}) => {
                 />
               )}
             </MapView>
+
+            
             {/* <View style={{position: "absolute", left: 0, right: 0, top: 80, display: "flex", alignItems: "center", justifyContent: "center"}}>
               <View style={{backgroundColor: "white", borderRadius: 30, width: width - 80, shadowColor: "rgba(0,0,0,.4)", shadowOpacity: .8, shadowRadius: 6, shadowOffset: { width: 0, height: 0}, height: 45, padding: 10, display: "flex", alignItems: "center", justifyContent: "center"}}>
                 <TextInput 
@@ -338,6 +433,22 @@ const HomeView = ({navigation}) => {
           onDirectUser={handleDirectUser}
           onClose={handleClose}
         />
+
+        {ComponentGMV.open && (
+          <GetMedalView 
+            open={ComponentGMV.open}
+            marker={ComponentGMV.payload.marker}
+            onGetMedal={handleSetUserMedal}
+            onClose={() => setComponentGMV({
+              open: false,
+              payload: {
+                name: "",
+                exp: 0,
+                urlImg: "http://anokha.world/images/not-found.png"
+              }
+            })}
+          />
+        )}
       </View>
     </TouchableWithoutFeedback>
   )

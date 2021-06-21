@@ -1,158 +1,148 @@
 import React from 'react';
+import * as Yup from "yup";
 import {
   View,
   StyleSheet,
-  TextInput,
-  Image,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard,
   Alert
 } from 'react-native';
-import { Appbar, HelperText } from 'react-native-paper';
+// import { Appbar, HelperText } from 'react-native-paper';
 
-import Button from "../../components/Button";
-import { CustomInput } from "../../components/Fields";
+// import Button from "../../components/Button";
+// import { CustomInput } from "../../components/Fields";
+import { Button, Form, FormContainer, Input, Helper } from "./styles";
 
-import { changePassword } from "../../utils/api";
+// import { changePassword } from "../../utils/api";
+import api from "../../services/api";
 
-import Routes from '../../utils/constants';
+import { Routes } from '../../utils/constants';
 
 const NewPasswordView = ({ navigation }) => {
-  const email = history.location.state && Object.keys(history.location.state).length > 0 && history.location.state.email;
+  const { email } = navigation.state.params;
+  const [loading, setLoading] = React.useState(false);
 
-  const [codigo, setCodigo] = React.useState({
-    value: "",
-    error: false,
-    helper: ""
+  //Seta as referencias
+  const newpasswordRef = React.useRef();
+  const confirmPasswordRef = React.useRef();
+  
+  const schemaValidation = Yup.object().shape({
+    recoverycode: Yup.string().required("Campo obrigatório."),
+    email: Yup.string()
+      .email("Email inválido.")
+      .required("Campo obrigatório."),
+    newpassword: Yup.string()
+      .required("Campo obrigatório!")
+      .min(8, ({ min }) => `A senha deve ter pelo menos ${min} caracteres.`),
+    confirmPassword: Yup.string()
+      .required("Campo obrigatório!")
+      .oneOf([Yup.ref('password')], "As senhas não conferem.")
   });
-  const [senha, setSenha] = React.useState({
-    value: "",
-    error: false,
-    helper: ""
-  });
-  const [confirm, setConfirm] = React.useState({
-    value: "",
-    error: false,
-    helper: ""
-  });
-
-  const handleChangeCodigo = c =>
-    setCodigo({
-      value: c,
-      error: false,
-      helper: ""
-    });
-
-  const handleChangeSenha = s =>
-    setSenha({
-      value: s,
-      error: false,
-      helper: ""
-    });
-
-  const handleChangeConfirm = co =>
-    setConfirm({
-      value: co,
-      error: false,
-      helper: ""
-    });
     
-  const handlePress = () => {
-    if (!codigo.value.length) {
-      setCodigo(prev => ({
-        value: prev.value,
-        error: true,
-        helper: "Não pode ficar vazio"
-      }));
-      return;
-    }
+  const handlePress = ({email, recoverycode, newpassword}) => {
+    setLoading(true);
 
-    if (!senha.value.length) {
-      setSenha(prev => ({
-        value: prev.value,
-        error: true,
-        helper: "Não pode ficar vazio"
-      }));
-      return;
-    }
-
-    if (!confirm.value.length) {
-      setConfirm(prev => ({
-        value: prev.value,
-        error: true,
-        helper: "Não pode ficar vazio"
-      }));
-      return;
-    }
-
-    if (senha.value !== confirm.value) {
-      setConfirm(prev => ({
-        value: prev.value,
-        error: true,
-        helper: "As senhas não são iguais"
-      }));
-      return;
-    }
-
-
-
-    changePassword(email, codigo, senha)
+    api.put("/user/forgotPassword", { email, recoverycode, newpassword })
       .then(res => {
-        console.log(res);
         if (res == null) {
           Alert.alert("Erro ao criar nova senha");
           return;
         }
+        setLoading(false);
+        Alert.alert("Senha nova criada com sucesso");
         navigation.navigate(Routes.Login);
-      });
+      })
+      .catch(err => {
+        console.error(err);
+        Alert.alert("Erro ao criar nova senha");
+        setLoading(false);
+      })
   };
 
   return (
-    <>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}
       >
-        <>
-          <View>
-            <View>
-              <CustomInput
-                label="Código de segurança"
-                placeholder="Digite o código de segurança"
-                onChange={handleChangeCodigo}
-              />
-              <HelperText
-                type="error"
-                visible={codigo.error}
-                style={{textAlign: "right"}}
-              >
-                {codigo.helper}
-              </HelperText>
-            </View>
-            <CustomInput
-              label="Nova Senha"
-              placeholder="Digite uma nova senha"
-              onChange={handleChangeSenha}
-            />
-            <CustomInput
-              label="Confirmar senha"
-              placeholder="Confirme a senha"
-              onChange={handleChangeConfirm}
-            />
-          </View>
-          <View>
-            <Button
-              variant="flat"
-              label="Mudar senha"
-              fullWidth
-              onPress={handlePress}
-            />
-          </View>
-        </>
+        <Form
+          validationSchema={schemaValidation}
+          initialValues={{ 
+            recoverycode: '',
+            email: email || '',
+            newpassword: '',
+            confirmPassword: ''
+          }}
+          onSubmit={values => handlePress(values)}
+        >
+          {({ 
+            handleChange, handleBlur, handleSubmit, values, errors, touched,
+          }) => (
+            <FormContainer>
+              <View>
+                <View>
+                  <Input
+                    label="Código de segurança"
+                    placeholder="Digite seu código"
+                    // ref={passwordRef}
+                    value={values.recoverycode}
+                    onChange={handleChange('recoverycode')}
+                    touched={touched.recoverycode}
+                    onBlur={handleBlur('recoverycode')}
+                    returnKeyType="next"
+                    onSubmitEditing={() => newpasswordRef.current.focus()}
+                  />
+                  <Helper visible={Boolean(errors.recoverycode && touched.recoverycode)}>
+                    {errors.recoverycode}
+                  </Helper>
+                </View>
+                <View>
+                  <Input
+                    label="Nova senha"
+                    placeholder="Digite sua nova senha"
+                    secureTextEntry={true}
+                    ref={newpasswordRef}
+                    value={values.newpassword}
+                    onChange={handleChange('newpassword')}
+                    touched={touched.newpassword}
+                    onBlur={handleBlur('newpassword')}
+                    returnKeyType="next"
+                    onSubmitEditing={() => confirmPasswordRef.current.focus()}
+                  />
+                </View>
+                <View>
+                  <Input
+                    label="Confirme a senha"
+                    placeholder="Digite sua senha"
+                    secureTextEntry={true}
+                    ref={confirmPasswordRef}
+                    value={values.confirmPassword}
+                    onChange={handleChange('confirmPassword')}
+                    touched={touched.confirmPassword}
+                    onBlur={handleBlur('confirmPassword')}
+                    returnKeyType="send"
+                    onSubmitEditing={() => handleSubmit()}
+                  />
+                </View>
+              </View>
+              <View style={{marginTop: 15}}>
+                <Button
+                  loading={loading}
+                  mode="contained"
+                  disabled={loading}
+                  onPress={() => handlePress(values)}
+                >
+                  Mudar a senha
+                </Button>
+              </View>
+            </FormContainer>
+          )}
+        </Form>
       </KeyboardAvoidingView>
       {/*</ScrollView>*/}
-    </>
+    </TouchableWithoutFeedback>
   )
 };
 
