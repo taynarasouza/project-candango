@@ -6,8 +6,8 @@ import {
   MedalCover,
 } from './styles';
 
-function GetMedalView({open, marker, onGetMedal, onClose}) {
-  const { name, exp, urlImg } = marker;
+function GetMedalView({open, marker, onGetMedal, onClose, onOpenMarkerView}) {
+  const { name = "", exp = 0, urlImg = "" } = marker;
   return (
     <Modal
       animationType="slide"
@@ -33,7 +33,13 @@ function GetMedalView({open, marker, onGetMedal, onClose}) {
             </MedalContainer>
             <Text style={{color: "white"}}>Exp: {exp}</Text>
           </View>
-          <View style={{height: 50, width: "100%", flexDirection: "row", alignItems: "center", justifyContent: "center"}}>
+          <View style={{height: 95, width: "100%", alignItems: "center", justifyContent: "space-between"}}>
+            <Pressable
+              style={[styles.button, styles.buttonOutlined]}
+              onPress={() => onOpenMarkerView()}
+            >
+              <Text style={styles.textStyle}>Informações</Text>
+            </Pressable>
             <Pressable
               style={styles.button}
               onPress={() => onGetMedal()}
@@ -67,6 +73,11 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 2,
     backgroundColor: "#000099"
+  },
+  buttonOutlined: {
+    backgroundColor: "transparent",
+    borderColor: "white",
+    borderWidth: 1
   },
   textStyle: {
     color: "white",

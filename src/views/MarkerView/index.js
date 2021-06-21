@@ -33,7 +33,7 @@ const Local = ({local}) => {
 
 
 
-function MarkerView({open, marker, onDirectUser, onClose}) {
+function MarkerView({open, marker, isNear, isDirecting, onDirectUser, onClose}) {
   const { name = "", description = "", urlImg = "" } = marker;
   return (
     <Modal
@@ -63,19 +63,25 @@ function MarkerView({open, marker, onDirectUser, onClose}) {
             <Description description={description} />
             
             <View style={styles.questionContainer}>
-              
-              <Text style={styles.label}>O que quer fazer?</Text>
+            <Text style={styles.label}>O que quer fazer?</Text>
               
               <View style={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
-                
-                <Button icon="directions" mode="contained" onPress={() => onDirectUser()}>
-                  Quero ir
-                </Button>
+                {!isNear && !isDirecting && (
+                  <>
+                    <Button icon="directions" mode="contained" onPress={() => onDirectUser()}>
+                      Quero ir
+                    </Button>
 
-                <Button icon="directions" mode="contained" onPress={() => onClose()}>
-                  Não quero ir
-                </Button>
+                    <Button icon="directions" mode="contained" onPress={() => onClose()}>
+                      Não quero ir
+                    </Button>
+                  </>
+                )}
 
+                <Button icon="close" mode="contained" onPress={() => onClose()}>
+                  Fechar
+                </Button>
+              
               </View>
             
             </View>

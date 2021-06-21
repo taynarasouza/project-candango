@@ -68,11 +68,7 @@ const HomeView = ({navigation}) => {
 
   const [ComponentGMV, setComponentGMV] = useState({
     open: false,
-    payload: {
-      name: "",
-      exp: 0,
-      urlImg: "http://anokha.world/images/not-found.png"
-    }
+    payload: {}
   });
   const [destination, setDestination] = useState({
     // start || pause || stop
@@ -130,7 +126,8 @@ const HomeView = ({navigation}) => {
   const [openMenu, setOpenMenu] = useState(false);
   const [modal, setModal] = useState({
     open: false,
-    payload: {}
+    payload: {},
+    isNear: false
   });
 
   const handleMenu = ({open}) =>
@@ -139,7 +136,7 @@ const HomeView = ({navigation}) => {
   // Controller responsavel por qual acao fazer:
   // 1: destination status stop && !isNear  => Abrir MarkerView
   // 2: destination status stop && isNear   => Abrir GetMedalView
-  // 3: destination status start && !isNear => Faz nada
+  // 3: destination status start && !isNear => Abrir MarkerView
   // 4: destination status start && isNear  => Abrir GetMedalView
   const MarkerController = (coordinates, marker) => {
     // verifica a distancia entre o usuario e o ponto turistico desejado
@@ -151,16 +148,16 @@ const HomeView = ({navigation}) => {
     const isnear = (distance <= MARKER_RADIUS);
     const { status } = destination;
 
-    // Acao 1
-    if (status === "stop" && !isnear) {
-      handlePressMarker(coordinates, marker);
+    // Acao 1 ou 3
+    if ((status === "stop" && !isnear) || (status === "start" && !isnear)) {
+      handlePressMarker(coordinates, marker, false);
       return;
     }
     // Acao 2 ou Acao 4
     if ((status === "stop" && isnear) || (status === "start" && isnear)) {
       setComponentGMV({
         open: true,
-        payload: { marker }
+        payload: marker
       });
       return;
     }
@@ -176,14 +173,15 @@ const HomeView = ({navigation}) => {
     // console.log("-----------------\n");
   }
 
-  const handlePressMarker = (coordinates, marker) => {
-    setDestination({ 
-      status: "stop", 
+  const handlePressMarker = (coordinates, marker, isNear) => {
+    setDestination(d => ({ 
+      status: d.status, 
       coordinates
-    });
+    }));
     setModal({
       open: true,
-      payload: marker
+      payload: marker,
+      isNear
     });
   };
 
@@ -197,21 +195,23 @@ const HomeView = ({navigation}) => {
     }));
     setModal(m => ({
       open: false,
-      payload: m.payload 
+      payload: m.payload,
+      isNear: false
     }));
   };
 
   const handleClose = () => {
-    setDestination(d => ({ 
-      status: "stop", 
-      coordinates: {
-        longitude: null,
-        latitude: null
-      } 
-    }));
+    // setDestination(d => ({ 
+    //   status: "stop", 
+    //   coordinates: {
+    //     longitude: null,
+    //     latitude: null
+    //   } 
+    // }));
     setModal(m => ({
       open: false,
-      payload: {} 
+      payload: {},
+      isNear: false
     }));
   }
 
@@ -259,28 +259,28 @@ const HomeView = ({navigation}) => {
     }, 1000);
   }
 
-  const handleErrorDirections = errorMessage =>
-    Alert.alert(errorMessage);
+  const handleErrorDirections = errorMessage => {
+    // Alert.alert(errorMessage);
+    setDestination({
+      status: "stop",
+      coordinates: {
+        latitude: null,
+        longitude: null
+      }
+    });
+  }
 
   const handleSetUserMedal = () => {
-    api.post("/medals/user", { 
-      attractionCode: ComponentGMV.payload.marker.codLocal 
+    api.post("/attractions/user", { 
+      attractionCode: ComponentGMV.payload.marker.codLocal
     })
     .then(() => setComponentGMV({
       open: false,
-      payload: {
-        name: "",
-        exp: 0,
-        urlImg: "http://anokha.world/images/not-found.png"
-      }
+      payload: {}
     }))
     .catch(() => setComponentGMV({
       open: false,
-      payload: {
-        name: "",
-        exp: 0,
-        urlImg: "http://anokha.world/images/not-found.png"
-      }
+      payload: {}
     }))
   }
 
@@ -331,6 +331,8 @@ const HomeView = ({navigation}) => {
     },
   ];
 
+  console.log("D: ", destination);
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={{...StyleSheet.absoluteFillObject}}>
@@ -351,7 +353,49 @@ const HomeView = ({navigation}) => {
               style={styles.mapStyle}
               onMapReady={getUserPosition}
               // onUserLocationChange={_setUserPosition}
-            > 
+            >
+              <Fragment key={99}>
+                <Marker
+                  pinColor={"blue"}
+                  coordinate={{
+                    latitude: -15.815580,
+                    longitude: -47.982582
+                  }}
+                  onPress={e => {
+                    const coordinates = e.nativeEvent.coordinate;
+                    MarkerController(
+                      coordinates,
+                      {
+                        "Local": {
+                          "CEP": "70354-400",
+                          "Endereco": "EQS 307/308, s/n, SHCS, Brasília - DF",
+                          "Latitude": "-15.815580",
+                          "Longitude": "-47.982582",
+                        },
+                        "codAttractionFather": null,
+                        "codAttractionType": 1,
+                        "codLocal": 99,
+                        "description": "A Igreja Nossa Senhora de Fátima, também conhecida como Igrejinha da 307/308 Sul, foi o primeiro templo católico em alvenaria a ser erguido em Brasília, inaugurado em 28 de junho de 1958.",
+                        "exp": 30,
+                        "microAttraction": false,
+                        "name": "Igreja Nossa Senhora de Fátima (Igrejinha)",
+                        "urlImg": null,
+                      }
+                    )
+                  }}
+                />
+                <Circle 
+                  center={{
+                    latitude: -15.815580, 
+                    longitude: -47.982582
+                  }}
+                  fillColor="rgba(135,206,235, .5)"
+                  strokeColor="rgba(135,206,235, .8)"
+                  strokeWidth={1}
+                  radius={MARKER_RADIUS}
+                  zIndex={100}
+                />
+              </Fragment>
               {markers && markers.map((marker, i) => {
                 let color = "red";
                 const latitude = parseFloat(marker.Local.Latitude);
@@ -430,6 +474,8 @@ const HomeView = ({navigation}) => {
         <MarkerView 
           open={modal.open}
           marker={modal.payload}
+          isNear={modal.isNear}
+          isDirecting={destination.status === "start"}
           onDirectUser={handleDirectUser}
           onClose={handleClose}
         />
@@ -437,15 +483,19 @@ const HomeView = ({navigation}) => {
         {ComponentGMV.open && (
           <GetMedalView 
             open={ComponentGMV.open}
-            marker={ComponentGMV.payload.marker}
+            marker={ComponentGMV.payload}
             onGetMedal={handleSetUserMedal}
+            onOpenMarkerView={() => {
+              setModal({
+                open: true,
+                payload: ComponentGMV.payload,
+                isNear: true
+              });
+            }}
             onClose={() => setComponentGMV({
               open: false,
-              payload: {
-                name: "",
-                exp: 0,
-                urlImg: "http://anokha.world/images/not-found.png"
-              }
+              payload: {},
+              isNear: false
             })}
           />
         )}
