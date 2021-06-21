@@ -15,7 +15,7 @@ export const Loading = styled.ActivityIndicator.attrs({
     margin: 30px 0;
 `;
 
-export const Card = styled.View`
+export const Card = styled.TouchableOpacity`
     height: 220px;
     margin: 16px;
     border-radius: 16px;

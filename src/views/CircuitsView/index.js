@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Alert } from 'react-native';
 import api from '../../services/api';
-// import { View } from 'react-native';
+
+import { Routes } from "../../utils/constants";
 
 import {
   Container,
@@ -16,20 +18,31 @@ import {
   Loading,
 } from './styles';
 
-const CircuitsView = () => {
+const CircuitsView = ({ navigation }) => {
   const [circuits, setCircuits] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function getCircuits() {
-      const response = await api.get(`circuit`);
+      try {
+        const response = await api.get(`circuit`);
 
-      setCircuits(response.data.circuits);
-      setLoading(false);
+        setCircuits(response.data.circuits);
+        setLoading(false);
+      } catch (error) {
+        Alert.alert('Erro');
+        setLoading(false);
+      }
     }
     
-    getCircuits();
+    
+      getCircuits();
   }, []);
+
+  const handlePress = (circuit) => {
+    navigation.navigate(Routes.SingleCircuit, { circuit });
+    console.log(circuit.attractions[0].urlImg);
+  };
 
   return (
     <Container>
@@ -39,8 +52,11 @@ const CircuitsView = () => {
       : (
       <Scroll>
         {circuits && circuits.map((circuit, i) => (
-            <Card key={circuit.id}>
-              <Cover source={{ uri : 'https://cultivatedculture.com/wp-content/uploads/2020/06/LinkedIn-Banner-Image-Example-of-Someone-Hiking-In-The-Mountains.png'}} />
+            <Card
+              key={circuit.circuitId}
+              onPress={() => handlePress(circuit)}
+            >
+              <Cover source={{ uri : circuit.attractions[0].urlImg }} />
               <Row>
                 <InfoContainer>
                   <Title>{circuit.circuitName}</Title>
