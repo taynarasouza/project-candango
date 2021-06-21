@@ -1,4 +1,6 @@
 import React from 'react';
+import * as Yup from 'yup';
+
 import {
   View,
   StyleSheet,
@@ -7,23 +9,35 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Alert
+  Alert,
+  TouchableWithoutFeedback,
+  Keyboard
 } from 'react-native';
+
 import { Appbar, HelperText } from 'react-native-paper';
 
-import Button from "../../components/Button";
+// import Button from "../../components/Button";
 import { EmailField, PasswordField } from "../../components/Fields";
 
-import Routes from '../../utils/constants';
+import { Routes } from '../../utils/constants';
 
 import { validadeEmail } from "../../utils";
-import { recoverPassword } from "../../utils/api";
+// import { recoverPassword } from "../../utils/api";
+import { Button, Form } from "./styles";
+import api from "../../services/api";
 
 const PasswordView = ({ navigation }) => {
+  const [loading, setLoading] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [error, setError] = React.useState({
     show: false,
     text: ""
+  });
+
+  const schemaValidation = Yup.object().shape({
+    email: Yup.string()
+      .email("Email inválido.")
+      .required("Preencha este campo.")
   });
 
   const handleChangeEmail = email =>
@@ -32,67 +46,62 @@ const PasswordView = ({ navigation }) => {
   const handleGoTo = path =>
     history.push(path);
 
-  const handlePress = () => {
-    if (!email.length) {
-      setError({
-        show: true,
-        text: "Campo obrigatório."
-      });
-      return;
-    }
-
-    if(!validadeEmail(email)) {
-      setError({
-        show: true,
-        text: "Email inválido."
-      });
-      return;
-    }
-
-    if (error.show)
-      setError({show: false, message: ""});
-
-    recoverPassword(email)
+  const handlePress = email => {
+    setLoading(true);
+    api.post("/user/forgotPassword", { email })
       .then(res => {
         if (res == null) {
           Alert.alert("Problema ao tentar recuperar a senha");
           return;
         }
 
-        // history.push("/password/generate", {email});
+        setLoading(false);
         navigation.navigate(Routes.NewPassword, {email});
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
+      });
   };
 
   return (
-    <>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       {/*<ScrollView>*/}
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}
       >
-        <>
-          <View>
-            <EmailField onChange={handleChangeEmail} />
-            {error.show && (
-              <HelperText type="error" style={{textAlign: "right"}}>
-                {error.text}
-              </HelperText>
-            )}
-          </View>
-          <View>
-            <Button
-              variant="flat"
-              label="Recuperar senha"
-              fullWidth
-              onPress={handlePress}
-            />
-          </View>
-        </>
+        <Form
+          validationSchema={schemaValidation}
+          initialValues={{ email: '' }}
+          onSubmit={({email}) => handlePress(email)}
+        >
+          {({ 
+            handleChange, handleSubmit, values, errors, touched,
+          }) => (
+            <>
+              <View>
+                <EmailField onChange={handleChange("email")} />
+                <HelperText visible={Boolean(errors.email && touched.email)}>
+                  {errors.email}
+                </HelperText>
+              </View>
+              <View>
+                <Button
+                  loading={loading}
+                  mode="contained"
+                  disabled={loading}
+                  onPress={() => handleSubmit()}
+                >
+                  Recuperar senha
+                </Button>
+              </View>
+            </>
+          )}
+        </Form>
       </KeyboardAvoidingView>
       {/*</ScrollView>*/}
-    </>
+    </TouchableWithoutFeedback>
   )
 };
 
