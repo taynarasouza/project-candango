@@ -6,9 +6,7 @@ export const Container = styled.View`
     flex: 1;
 `;
 
-export const Scroll = styled.ScrollView.attrs({
-    contentContainerStyle: { flex: 1 }
-})``;
+export const Scroll = styled.ScrollView``;
 
 export const Loading = styled.ActivityIndicator.attrs({
     size: 'small',
@@ -18,11 +16,12 @@ export const Loading = styled.ActivityIndicator.attrs({
 `;
 
 export const Card = styled.View`
-    flex: 1; 
+    height: 220px;
     margin: 16px;
     border-radius: 16px;
     background: white;
     box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.5);
+    elevation: 8;
 `;
 
 export const Cover = styled.Image`
@@ -47,7 +46,6 @@ export const Arrow = styled(MaterialIcons).attrs({
 
 export const InfoContainer = styled.View`
     flex: 1;
-    padding: 16px 0px;
 `;
 
 export const Title = styled.Text`
