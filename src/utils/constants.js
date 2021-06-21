@@ -10,4 +10,6 @@ export const Routes = {
   Messages: "MessagesView",
   NotifyView: "NotifyView",
   Info: "InfoView",
+  Circuits: "CircuitsView",
+  SingleCircuit: "SingleCircuitView",
 }; 

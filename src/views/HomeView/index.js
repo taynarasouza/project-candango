@@ -312,6 +312,15 @@ const HomeView = ({navigation}) => {
       }
     },
     {
+      icon: 'walk',
+      label: 'Circuitos',
+      onPress: () => navigation.navigate(Routes.Circuits),
+      small: false,
+      style: {
+        backgroundColor: "#000099"
+      }
+    },
+    {
       icon: 'account',
       label: 'Perfil',
       onPress: () => navigation.navigate(Routes.Profile),
