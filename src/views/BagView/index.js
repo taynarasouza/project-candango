@@ -11,6 +11,7 @@ import {
   ModalMedalImage,
   ModalMedalDescription,
   CloseModal,
+  Loading,
 } from './styles';
 
 import api from '../../services/api';
@@ -18,14 +19,21 @@ import api from '../../services/api';
 
 const BagView = ({ navigation }) => {
   const [medals, setMedals ] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedMedal, setSelectedMedal] = useState({});
 
   useEffect(() => {
     async function getMedals() {
-      const response = await api.get(`/medals/user`);
+      try {
+        const response = await api.get(`/medals/user`);
       
-      setMedals(response.data.medals);
+        setMedals(response.data.medals);
+        setLoading(false);
+      } catch (error) {
+        Alert.alert('Erro');
+        setLoading(false);
+      }
     }
     
     getMedals();
@@ -36,10 +44,12 @@ const BagView = ({ navigation }) => {
     setSelectedMedal(medal);
   };
 
-  console.log(medals);
-
   return (
     <Container>
+      {
+      loading ? 
+      <Loading />
+    : (
       <Scroll>
           {medals && medals.map((medal, i) => (
             <MedalContainer key={medal.id} onPress={() => handleMedalPress(medal)}>
@@ -49,6 +59,7 @@ const BagView = ({ navigation }) => {
             </MedalContainer>
           ))}
       </Scroll>
+      )}
       <MedalModal isVisible={isModalVisible}>
           <ModalMedalImage source={{ uri: selectedMedal.img }}/>
           <ModalMedalDescription>

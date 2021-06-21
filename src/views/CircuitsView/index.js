@@ -41,7 +41,6 @@ const CircuitsView = ({ navigation }) => {
 
   const handlePress = (circuit) => {
     navigation.navigate(Routes.SingleCircuit, { circuit });
-    console.log(circuit.attractions[0].urlImg);
   };
 
   return (

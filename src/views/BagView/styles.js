@@ -19,8 +19,13 @@ export const Scroll = styled.ScrollView.attrs({
         alignItems: "center",
         justifyContent: "center",
     }
+})``;
+
+export const Loading = styled.ActivityIndicator.attrs({
+    size: 'small',
+    color: '#999'
 })`
-    
+    margin: 30px 0;
 `;
 
 export const MedalContainer = styled.TouchableOpacity``;
