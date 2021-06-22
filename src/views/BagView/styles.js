@@ -41,7 +41,7 @@ export const Medal = styled.ImageBackground.attrs({
 export const MedalCover = styled.View`
     flex: 1;
     border-radius: 100px;
-    background: ${props => props.hasMedal ? "rgba(200, 200, 200, 0.7)" : "rgba(0, 0, 0, 0)"} ;
+    background: ${props => props.hasMedal ? "rgba(0, 0, 0, 0)" : "rgba(200, 200, 200, 0.7)"} ;
 `;
 
 export const MedalModal = styled(Modal)`
