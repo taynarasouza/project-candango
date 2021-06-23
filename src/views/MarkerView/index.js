@@ -60,7 +60,7 @@ function MarkerView({open, marker, isNear, isDirecting, onDirectUser, onClose}) 
             <Description description={description} />
             
             <View style={styles.questionContainer}>
-            <Text style={styles.label}>O que quer fazer?</Text>
+              <Text style={styles.label}>O que quer fazer?</Text>
               
               <View style={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
                 {!isNear && !isDirecting && (
