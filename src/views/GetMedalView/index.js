@@ -12,12 +12,13 @@ import {
   ModalContent,
   ModalCloseButton,
   ModalTitle,
-  MedalExp
+  MedalExp,
+  ButtonRescued
 } from './styles';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-function GetMedalView({open, marker, onGetMedal, onClose, onOpenMarkerView}) {
-  const { name = "", exp = 0, urlImg = "" } = marker;
+function GetMedalView({open, marker, onGetMedal, onClose, onOpenMarkerView, onNavigate}) {
+  const { name = "", exp = 0, urlImg = "", hasVisited } = marker;
   // console.log(marker);
   return (
     <Modal
@@ -39,12 +40,14 @@ function GetMedalView({open, marker, onGetMedal, onClose, onOpenMarkerView}) {
           </TopContainer>
 
           <MiddleContainer>
-            <Medal source={{ uri: urlImg }}>
+            <Medal source={{ uri: urlImg }} hasVisited={hasVisited}>
               <MedalCover />
             </Medal>
-            <MedalExp>
-              Exp: {exp}
-            </MedalExp>
+            {!hasVisited && (
+              <MedalExp>
+                Exp: {exp}
+              </MedalExp>
+            )}
           </MiddleContainer>
 
           <BottomContainer>
@@ -56,14 +59,20 @@ function GetMedalView({open, marker, onGetMedal, onClose, onOpenMarkerView}) {
             >
               Informações
             </Button>
-
-            <Button 
-              icon="medal" 
-              mode="contained" 
-              onPress={() => onGetMedal()}
-            >
-              Pegar medalha
-            </Button>
+            {!hasVisited ? (
+              <Button 
+                icon="medal" 
+                mode="contained" 
+                onPress={() => onGetMedal()}
+              >
+                Pegar medalha
+              </Button>
+            ) : (
+              <ButtonRescued icon="medal">
+                Medalha resgatada
+              </ButtonRescued>
+              
+            )}
           </BottomContainer>
         </ModalContent>
       </ModalContainer>

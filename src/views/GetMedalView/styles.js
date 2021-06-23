@@ -62,6 +62,18 @@ export const Button = styled(ButtonPaper)`
     border-color: ${props => props.mode === "outlined" ? "white" : "#000099"};
 `;
 
+export const ButtonRescued = styled(Button).attrs({
+    color: "gold"
+})`
+    background-color: rgba(255, 215, 0, .45);
+    border-width: 1px;
+    border-color: gold;
+    width: 100%;
+    height: 50px;
+    border-radius: 30px;
+    justify-content: center;
+`;
+
 export const ModalCloseButton = styled(Pressable)`
     position: absolute;
     top: -12px;
@@ -94,6 +106,19 @@ export const ModalTitle = styled(Text)`
     text-align: center;
     color: white;
     font-size: 20px;
+`;
+
+export const CongratsText = styled(Text).attrs({
+    children: "Medalha resgatada"
+})`
+    width: 100%;
+    height: 50px;
+    align-items: center;
+    text-align: center;
+    color: gold;
+    text-transform: uppercase;
+    border-width: 1px;
+    border-color: gold;
 `;
 
 // width: "100%",
