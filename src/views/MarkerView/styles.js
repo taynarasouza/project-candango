@@ -10,4 +10,7 @@ export const Button = styled(ButtonPaper).attrs(props => ({
   border-radius: 30px;
   justify-content: center;
   font-size: 16px;
+
+  border-color: ${props => props.icon === "close" ? "rgb(255,0,0)" : "transparent"};
+  border-width: ${props => props.icon === "close" ? "1px" : "0"};
 `;
