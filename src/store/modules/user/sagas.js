@@ -23,9 +23,9 @@ export function* updateProfile({payload}) {
 
     Alert.alert('Perfil atualizado com sucesso!');
 
-    const { userInfo } = response.data;
+    const { user } = response.data;
 
-    yield put(updateProfileSuccess(userInfo));
+    yield put(updateProfileSuccess(user));
   } catch (error) {
     Alert.alert('Falha ao atualizar perfil', error.response.data.error);
     yield put(updateProfileFailure());

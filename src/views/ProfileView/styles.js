@@ -1,11 +1,13 @@
 import styled from 'styled-components/native';
 import { Platform } from 'react-native';
 import { Formik } from 'formik';
-import { HelperText } from 'react-native-paper';
+import { HelperText, ProgressBar } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Button as ButtonPaper } from 'react-native-paper';
 import { ProfileXp } from '../../components/ProfileXp';
+
+import normalize from 'react-native-normalize';
 
 import { 
   PhoneInput, 
@@ -26,7 +28,6 @@ export const Container = styled(KeyboardAwareScrollView).attrs({
 `;
 
 export const ProfileContainer = styled.View`
-    flex: 1;
     padding: 0 36px;
     flex-direction: row;
     align-items: center;
@@ -37,6 +38,8 @@ export const ProfileContainer = styled.View`
 export const ProfileXpContainer = styled.View`
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
 `;
 
 export const ProfileAvatarXp = styled(ProfileXp)`
@@ -51,24 +54,32 @@ export const ProfileInfo = styled.View`
 
 export const ProfileName = styled.Text`
     font-weight: bold;
-    font-size: 24px;
+    font-size: 22px;
     margin-bottom: 4px;
 `;
 
 export const ProfileLevel = styled.Text`
-    font-size: 20px;
+    font-size: 18px;
 `;
 
 export const ProfileXpProgress = styled.Text`
     font-size: 14px;
     margin-left: 4px;
+    margin-bottom: 3px;
+    align-self: flex-end;
+`;
+
+export const ExpProgress = styled(ProgressBar).attrs({
+    color: "#000099"
+})`
+    margin-top: 4px;
 `;
 
 export const FormContainer = styled.View`
     flex: 1;
     justify-content: center;
     align-items: center;
-    padding-top: 25px;
+    padding-top: 12px;
 `;
 
 export const Form = styled(Formik)`
@@ -92,7 +103,6 @@ export const Button = styled(ButtonPaper).attrs({
     width: 90%;
     max-width: 325px;
     height: 50px;
-    /* margin: 16px 0px; */
     margin-bottom: 24px;
     border-radius: 32px;
     justify-content: center;

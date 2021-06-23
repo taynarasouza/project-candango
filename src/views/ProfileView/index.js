@@ -30,11 +30,14 @@ import {
   PhoneNumberInput,
   Helper,
   Button,
+  ExpProgress,
 } from './styles';
 
 import { 
   Picker, 
 } from "../../components/Fields";
+
+import profile from '../../../assets/images/profile.png';
 
 const ProfileView = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -63,16 +66,7 @@ const ProfileView = ({ navigation }) => {
       .max(1, "Apenas 2 letras."),
     phone: Yup.string()
       .required("Campo obrigatório.")
-      .min(14, ({ min }) => `Deve conter pelo menos 10 digitos.`), 
-    // confirmEmail: Yup.string()
-    //   .required("Campo obrigatório.")
-    //   .oneOf([Yup.ref('email')], "Os emails não conferem."),
-    // password: Yup.string()
-    //   .required("Campo obrigatório!")
-    //   .min(8, ({ min }) => `A senha deve ter pelo menos ${min} caracteres.`),
-    // confirmPassword: Yup.string()
-    //   .required("Campo obrigatório!")
-    //   .oneOf([Yup.ref('password')], "As senhas não conferem."),
+      .min(14, ({ min }) => `Deve conter pelo menos 10 digitos.`),
     state: Yup.string()
       .required("Campo obrigatório!")
       .max(2, "Apenas 2 letras."),
@@ -81,6 +75,7 @@ const ProfileView = ({ navigation }) => {
   });
   
   const handleUpdateUser = (data) => {
+    console.log(data);
     dispatch(updateProfileRequest(data));
   };
 
@@ -90,15 +85,16 @@ const ProfileView = ({ navigation }) => {
           <ProfileContainer>
             <ProfileAvatarXp
               size={50}
-              percent={30}
-              imageUrl={'https://randomuser.me/api/portraits/lego/0.jpg'}
+              percent={user.exp}
+              image={profile}
             />
             <ProfileInfo>
               <ProfileName>{user.name}</ProfileName>
               <ProfileXpContainer>
                 <ProfileLevel>Level {user.level}</ProfileLevel>
-                {/* <ProfileXpProgress>{'30' || user.currentAmountExp}/100</ProfileXpProgress> */}
+                <ProfileXpProgress>{user.exp}/{user.levelInfo.totalExp}</ProfileXpProgress>
               </ProfileXpContainer>
+              <ExpProgress progress={user.exp/100} />
             </ProfileInfo>
           </ProfileContainer>
           <Form
@@ -145,16 +141,17 @@ const ProfileView = ({ navigation }) => {
                 <Helper type="error" visible={Boolean(errors.phone && touched.phone)}>
                   {errors.phone}
                 </Helper>
-                {/* <Input 
+                <Input 
                   label="Email"
                   value={values.email} 
                   type="email-address"
                   placeholder="Escreva seu email" 
                   onChange={handleChange('email')} 
+                  disabled
                 />
                 <Helper type="error" visible={Boolean(errors.email && touched.email)}>
                   {errors.email}
-                </Helper> */}
+                </Helper>
                 <Picker 
                   ref={selectContryRef}
                   openModal={openContryModal}
