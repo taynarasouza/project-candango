@@ -5,9 +5,6 @@ import { Appbar } from "react-native-paper";
 import Description from "./description";
 import { Button } from "./styles";
 
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-
-
 const StickyHeader = React.forwardRef((props, ref) => {
   const { onClose } = props;
   return (
