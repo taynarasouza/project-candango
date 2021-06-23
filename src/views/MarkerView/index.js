@@ -81,7 +81,7 @@ function MarkerView({open, marker, isNear, isDirecting, onDirectUser, onClose}) 
 
                 )}
 
-                <Button icon="close" mode="contained" onPress={() => onClose()}>
+                <Button icon="close" color="rgb(255,0,0)" onPress={() => onClose()}>
                   Fechar
                 </Button>
               
