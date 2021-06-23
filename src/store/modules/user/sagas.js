@@ -8,18 +8,28 @@ import {updateProfileSuccess, updateProfileFailure, visitAttractionSuccess, visi
 export function* updateProfile({payload}) {
   try {
     const { 
-      name, gender, phone, email, password, state, country 
-    } = payload.data;
-
-    const response = yield call(api.put, 'user', {
       name,
       gender,
       phone,
       email,
       password,
       state,
-      country
-    });
+      country, 
+      ...rest
+    } = payload.data;
+
+    const profile = {
+      name,
+      gender,
+      phone,
+      email,
+      password,
+      state,
+      country,
+      ...(rest.oldPassword ? rest : {}),
+    };
+
+    const response = yield call(api.put, 'user', profile);
 
     Alert.alert('Perfil atualizado com sucesso!');
 

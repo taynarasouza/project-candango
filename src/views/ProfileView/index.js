@@ -58,15 +58,30 @@ const ProfileView = ({ navigation }) => {
 
   const schemaValidation = Yup.object().shape({
     name: Yup.string().required("Campo obrigatório."),
-    email: Yup.string()
-      .email("Email inválido.")
-      .required("Campo obrigatório."),
+    // email: Yup.string()
+    //   .email("Email inválido.")
+    //   .required("Campo obrigatório."),
     gender: Yup.string()
       .required("Campo obrigatório!")
       .max(1, "Apenas 2 letras."),
     phone: Yup.string()
       .required("Campo obrigatório.")
       .min(14, ({ min }) => `Deve conter pelo menos 10 digitos.`),
+    oldPassword: Yup.string(),
+    newPassword: Yup.string().when('oldPassword', {
+      is: val => !!val.length,
+      then: Yup.string()
+        .min(8, ({ min }) => `A senha deve ter pelo menos ${min} caracteres.`)
+        .required('Campo obrigatório'),
+      otherwise: Yup.string(),
+    }),
+    confirmNewPassword: Yup.string()
+      .when('oldPassword', {
+        is: val => !!val.length,
+        then: Yup.string().required('Campo obrigatório'),
+        otherwise: Yup.string(),
+      })  
+      .oneOf([Yup.ref('newPassword'), null], 'As senhas não conferem.'),
     state: Yup.string()
       .required("Campo obrigatório!")
       .max(2, "Apenas 2 letras."),
@@ -106,6 +121,9 @@ const ProfileView = ({ navigation }) => {
               email: user.email, 
               country: user.country,
               state: user.state,
+              oldPassword: "",
+              newPassword: "",
+              confirmNewPassword: "",
             }}
             onSubmit={values => handleUpdateUser(values)}
           >
@@ -132,6 +150,7 @@ const ProfileView = ({ navigation }) => {
                   errors={errors.gender}
                   touched={touched.gender}
                 />
+                <ProfileName>{new String(values.phone.length)}</ProfileName>
                 <PhoneNumberInput 
                   label="Telefone"
                   value={values.phone}
@@ -152,6 +171,39 @@ const ProfileView = ({ navigation }) => {
                 <Helper type="error" visible={Boolean(errors.email && touched.email)}>
                   {errors.email}
                 </Helper>
+                <Input 
+                  label="Senha antiga"
+                  value={values.oldPassword}
+                  placeholder="Escreva sua senha antiga" 
+                  secureTextEntry
+                  onChange={handleChange('oldPassword')} 
+                  touched={touched.oldPassword}
+                />
+                <Helper type="error" visible={Boolean(errors.oldPassword && touched.oldPassword)}>
+                  {errors.oldPassword}
+                </Helper>
+                <Input 
+                  label="Nova senha"
+                  value={values.newPassword}
+                  placeholder="Escreva sua nova senha" 
+                  secureTextEntry
+                  onChange={handleChange('newPassword')}  
+                  touched={touched.newPassword}
+                />
+                <Helper type="error" visible={Boolean(errors.newPassword && touched.newPassword)}>
+                  {errors.newPassword}
+                </Helper>
+                <Input 
+                  label="Confirmar nova senha"
+                  value={values.confirmNewPassword}
+                  placeholder="Digite a nova senha novamente" 
+                  secureTextEntry
+                  onChange={handleChange('confirmNewPassword')} 
+                  touched={touched.confirmNewPassword}
+                />
+                <Helper type="error" visible={Boolean(errors.confirmNewPassword && touched.confirmNewPassword)}>
+                  {errors.confirmNewPassword}
+                </Helper>
                 <Picker 
                   ref={selectContryRef}
                   openModal={openContryModal}
@@ -171,7 +223,6 @@ const ProfileView = ({ navigation }) => {
                   touched={touched.state}
                 />
                 <Button
-                  // onPress={handleSubmit}
                   onPress={handleSubmit}
                   mode="contained"
                   loading={loading}
@@ -181,7 +232,8 @@ const ProfileView = ({ navigation }) => {
                       values.phone == user.phone &&
                       values.email == user.email &&
                       values.country == user.country &&
-                      values.state == user.state
+                      values.state == user.state &&
+                      !values.oldPassword
                   )}
                 >
                   Salvar
