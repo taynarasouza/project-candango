@@ -19,16 +19,7 @@ export function* signIn({payload}) {
     const { user, attractions } = response.data;
     const { headers } = response;
 
-    let cookieHeader = headers["set-cookie"][0];
-    let cookie = cookieHeader.split('; ')[0];
-
-    // console.tron.log(headers);
-
-    // // Seta o token no Header Authorization, necessário na api
-    // api.defaults.headers.Authorization = `Bearer ${token}`;
-    // api.defaults.headers['Cookie'] = cookie;
-    // // api.defaults.headers['cookie'] = cookie;
-    // // api.defaults.headers.Authorization = cookie;
+    let cookie = headers["set-cookie"];
 
     yield put(setMarkers(attractions));
     yield put(signInSuccess(cookie, user));
