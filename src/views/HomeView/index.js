@@ -10,7 +10,7 @@ import MarkerView from "../MarkerView";
 import GetMedalView from "../GetMedalView";
 
 import { Routes } from "../../utils/constants";
-import { setUserPosition } from '../../store/modules/user/actions';
+import { setUserPosition, visitAttraction } from '../../store/modules/user/actions';
 import api from "../../services/api";
 
 import { FabPosition, FabCancel } from "./styles";
@@ -271,17 +271,12 @@ const HomeView = ({navigation}) => {
   }
 
   const handleSetUserMedal = () => {
-    api.post("/attractions/user", { 
-      attractionCode: ComponentGMV.payload.marker.codLocal
-    })
-    .then(() => setComponentGMV({
-      open: false,
-      payload: {}
-    }))
-    .catch(() => setComponentGMV({
-      open: false,
-      payload: {}
-    }))
+    dispatch(
+      visitAttraction({
+        attractionCode: ComponentGMV.payload.codLocal,
+        exp: ComponentGMV.payload.exp
+      })
+    );
   }
 
   const actions = [
@@ -330,8 +325,6 @@ const HomeView = ({navigation}) => {
       }
     },
   ];
-
-  console.log("D: ", destination);
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
