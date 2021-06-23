@@ -150,7 +150,6 @@ const ProfileView = ({ navigation }) => {
                   errors={errors.gender}
                   touched={touched.gender}
                 />
-                <ProfileName>{new String(values.phone.length)}</ProfileName>
                 <PhoneNumberInput 
                   label="Telefone"
                   value={values.phone}
