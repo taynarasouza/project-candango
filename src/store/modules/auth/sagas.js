@@ -16,13 +16,19 @@ export function* signIn({payload}) {
       password,
     });
 
-    const { user, attractions } = response.data;
+    const { user, attractions, userVisitedAttractions } = response.data;
     const { headers } = response;
 
     let cookieHeader = headers["set-cookie"][0];
     let cookie = cookieHeader.split('; ')[0];
+    let visited = userVisitedAttractions;
 
-    // console.tron.log(headers);
+
+    const markers = attractions.reduce((res, pt) => {
+      pt.hasVisited = visited.length > 0 && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).length > 0;
+      res.push(pt);
+      return res;
+    }, []);
 
     // // Seta o token no Header Authorization, necessário na api
     // api.defaults.headers.Authorization = `Bearer ${token}`;
@@ -30,7 +36,7 @@ export function* signIn({payload}) {
     // // api.defaults.headers['cookie'] = cookie;
     // // api.defaults.headers.Authorization = cookie;
 
-    yield put(setMarkers(attractions));
+    yield put(setMarkers(markers));
     yield put(signInSuccess(cookie, user));
 
     // history.push("/home");
