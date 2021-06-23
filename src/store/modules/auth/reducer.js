@@ -30,7 +30,11 @@ export default function auth(state = INITIAL_STATE, action) {
         break;
       }
 
-      case '@auth/SIGN_OUT': {
+      case '@auth/SIGN_OUT_REQUEST': {
+        break;
+      }
+
+      case '@auth/SIGN_OUT_SUCCESS': {
         draft.token = null;
         draft.signed = false;
         break;
