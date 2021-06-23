@@ -39,11 +39,9 @@ function GetMedalView({open, marker, onGetMedal, onClose, onOpenMarkerView}) {
           </TopContainer>
 
           <MiddleContainer>
-            <MedalContainer>
-              <Medal source={{ uri: urlImg }}>
-                <MedalCover />
-              </Medal>
-            </MedalContainer>
+            <Medal source={{ uri: urlImg }}>
+              <MedalCover />
+            </Medal>
             <MedalExp>
               Exp: {exp}
             </MedalExp>
