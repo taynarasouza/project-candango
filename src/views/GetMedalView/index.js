@@ -1,95 +1,76 @@
 import React, { useState } from "react";
-import { Alert, Modal, StyleSheet, Text, Pressable, View, Dimensions } from "react-native";
+import { Modal } from "react-native";
 import {
   Medal,
   MedalContainer,
   MedalCover,
+  Button,
+  TopContainer,
+  MiddleContainer,
+  BottomContainer,
+  ModalContainer,
+  ModalContent,
+  ModalCloseButton,
+  ModalTitle,
+  MedalExp
 } from './styles';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function GetMedalView({open, marker, onGetMedal, onClose, onOpenMarkerView}) {
   const { name = "", exp = 0, urlImg = "" } = marker;
+  // console.log(marker);
   return (
     <Modal
       animationType="slide"
       transparent={true}
       visible={open}
+      statusBarTranslucent
     >
-      <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          <View style={{height: 100, width: "100%", flexDirection: "row", alignItems: "center", justifyContent: "center"}}>
-            <Text style={styles.modalText}>{name}</Text>
-            <Pressable
-              style={{position: "absolute", top: -12, right: -12, borderColor: "white", borderWidth: 1, borderRadius: 20, width: 25, height: 25, justifyContent: "center", alignItems: "center"}}
-              onPress={() => onClose()}
-            >
-              <Text style={styles.textStyle}>X</Text>
-            </Pressable>
-          </View>
-          <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+      <ModalContainer>
+        <ModalContent>
+
+          <TopContainer>
+            <ModalCloseButton onPress={() => onClose()}>
+              <MaterialCommunityIcons name="close" size={18} color="white" />
+            </ModalCloseButton>
+            <ModalTitle>
+              {name}
+            </ModalTitle>
+          </TopContainer>
+
+          <MiddleContainer>
             <MedalContainer>
               <Medal source={{ uri: urlImg }}>
                 <MedalCover />
               </Medal>
             </MedalContainer>
-            <Text style={{color: "white"}}>Exp: {exp}</Text>
-          </View>
-          <View style={{height: 95, width: "100%", alignItems: "center", justifyContent: "space-between"}}>
-            <Pressable
-              style={[styles.button, styles.buttonOutlined]}
+            <MedalExp>
+              Exp: {exp}
+            </MedalExp>
+          </MiddleContainer>
+
+          <BottomContainer>
+            <Button 
+              icon="information-outline" 
+              mode="outlined"
+              color="white"
               onPress={() => onOpenMarkerView()}
             >
-              <Text style={styles.textStyle}>Informações</Text>
-            </Pressable>
-            <Pressable
-              style={styles.button}
+              Informações
+            </Button>
+
+            <Button 
+              icon="medal" 
+              mode="contained" 
               onPress={() => onGetMedal()}
             >
-              <Text style={styles.textStyle}>Pegar medalha</Text>
-            </Pressable>
-          </View>
-        </View>
-      </View>
+              Pegar medalha
+            </Button>
+          </BottomContainer>
+        </ModalContent>
+      </ModalContainer>
     </Modal>
   )
 }
-
-const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22
-  },
-  modalView: {
-    width: "100%",
-    height: Dimensions.get("window").height,
-    backgroundColor: "rgba(0,0,0,.85)",
-    padding: 35,
-    alignItems: "center",
-  },
-  button: {
-    width: "100%",
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-    backgroundColor: "#000099"
-  },
-  buttonOutlined: {
-    backgroundColor: "transparent",
-    borderColor: "white",
-    borderWidth: 1
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center"
-  },
-  modalText: {
-    // marginBottom: 15,
-    textAlign: "center",
-    color: "white",
-    fontSize: 20
-  }
-});
 
 export default GetMedalView;
