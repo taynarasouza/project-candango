@@ -74,15 +74,11 @@ function MarkerView({open, marker, isNear, isDirecting, onDirectUser, onClose}) 
               
               <View style={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
                 {!isNear && !isDirecting && (
-                  <>
-                    <Button icon="directions" mode="contained" onPress={() => onDirectUser()}>
-                      Quero ir
-                    </Button>
 
-                    <Button icon="directions" mode="contained" onPress={() => onClose()}>
-                      Não quero ir
-                    </Button>
-                  </>
+                  <Button icon="directions" mode="contained" onPress={() => onDirectUser()}>
+                    Quero ir
+                  </Button>
+
                 )}
 
                 <Button icon="close" mode="contained" onPress={() => onClose()}>
