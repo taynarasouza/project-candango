@@ -50,7 +50,8 @@ function MarkerView({open, marker, isNear, isDirecting, onDirectUser, onClose}) 
               source={{
                 uri: urlImg
               }} 
-              style={styles.image}/>
+              style={styles.image}
+            />
           </View>
           
           <View style={styles.modal}>
