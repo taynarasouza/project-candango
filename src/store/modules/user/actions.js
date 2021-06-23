@@ -24,3 +24,29 @@ export function setUserPosition(position) {
     payload: { position }
   }
 }
+
+export function visitAttraction({exp, attractionCode}) {
+  return {
+    type: '@user/VISIT_ATTRACTION_REQUEST',
+    payload: { 
+      exp, 
+      attractionCode
+    }
+  }
+}
+
+export function visitAttractionSuccess({exp, attractionCode}) {
+  return {
+    type: '@user/VISIT_ATTRACTION_SUCCESS',
+    payload: { 
+      exp, 
+      attractionCode
+    }
+  }
+}
+
+export function visitAttractionFailure() {
+  return {
+    type: '@user/VISIT_ATTRACTION_FAILURE'
+  }
+}

@@ -43,6 +43,25 @@ export default function user(state = INITIAL_STATE, action) {
         break;
       }
 
+      case '@user/VISIT_ATTRACTION_REQUEST': {
+        draft.loading = true;
+        break;
+      }
+
+      case '@user/VISIT_ATTRACTION_SUCCESS': {
+        draft.profile = {
+          ...state.profile,
+          exp: state.profile.exp + action.payload.exp
+        };
+        draft.loading = false;
+        break;
+      }
+
+      case '@user/VISIT_ATTRACTION_FAILURE': {
+        draft.loading = false;
+        break;
+      }
+
       default:
     }
   });
