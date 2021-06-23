@@ -1,7 +1,7 @@
 import {all, takeLatest, call, put} from 'redux-saga/effects';
 import {Alert} from 'react-native';
 
-import {signInSuccess, signFailure} from './actions';
+import {signInSuccess, signFailure, signOutSucess} from './actions';
 import {setMarkers} from '../markers/actions';
 
 import api from './../../../services/api';
@@ -70,6 +70,17 @@ export function* signUp({payload}) {
     yield put(signFailure());
   }
 }
+export function* signOut() {
+  try {
+
+    const response = yield call(api.get, 'user/signout');
+
+    yield put(signOutSucess());
+
+  } catch (error) {
+    Alert.alert('Falha no logout', error.response.data.error);
+  }
+}
 
 export function setToken({payload}) {
   if (!payload) {
@@ -86,5 +97,6 @@ export function setToken({payload}) {
 export default all([
   takeLatest('@auth/SIGN_IN_REQUEST', signIn),
   takeLatest('@auth/SIGN_UP_REQUEST', signUp),
+  takeLatest('@auth/SIGN_OUT_REQUEST', signOut),
   takeLatest('persist/REHYDRATE', setToken), // action disparado pelo persist
 ]);

@@ -12,7 +12,7 @@ import {
 } from '../../utils/pickerList';
 
 import { updateProfileRequest } from '../../store/modules/user/actions';
-import { signOut } from '../../store/modules/auth/actions'
+import { signOutRequest } from '../../store/modules/auth/actions'
 
 import {
   Wrapper,
@@ -238,7 +238,7 @@ const ProfileView = ({ navigation }) => {
                   Salvar
                 </Button>
                 <Button
-                  onPress={() => dispatch(signOut())}
+                  onPress={() => dispatch(signOutRequest())}
                   color={"rgb(255, 0, 0)"}
                 >
                   Sair
