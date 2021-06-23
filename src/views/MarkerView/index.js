@@ -55,6 +55,15 @@ function MarkerView({open, marker, isNear, isDirecting, onDirectUser, onClose}) 
           </View>
           
           <View style={styles.modal}>
+
+            <View style={styles.questionContainer}>
+              <Text style={styles.label}>Experiência</Text>
+              <View>
+                <Text style={styles.scrollText}>
+                  {marker.exp}
+                </Text>
+              </View>
+            </View>
             
             <Local local={name} />
             
