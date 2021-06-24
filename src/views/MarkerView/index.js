@@ -1,9 +1,9 @@
 import React from "react";
-import { StyleSheet, Modal, ScrollView, Image, View, Text, TouchableHighlight } from "react-native";
+import { StyleSheet, Modal, ScrollView, Image, View, Text, ImageBackground } from "react-native";
 import { Appbar } from "react-native-paper";
 
 import Description from "./description";
-import { Button } from "./styles";
+import { Button, Gradient, Bold, Experience, ExpLabel, ExpValue } from "./styles";
 
 const StickyHeader = React.forwardRef((props, ref) => {
   const { onClose } = props;
@@ -28,10 +28,23 @@ const Local = ({local}) => {
   )
 }
 
+const defaults = {
+  marker: {
+    name: "",
+    description: "",
+    urlImg: "",
+    exp: "",
+    Local: {
+      CEP: "",
+      Endereco: ""
+    }
+  }
+}
 
+function MarkerView({open, marker = defaults.marker, isNear, isDirecting, onDirectUser, onClose}) {
+  if (Object.keys(marker).length === 0)
+    marker = defaults.marker;
 
-function MarkerView({open, marker, isNear, isDirecting, onDirectUser, onClose}) {
-  const { name = "", description = "", urlImg = "" } = marker;
   return (
     <Modal
       animationType="slide"
@@ -45,30 +58,48 @@ function MarkerView({open, marker, isNear, isDirecting, onDirectUser, onClose}) 
 
         <View style={styles.centerView}>
 
-          <View style={styles.imageContainer}>
+          <ImageBackground source={{ uri: marker.urlImg }} style={{resizeMode: "cover", justifyContent: "center", height: 200, width: "100%", }}>
+            <Gradient>
+              <Bold bottom>
+                {marker.name}
+              </Bold>
+            </Gradient>
+          </ImageBackground>
+
+          {/* <View style={styles.imageContainer}>
             <Image 
               source={{
                 uri: urlImg
               }} 
               style={styles.image}
             />
-          </View>
+          </View> */}
           
           <View style={styles.modal}>
 
             <View style={styles.questionContainer}>
-              <Text style={styles.label}>Experiência</Text>
+              <Text style={styles.label}>Endereço</Text>
               <View>
                 <Text style={styles.scrollText}>
-                  {marker.exp}
+                  {marker.Local.CEP}
+                </Text>
+                <Text style={styles.scrollText}>
+                  {marker.Local.Endereco}
                 </Text>
               </View>
             </View>
             
-            <Local local={name} />
+            <Description description={marker.description} />
             
-            <Description description={description} />
-            
+            <View style={styles.questionContainer}>
+              <Text style={styles.label}>Experiência</Text>
+              <View>
+                <Text style={styles.scrollText}>
+                  {marker.exp} pontos
+                </Text>
+              </View>
+            </View>
+
             <View style={styles.questionContainer}>
               <Text style={styles.label}>O que quer fazer?</Text>
               
