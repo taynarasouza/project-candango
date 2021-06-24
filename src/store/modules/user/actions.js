@@ -25,12 +25,13 @@ export function setUserPosition(position) {
   }
 }
 
-export function visitAttraction({exp, attractionCode}) {
+export function visitAttraction({exp, attractionCode, markers}) {
   return {
     type: '@user/VISIT_ATTRACTION_REQUEST',
     payload: { 
       exp, 
-      attractionCode
+      attractionCode,
+      markers
     }
   }
 }
