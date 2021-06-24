@@ -16,12 +16,12 @@ export function* signIn({payload}) {
       password,
     });
 
-    const { user, attractions } = response.data;
+    const { user, attractions, userVisitedAttractions } = response.data;
     const { headers } = response;
 
     let cookie = headers["set-cookie"];
 
-    yield put(setMarkers(attractions));
+    yield put(setMarkers(markers));
     yield put(signInSuccess(cookie, user));
 
     // history.push("/home");
