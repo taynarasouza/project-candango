@@ -3,6 +3,7 @@ import {all, takeLatest, call, put} from 'redux-saga/effects';
 import {Alert} from 'react-native';
 import api from '../../../services/api';
 
+import {setMarkers} from '../markers/actions';
 import {updateProfileSuccess, updateProfileFailure, visitAttractionSuccess, visitAttractionFailure} from './actions';
 
 export function* updateProfile({payload}) {
@@ -44,14 +45,24 @@ export function* updateProfile({payload}) {
 
 export function* getUserMedal({payload}) {
   try {
-    const { attractionCode, exp } = payload.data;
+    const { attractionCode, markers } = payload;
 
-    yield call(api.post, 'attractions/user', { attractionCode });
+    const response = yield call(api.post, 'attractions/user', { attractionCode });
 
-    Alert.alert('Medalha resgatada e essa nova experiência já foi registrada. Continue jogando e subindo de nível!');
+    const { exp, medalStatus, userVisitedAttractions } = response.data;
 
+    const upmarkers = markers.reduce((res, pt) => {
+      pt.hasVisited = userVisitedAttractions.length > 0 && userVisitedAttractions.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).length > 0;
+      res.push(pt);
+      return res;
+    }, []);
+
+    yield put(setMarkers(upmarkers));
     yield put(visitAttractionSuccess({ exp }));
+    Alert.alert("Ponto turísitco visitado", medalStatus);
+
   } catch (error) {
+    console.log(error);
     Alert.alert('Falha ao pegar medalha');
     yield put(visitAttractionFailure());
   }

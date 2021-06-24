@@ -66,6 +66,10 @@ const HomeView = ({navigation}) => {
   const markers = useSelector(state => state.markers.markers);
   const mapRef = React.useRef();
 
+  if (("params" in navigation.state)) {
+    console.log(navigation.state.params);
+  }
+
   const [ComponentGMV, setComponentGMV] = useState({
     open: false,
     payload: {}
@@ -274,7 +278,8 @@ const HomeView = ({navigation}) => {
     dispatch(
       visitAttraction({
         attractionCode: ComponentGMV.payload.codLocal,
-        exp: ComponentGMV.payload.exp
+        exp: ComponentGMV.payload.exp,
+        markers
       })
     );
   }
