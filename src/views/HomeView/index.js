@@ -298,8 +298,8 @@ const HomeView = ({navigation}) => {
       }
     },
     {
-      icon: 'bag-personal',
-      label: 'Mochila',
+      icon: 'medal',
+      label: 'Medalhas',
       onPress: () => navigation.navigate(Routes.Bag),
       small: false,
       style: {
@@ -307,7 +307,7 @@ const HomeView = ({navigation}) => {
       }
     },
     {
-      icon: 'walk',
+      icon: 'map-marker-path',
       label: 'Circuitos',
       onPress: () => navigation.navigate(Routes.Circuits),
       small: false,
