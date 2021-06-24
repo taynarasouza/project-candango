@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, Alert } from "react-native";
+import { formatRelative, addHours } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
 import {
   Container,
@@ -8,8 +10,11 @@ import {
   MedalCover,
   Scroll,
   MedalModal,
-  ModalMedalImage,
-  ModalMedalDescription,
+  ModalImage,
+  ModalTitle,
+  ModalDescription,
+  ModalDivider,
+  ModalDate,
   CloseModal,
   Loading,
 } from './styles';
@@ -44,6 +49,12 @@ const BagView = ({ navigation }) => {
     setSelectedMedal(medal);
   };
 
+  const formatDate = (date) => {
+    let newDate = new Date(date);
+    let dateFormatted = formatRelative(addHours(newDate, 3), new Date(), { locale: ptBR });
+    return `Conquistada ${dateFormatted}.`;
+  }
+
   return (
     <Container>
       {
@@ -61,10 +72,20 @@ const BagView = ({ navigation }) => {
       </Scroll>
       )}
       <MedalModal isVisible={isModalVisible}>
-          <ModalMedalImage source={{ uri: selectedMedal.img }}/>
-          <ModalMedalDescription>
-            {selectedMedal.name}
-          </ModalMedalDescription>
+          <ModalImage source={{ uri: selectedMedal.img }}/>
+          <ModalTitle> {selectedMedal.name} </ModalTitle>
+          <ModalDivider />
+          {
+              selectedMedal.hasMedal 
+                ? 
+                <>
+                  <ModalDate> {formatDate(selectedMedal.unlockDate1)} </ModalDate>
+                </>
+                : 
+                <ModalDescription>
+                  Visite este ponto turístico para obter a medalha.
+                </ModalDescription>
+          }
           <CloseModal
             mode="contained" 
             onPress={() => 

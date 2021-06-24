@@ -53,18 +53,37 @@ export const MedalModal = styled(Modal)`
     position: absolute;
     top: ${ `${normalize(25, "height")}%` };
     right: -7px;
+    padding: 12px;
 `;
 
-export const ModalMedalImage = styled.Image`
+export const ModalImage = styled.Image`
     width: ${ `${normalize(90)}px` };
     height: ${ `${normalize(90)}px` };
     margin: ${ `${normalize(15)}px` };
     border-radius: 100px;
 `;
 
-export const ModalMedalDescription = styled.Text`
-    font-size: 17px;
+export const ModalTitle = styled.Text`
+    font-size: 18px;
     font-weight: bold;
+`;
+
+export const ModalDescription = styled.Text`
+    font-size: 16px;
+    text-align: center;
+`;
+
+export const ModalDate = styled.Text`
+    font-size: 16px;
+    margin: 12px 0px;
+    text-align: center;
+`;
+
+export const ModalDivider = styled.View`
+    width: 120px;
+    height: 2px;
+    margin: 8px 0px;
+    background: #000099;
 `;
 
 export const CloseModal = styled(ButtonPaper).attrs({
@@ -74,8 +93,7 @@ export const CloseModal = styled(ButtonPaper).attrs({
 })`
     width: 150px;
     height: 40px;
-    margin-top: 36px;
-    margin-bottom: 18px;
+    margin: 12px 0px;
     border-radius: 32px;
     justify-content: center;
 `;
