@@ -20,11 +20,15 @@ export function* signIn({payload}) {
     const { headers } = response;
 
     let cookie = headers["set-cookie"];
+    let visited = userVisitedAttractions;
+    const markers = attractions.reduce((res, pt) => {
+      pt.hasVisited = visited.length > 0 && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).length > 0;
+      res.push(pt);
+      return res;
+    }, []);
 
     yield put(setMarkers(markers));
     yield put(signInSuccess(cookie, user));
-
-    // history.push("/home");
 
   } catch (error) {
     Alert.alert('Falha na autenticação', error.response.data.error);
