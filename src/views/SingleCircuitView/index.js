@@ -18,6 +18,14 @@ import {
   Info,
   About, 
   Description,
+  Footer,
+  HorizontalScroll,
+  FooterContent,
+  FooterDivider,
+  FooterCard,
+  FooterTitle,
+  FooterAbout,
+  FooterCover,
   Button,
 } from './styles';
 
@@ -56,6 +64,24 @@ const SingleCircuitView = ({ navigation }) => {
           <About>Sobre o circuito</About>
           <Description>{circuit.circuitDesc}</Description>
         </Content>
+
+        <Footer>
+          <FooterAbout>Pontos turísticos</FooterAbout>
+
+          <HorizontalScroll>
+            {
+              circuit.attractions.map((attraction, i) => (
+                <FooterCard key={i}>
+                  <FooterCover source={{ uri: attraction.urlImg }} />
+                  <FooterContent>
+                    <FooterDivider />
+                    <FooterTitle>{attraction.name}</FooterTitle>
+                  </FooterContent>
+                </FooterCard>
+              ))
+            }
+          </HorizontalScroll>
+        </Footer>
 
         <Button
           mode="contained" 

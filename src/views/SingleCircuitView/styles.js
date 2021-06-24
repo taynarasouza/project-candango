@@ -26,19 +26,19 @@ export const Title = styled.Text`
     color: #fff;
     font-size: ${ `${normalize(24)}px` };
     font-weight: bold;
-    padding-left: 18px;
+    padding-left: 16px;
 `;
 
 export const Divider = styled.View`
     width: 50px;
     height: 3px;
-    margin:  ${ `${normalize(12)}px` } 18px;
+    margin:  ${ `${normalize(12)}px` } 16px;
     background: #000099;
 `;
 
 export const Content = styled.View`
     background: #fff;
-    padding: 15px;
+    padding: 16px;
     elevation: 5;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
 `;
@@ -89,6 +89,59 @@ export const Bold = styled.Text`
     font-weight: bold;
     font-size: 18px;
     color: #000;
+`;
+
+export const Footer = styled.View`
+    /* padding: 16px; */
+`;
+
+export const FooterAbout = styled.Text`
+    font-weight: bold;
+    margin-top: 16px;
+    padding-left: 16px;
+`;
+
+export const HorizontalScroll = styled.ScrollView.attrs({
+    horizontal: true,
+    showsHorizontalScrollIndicator: false,
+    contentContainerStyle: {
+        flexDirection: "row",
+        padding: 16,
+    }
+})``;
+
+export const FooterCard = styled.View`
+    background: #fff;
+    height: 175px;
+    width: 175px;
+    margin-right: 15px;
+    border-radius: 16px;
+    elevation: 5;
+    box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.5);
+`;
+
+export const FooterCover = styled.Image`
+    width: 100%;
+    height: 60%;
+    border-top-right-radius: 16px;
+    border-top-left-radius: 16px;
+`;
+
+export const FooterContent = styled.View`
+    padding: 8px 16px;
+`;
+
+export const FooterDivider = styled.View`
+    width: 60px;
+    margin: 8px 0px;
+    height: 2px;
+    background: #009;
+`;
+
+export const FooterTitle = styled.Text.attrs({
+    numberOfLines: 2,
+})`
+    font-size: 12px;
 `;
 
 export const Button = styled(ButtonPaper).attrs({
