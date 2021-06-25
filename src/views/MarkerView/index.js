@@ -154,13 +154,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     // borderRadius: 10,
     padding: 10,
-    shadowColor: "black",
-    shadowOffset: {
-      width: 0,
-      height: -10
-    },
-    shadowOpacity: .3,
-    shadowRadius: 5,
   },
   titleContainer: {
     padding: 5,
