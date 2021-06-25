@@ -23,20 +23,23 @@ const defaults = {
     exp: 0,
     urlImg: "",
     hasMedal: false,
-    expired: {
+    expirationDate: {
       default: "",
       formatted: ""
     }
   }
 }
 
-function hasExpired(expirationDate, now = new Date()) {
-  return expirationDate.getTime() < now.getTime();
+function hasExpired(expDate, now = new Date()) {
+  if (!expDate)
+    return;
+  
+  return expDate.getTime() < now.getTime();
 }
 
 function GetMedalView({open, marker = defaults.marker, onGetMedal, onClose, onOpenMarkerView, onNavigate}) {
-  const { name, exp, urlImg, hasMedal, expired } = marker;
-  const showVisitButton = hasExpired(new Date(expired.default));
+  const { name, exp, urlImg, hasMedal, expirationDate } = marker;
+  const showVisitButton = hasExpired(new Date(expirationDate.default));
   return (
     <Modal
       animationType="slide"
