@@ -17,9 +17,26 @@ import {
 } from './styles';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-function GetMedalView({open, marker, onGetMedal, onClose, onOpenMarkerView, onNavigate}) {
-  const { name = "", exp = 0, urlImg = "", hasVisited } = marker;
-  // console.log(marker);
+const defaults = {
+  marker: {
+    name: "",
+    exp: 0,
+    urlImg: "",
+    hasMedal: false,
+    expired: {
+      default: "",
+      formatted: ""
+    }
+  }
+}
+
+function hasExpired(expirationDate, now = new Date()) {
+  return expirationDate.getTime() < now.getTime();
+}
+
+function GetMedalView({open, marker = defaults.marker, onGetMedal, onClose, onOpenMarkerView, onNavigate}) {
+  const { name, exp, urlImg, hasMedal, expired } = marker;
+  const showVisitButton = hasExpired(new Date(expired.default));
   return (
     <Modal
       animationType="slide"
@@ -40,38 +57,37 @@ function GetMedalView({open, marker, onGetMedal, onClose, onOpenMarkerView, onNa
           </TopContainer>
 
           <MiddleContainer>
-            <Medal source={{ uri: urlImg }} hasVisited={hasVisited}>
+            <Medal source={{ uri: urlImg }} hasMedal={hasMedal}>
               <MedalCover />
             </Medal>
-            {!hasVisited && (
-              <MedalExp>
-                Exp: {exp}
-              </MedalExp>
-            )}
+            <MedalExp>
+              Exp: {exp} pontos
+            </MedalExp>
           </MiddleContainer>
 
           <BottomContainer>
+            {hasMedal && (
+              <ButtonRescued icon="medal">
+                Medalha conquistada
+              </ButtonRescued>
+            )}
             <Button 
               icon="information-outline" 
               mode="outlined"
               color="white"
               onPress={() => onOpenMarkerView()}
+              style={{marginBottom: 40}}
             >
               Informações
             </Button>
-            {!hasVisited ? (
+            {showVisitButton && (
               <Button 
-                icon="medal" 
+                icon="map-marker-radius" 
                 mode="contained" 
                 onPress={() => onGetMedal()}
               >
-                Pegar medalha
+                Visitar ponto turístico
               </Button>
-            ) : (
-              <ButtonRescued icon="medal">
-                Medalha resgatada
-              </ButtonRescued>
-              
             )}
           </BottomContainer>
         </ModalContent>
