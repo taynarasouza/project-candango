@@ -20,6 +20,8 @@ const Description = ({description}) => {
     setToggled(prevState => !prevState);
   }
 
+  const toggleText = toggled ? "Ver menos" : "Ver mais";
+
   return (
     <View style={styles.descriptionView}>
       <Text style={styles.label}>
@@ -38,7 +40,7 @@ const Description = ({description}) => {
             onPress={handleToggle}
             style={{color: "#000099"}}
           >
-            Ver mais
+            {toggleText}
           </Text>
         )}
       </View>
@@ -48,12 +50,12 @@ const Description = ({description}) => {
 
 const styles = StyleSheet.create({
   label: {
-    fontSize: 24,
+    fontSize: 20,
     color: "rgba(0,0,0,.5)",
     marginBottom: 5
   },
   descriptionView: {
-    padding: 5,
+    marginTop: 5,
     width: "100%",
     // minHeight: 300,
     // maxHeight: 400,
@@ -62,7 +64,7 @@ const styles = StyleSheet.create({
     maxHeight: 300
   },
   scrollText: {
-    fontSize: 18,
+    fontSize: 16,
     textAlign: "justify",
     color: "rgba(0,0,0,.85)"
   }
