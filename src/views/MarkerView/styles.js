@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import normalize from 'react-native-normalize';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button as ButtonPaper, Text } from 'react-native-paper';
 
@@ -30,6 +31,20 @@ export const Bold = styled(Text)`
   font-size: 16px;
 `;
 
+export const Title = styled(Text)`
+  font-size: 20px;
+  color: white;
+  font-weight: bold;
+  padding-left: 15px;
+`;
+
+export const TitleDivider = styled.View`
+  width: 50px;
+  height: 3px;
+  margin:  ${ `${normalize(12)}px` } 15px;
+  background: #000099;
+`;
+
 export const Experience = styled.View`
   padding: 5px;
   padding-right: 15px;
@@ -45,4 +60,15 @@ export const ExpValue = styled(Text)`
   font-size: 16px;
   text-align: center;
   color: white;
+`;
+
+export const Content = styled.View`
+  elevation: 5;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
+  
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: #FFFFFF;
+  padding: 0 15px;
 `;
