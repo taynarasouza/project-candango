@@ -7,6 +7,22 @@ import {setMarkers} from '../markers/actions';
 import api from './../../../services/api';
 //import history from '~/services/history';
 
+const fakeData = [
+  {
+    amountVisits: 1,
+    attractionCode: 11,
+    attractionLocal: {
+      CEP: "71010-092",
+      Endereco: "Guará I QI 2 Bloco B Conjunto Q R",
+      Latitude: "-15.815580",
+      Longitude: "-47.982582"
+    },
+    attractionName: "Casa do Vijay",
+    userAttractionImg: null,
+    userCode: 13
+  }
+];
+
 export function* signIn({payload}) {
   try {
     const {email, password} = payload;
@@ -21,8 +37,30 @@ export function* signIn({payload}) {
 
     let cookie = headers["set-cookie"];
     let visited = userVisitedAttractions;
+
+    // if (!visited.length)
+    //   visited = fakeData;
+
+    // console.log("-------------");
+    // console.log("Attractions: ", attractions);
+    // console.log("-------------");
+    // console.log("Visited: ", visited);
+    // console.log("-------------\n");
+
     const markers = attractions.reduce((res, pt) => {
-      pt.hasVisited = visited.length > 0 && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).length > 0;
+      const isOk = visited.length > 0 && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).length > 0;
+      const hasMedal =  isOk;
+      const qtdVisits = isOk && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.ammountVisits)[0];
+      const expVisitF = isOk && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.lastVisit)[0];
+      const expVisitD = isOk && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.lastVisit1)[0];
+
+      pt.hasMedal = hasMedal;
+      pt.qtdVisits = qtdVisits;
+      pt.expirationDate = {
+        default: expVisitD,
+        formatted: expVisitF
+      };
+      
       res.push(pt);
       return res;
     }, []);
@@ -73,6 +111,7 @@ export function* signOut() {
     yield put(signOutSucess());
 
   } catch (error) {
+      // if (error.toString().indexOf("401") !== -1) {}
     Alert.alert('Falha no logout', error.response.data.error);
   }
 }
