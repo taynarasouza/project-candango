@@ -3,7 +3,7 @@ import { StyleSheet, Modal, ScrollView, Image, View, Text, ImageBackground } fro
 import { Appbar } from "react-native-paper";
 
 import Description from "./description";
-import { Button, Gradient, Bold, Experience, ExpLabel, ExpValue } from "./styles";
+import { Button, Gradient, Bold, Experience, ExpLabel, ExpValue, Title, TitleDivider, Content } from "./styles";
 
 const StickyHeader = React.forwardRef((props, ref) => {
   const { onClose } = props;
@@ -60,9 +60,10 @@ function MarkerView({open, marker = defaults.marker, isNear, isDirecting, onDire
 
           <ImageBackground source={{ uri: marker.urlImg }} style={{resizeMode: "cover", justifyContent: "center", height: 200, width: "100%", }}>
             <Gradient>
-              <Bold bottom>
+              <Title>
                 {marker.name}
-              </Bold>
+              </Title>
+              <TitleDivider />
             </Gradient>
           </ImageBackground>
 
@@ -75,7 +76,7 @@ function MarkerView({open, marker = defaults.marker, isNear, isDirecting, onDire
             />
           </View> */}
           
-          <View style={styles.modal}>
+          <Content>
 
             <View style={styles.questionContainer}>
               <Text style={styles.label}>Endereço</Text>
@@ -120,7 +121,7 @@ function MarkerView({open, marker = defaults.marker, isNear, isDirecting, onDire
             
             </View>
 
-          </View>
+          </Content>
         
         </View>
       
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
     marginBottom: 5
   },
   label: {
-    fontSize: 24,
+    fontSize: 20,
     color: "rgba(0,0,0,.5)",
     marginBottom: 5
   },
@@ -178,11 +179,11 @@ const styles = StyleSheet.create({
     borderColor: "black"
   },
   scrollText: {
-    fontSize: 18,
+    fontSize: 16,
     textAlign: "justify"
   },
   questionContainer: {
-    padding: 5,
+    marginTop: 5,
     width: "100%",
     flex: 1
   },
