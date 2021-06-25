@@ -50,9 +50,21 @@ export function* getUserMedal({payload}) {
     const response = yield call(api.post, 'attractions/user', { attractionCode });
 
     const { exp, medalStatus, userVisitedAttractions } = response.data;
-
+    const visited = userVisitedAttractions;
     const upmarkers = markers.reduce((res, pt) => {
-      pt.hasVisited = userVisitedAttractions.length > 0 && userVisitedAttractions.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).length > 0;
+      const isOk = visited.length > 0 && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).length > 0;
+      const hasMedal =  isOk;
+      const qtdVisits = isOk && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.ammountVisits)[0];
+      const expVisitF = isOk && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.lastVisit)[0];
+      const expVisitD = isOk && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.lastVisit1)[0];
+
+      pt.hasMedal = hasMedal;
+      pt.qtdVisits = qtdVisits;
+      pt.expirationDate = {
+        default: expVisitD,
+        formatted: expVisitF
+      };
+      
       res.push(pt);
       return res;
     }, []);
