@@ -72,6 +72,7 @@ export const ButtonRescued = styled(Button).attrs({
     height: 50px;
     border-radius: 30px;
     justify-content: center;
+    margin-bottom: 40px;
 `;
 
 export const ModalCloseButton = styled(Pressable)`
