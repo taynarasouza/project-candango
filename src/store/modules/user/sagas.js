@@ -48,9 +48,8 @@ export function* getUserMedal({payload}) {
     const { attractionCode, markers } = payload;
 
     const response = yield call(api.post, 'attractions/user', { attractionCode });
-
-    const { exp, medalStatus, userVisitedAttractions } = response.data;
-    const visited = userVisitedAttractions;
+    const { exp, medalStatus, userAttractionVisited } = response.data;
+    const visited = userAttractionVisited;
     const upmarkers = markers.reduce((res, pt) => {
       const isOk = visited.length > 0 && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).length > 0;
       const hasMedal =  isOk;
