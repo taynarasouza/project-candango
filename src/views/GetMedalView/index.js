@@ -34,7 +34,10 @@ function hasExpired(expDate, now = new Date()) {
   if (!expDate)
     return;
   
-  return expDate.getTime() < now.getTime();
+  const MILISECONDS_DAY = 3600 * 1000; // segundos em 24hrs * mil
+  const diff = Math.abs( (now.getTime() - expDate.getTime()) );
+  
+  return diff > MILISECONDS_DAY;
 }
 
 function GetMedalView({open, marker = defaults.marker, onGetMedal, onClose, onOpenMarkerView, onNavigate}) {
