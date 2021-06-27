@@ -59,10 +59,10 @@ export function* getUserMedal({payload}) {
       const expVisitD = isOk && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.lastVisit1)[0];
 
       pt.hasMedal = hasMedal;
-      pt.qtdVisits = qtdVisits;
+      pt.qtdVisits = qtdVisits || 0;
       pt.expirationDate = {
-        default: expVisitD,
-        formatted: expVisitF
+        default: expVisitD || "",
+        formatted: expVisitF || ""
       };
       
       res.push(pt);
@@ -75,7 +75,7 @@ export function* getUserMedal({payload}) {
 
   } catch (error) {
     console.log(error);
-    Alert.alert('Falha ao pegar medalha');
+    Alert.alert('Falha ao visitar ponto turístico');
     yield put(visitAttractionFailure());
   }
 }
