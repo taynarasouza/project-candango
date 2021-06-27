@@ -132,7 +132,13 @@ const HomeView = ({navigation}) => {
     // se nao faz nada
     if ((coordinates.latitude === position.latitude) && (coordinates.longitude === position.longitude))
       return;
-    
+      
+    mapRef.current.animateToRegion({ 
+      ...coordinates, 
+      latitudeDelta: LATITUDE_DELTA, 
+      longitudeDelta: LONGITUDE_DELTA 
+    }, 1000);
+
     dispatch(setUserPosition(coordinates));
   }
   
@@ -283,6 +289,10 @@ const HomeView = ({navigation}) => {
     );
   }
 
+  const handlePressCard = (attraction) => {
+    console.log(attraction);
+  }
+
   const actions = [
     { icon: 'information',
       label: 'Informações',
@@ -350,6 +360,7 @@ const HomeView = ({navigation}) => {
             style={styles.mapStyle}
             onMapReady={getUserPosition}
             onUserLocationChange={_setUserPosition}
+            enableHighAccuracy
           >
             {circuit.attractions.length > 0 && circuit.attractions.map((marker, i) => {
               let color = "#000099";
@@ -430,7 +441,7 @@ const HomeView = ({navigation}) => {
                 origin={position}
                 destination={destination.coordinates}
                 apikey={GOOGLE_API_KEY}
-                strokeWidth={4}
+                strokeWidth={3}
                 strokeColor="#000099"
                 onReady={handleReadyDirections}
                 onError={handleErrorDirections}
@@ -443,7 +454,7 @@ const HomeView = ({navigation}) => {
           <>
             <HorizontalScroll>
               {circuit.attractions.map((attraction, i) => (
-                <FooterCard key={i}>
+                <FooterCard key={i} onPress={() => handlePressCard(attraction)}>
                   <FooterCover source={{ uri: attraction.urlImg }} />
                   <FooterContent>
                     <FooterDivider />
@@ -459,7 +470,7 @@ const HomeView = ({navigation}) => {
         {circuit.attractions.length === 0 && (
           <FabPosition onPress={() => handleGoToMyPosition()} />
         )}
-        {destination.status === "start" && (
+        {destination.status === "start" && circuit.attractions.length === 0 && (
           <FabCancel label="Cancelar" onPress={() => handleCancelDestination()} />
         )}
         
