@@ -66,12 +66,25 @@ export function* signUp({payload}) {
 
     Alert.alert('Cadastro realizado com sucesso!');
 
-    const { user } = response.data;
+    const { user, attractions } = response.data;
     const { headers } = response;
 
     let cookieHeader = headers["set-cookie"][0];
     let cookie = cookieHeader.split('; ')[0];
 
+    const markers = attractions.reduce((res, pt) => {
+      pt.hasMedal = false;
+      pt.qtdVisits = 0;
+      pt.expirationDate = {
+        default: "",
+        formatted: ""
+      };
+      
+      res.push(pt);
+      return res;
+    }, []);
+
+    yield put(setMarkers(markers));
     yield put(signInSuccess(cookie, user));
   } catch (error) {
     Alert.alert('Falha no cadastro', error.response.data.error);
