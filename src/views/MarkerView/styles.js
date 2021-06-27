@@ -2,6 +2,7 @@ import styled from 'styled-components/native';
 import normalize from 'react-native-normalize';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button as ButtonPaper, Text } from 'react-native-paper';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export const Button = styled(ButtonPaper).attrs(props => ({
   ...props
@@ -72,3 +73,17 @@ export const Content = styled.View`
   background-color: #FFFFFF;
   padding: 0 15px;
 `;
+
+//<MaterialCommunityIcons name="medal" size={24} color="gold"  />
+export const Medal = styled.View`
+  position: absolute;
+  top: 30px;
+  left: 15px;
+  text-align: center;
+`;
+
+// export const MedalIcon = styled(MaterialCommunityIcons).attrs({
+//   name: "medal",
+//   size: 24,
+//   color: "gold"
+// });

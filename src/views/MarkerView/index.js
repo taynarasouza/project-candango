@@ -3,7 +3,8 @@ import { StyleSheet, Modal, ScrollView, Image, View, Text, ImageBackground } fro
 import { Appbar } from "react-native-paper";
 
 import Description from "./description";
-import { Button, Gradient, Bold, Experience, ExpLabel, ExpValue, Title, TitleDivider, Content } from "./styles";
+import { Button, Gradient, Bold, Experience, ExpLabel, ExpValue, Title, TitleDivider, Content, Medal, MedalIcon } from "./styles";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const StickyHeader = React.forwardRef((props, ref) => {
   const { onClose } = props;
@@ -33,7 +34,8 @@ const defaults = {
     name: "",
     description: "",
     urlImg: "",
-    exp: "",
+    exp: 0,
+    hasMedal: false,
     Local: {
       CEP: "",
       Endereco: ""
@@ -60,6 +62,18 @@ function MarkerView({open, marker = defaults.marker, isNear, isDirecting, onDire
 
           <ImageBackground source={{ uri: marker.urlImg }} style={{resizeMode: "cover", justifyContent: "center", height: 200, width: "100%", }}>
             <Gradient>
+              {marker.hasMedal && (
+                <MaterialCommunityIcons 
+                  name="medal" 
+                  size={24} 
+                  color="gold"
+                  style={{
+                    position: "absolute",
+                    top: 10,
+                    left: 10
+                  }} 
+                />
+              )}
               <Title>
                 {marker.name}
               </Title>
