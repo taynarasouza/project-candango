@@ -13,7 +13,7 @@ import { Routes } from "../../utils/constants";
 import { setUserPosition, visitAttraction } from '../../store/modules/user/actions';
 import api from "../../services/api";
 
-import { FabPosition, FabCancel } from "./styles";
+import { FabPosition, FabCancel, HorizontalScroll, FooterCard, FooterContent, FooterCover, FooterDivider, FooterTitle, Footer } from "./styles";
 
 const GOOGLE_API_KEY = "AIzaSyB90RnyJ2NDSeoXAuIEGfv8viCx_BrCo28";
 
@@ -66,9 +66,16 @@ const HomeView = ({navigation}) => {
   const markers = useSelector(state => state.markers.markers);
   const mapRef = React.useRef();
 
-  if (("params" in navigation.state)) {
-    console.log(navigation.state.params);
-  }
+  const [circuit, setCircuit] = useState({
+    attractions: []
+  });
+
+  useEffect(() => {
+    if (("params" in navigation.state) && ("attractions" in navigation.state.params)) {
+      setCircuit({ attractions: navigation.state.params.attractions });
+    }
+
+  }, [navigation.state]);
 
   const [ComponentGMV, setComponentGMV] = useState({
     open: false,
@@ -85,6 +92,7 @@ const HomeView = ({navigation}) => {
 
   // Effect para resgatar a posicao do usuario 
   // e disparar a acao para salvar a posicao na store
+  // assim que entrar na view
   useEffect(() => {
     getUserPosition();    
 
@@ -97,10 +105,6 @@ const HomeView = ({navigation}) => {
       );
     }
   }, []);
-
-  // useEffect(() => {
-
-  // }, []);
 
   const getUserPosition = () => {
     navigator.geolocation.getCurrentPosition(
@@ -123,8 +127,13 @@ const HomeView = ({navigation}) => {
 
   const _setUserPosition = e => {
     const coordinates = e.nativeEvent.coordinate;
+    // Verifica se mudou ou nao a posicao do usuario
+    // se mudou executa o dispatch
+    // se nao faz nada
+    if ((coordinates.latitude === position.latitude) && (coordinates.longitude === position.longitude))
+      return;
+    
     dispatch(setUserPosition(coordinates));
-    // console.log(coordinates);
   }
   
   const [openMenu, setOpenMenu] = useState(false);
@@ -165,16 +174,6 @@ const HomeView = ({navigation}) => {
       });
       return;
     }
-
-    // console.log("-----------------");
-    // console.log({
-    //   coordinates,
-    //   marker,
-    //   destination,
-    //   distance,
-    //   isnear
-    // });
-    // console.log("-----------------\n");
   }
 
   const handlePressMarker = (coordinates, marker, isNear) => {
@@ -334,92 +333,138 @@ const HomeView = ({navigation}) => {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={{...StyleSheet.absoluteFillObject}}>
+        <>
+          <MapView
+            ref={mapRef}
+            provider={PROVIDER_GOOGLE}
+            // mapType={Platform.OS === "android" ? "none" : "standard"}
+            initialRegion={initialRegion}
+            loadingEnabled={true}
+            toolbarEnabled={false}
+            // minZoomLevel={0}
+            maxZoomLevel={15}
+            showsUserLocation={true}
+            followsUserLocation={true}
+            showsMyLocationButton={false}
+            pitchEnabled={true}
+            style={styles.mapStyle}
+            onMapReady={getUserPosition}
+            onUserLocationChange={_setUserPosition}
+          >
+            {circuit.attractions.length > 0 && circuit.attractions.map((marker, i) => {
+              let color = "#000099";
+              const latitude = parseFloat(marker.Local.Latitude);
+              const longitude = parseFloat(marker.Local.Longitude);
+
+              return (
+                <Fragment key={marker.codLocal}>
+                  <Marker
+                    key={marker.codLocal}
+                    pinColor={color}
+                    coordinate={{
+                      latitude,
+                      longitude 
+                    }}
+                    onPress={e => {
+                      const coordinates = e.nativeEvent.coordinate;
+                      MarkerController(
+                        coordinates,
+                        marker
+                      )
+                    }}
+                  />
+                  <Circle 
+                    center={{
+                      latitude,
+                      longitude 
+                    }}
+                    fillColor="rgba(135,206,235, .5)"
+                    strokeColor="rgba(135,206,235, .8)"
+                    strokeWidth={1}
+                    radius={MARKER_RADIUS}
+                    zIndex={100}
+                  />
+                </Fragment>
+              )
+            })}
+
+            {circuit.attractions.length === 0 && markers && markers.map((marker, i) => {
+              const latitude = parseFloat(marker.Local.Latitude);
+              const longitude = parseFloat(marker.Local.Longitude);
+
+              return (
+                <Fragment key={marker.codLocal}>
+                  <Marker
+                    key={marker.codLocal}
+                    coordinate={{
+                      latitude,
+                      longitude 
+                    }}
+                    onPress={e => {
+                      const coordinates = e.nativeEvent.coordinate;
+                      MarkerController(
+                        coordinates,
+                        marker
+                      )
+                    }}
+                  />
+
+                  <Circle 
+                    center={{
+                      latitude,
+                      longitude 
+                    }}
+                    fillColor="rgba(135,206,235, .5)"
+                    strokeColor="rgba(135,206,235, .8)"
+                    strokeWidth={1}
+                    radius={MARKER_RADIUS}
+                    zIndex={100}
+                  />
+                </Fragment>
+              )
+            })}
+
+            {destination.status === "start" && (
+              <MapViewDirections
+                mode="DRIVING"
+                origin={position}
+                destination={destination.coordinates}
+                apikey={GOOGLE_API_KEY}
+                strokeWidth={4}
+                strokeColor="#000099"
+                onReady={handleReadyDirections}
+                onError={handleErrorDirections}
+              />
+            )}
+          </MapView>
+        </>
+
+        {circuit.attractions.length > 0 && (
           <>
-            <MapView
-              ref={mapRef}
-              provider={PROVIDER_GOOGLE}
-              // mapType={Platform.OS === "android" ? "none" : "standard"}
-              initialRegion={initialRegion}
-              loadingEnabled={true}
-              toolbarEnabled={false}
-              // minZoomLevel={0}
-              maxZoomLevel={15}
-              showsUserLocation={true}
-              followsUserLocation={true}
-              showsMyLocationButton={false}
-              pitchEnabled={true}
-              style={styles.mapStyle}
-              onMapReady={getUserPosition}
-              // onUserLocationChange={_setUserPosition}
-            >
-              {markers && markers.map((marker, i) => {
-                let color = "red";
-                const latitude = parseFloat(marker.Local.Latitude);
-                const longitude = parseFloat(marker.Local.Longitude);
-
-                return (
-                  <Fragment key={marker.codLocal}>
-                    <Marker
-                      key={marker.codLocal}
-                      pinColor={color}
-                      coordinate={{
-                        latitude,
-                        longitude 
-                      }}
-                      onPress={e => {
-                        const coordinates = e.nativeEvent.coordinate;
-                        MarkerController(
-                          coordinates,
-                          marker
-                        )
-                      }}
-                    />
-                    <Circle 
-                      center={{
-                        latitude,
-                        longitude 
-                      }}
-                      fillColor="rgba(135,206,235, .5)"
-                      strokeColor="rgba(135,206,235, .8)"
-                      strokeWidth={1}
-                      radius={MARKER_RADIUS}
-                      zIndex={100}
-                    />
-                  </Fragment>
-                )
-              })}
-
-              {destination.status === "start" && (
-                <MapViewDirections
-                  mode="DRIVING"
-                  origin={position}
-                  destination={destination.coordinates}
-                  apikey={GOOGLE_API_KEY}
-                  strokeWidth={4}
-                  strokeColor="#000099"
-                  onReady={handleReadyDirections}
-                  onError={handleErrorDirections}
-                />
-              )}
-            </MapView>
-
-            
-            {/* <View style={{position: "absolute", left: 0, right: 0, top: 80, display: "flex", alignItems: "center", justifyContent: "center"}}>
-              <View style={{backgroundColor: "white", borderRadius: 30, width: width - 80, shadowColor: "rgba(0,0,0,.4)", shadowOpacity: .8, shadowRadius: 6, shadowOffset: { width: 0, height: 0}, height: 45, padding: 10, display: "flex", alignItems: "center", justifyContent: "center"}}>
-                <TextInput 
-                  placeholder="Pesquisar localização"
-                  style={{width: "100%", paddingHorizontal: 10, fontSize: 16}}
-                />
-              </View>
-            </View> */}
+            <HorizontalScroll>
+              {circuit.attractions.map((attraction, i) => (
+                <FooterCard key={i}>
+                  <FooterCover source={{ uri: attraction.urlImg }} />
+                  <FooterContent>
+                    <FooterDivider />
+                    <FooterTitle>{attraction.name}</FooterTitle>
+                  </FooterContent>
+                </FooterCard>
+              ))}
+            </HorizontalScroll>
+            <FabCancel label="Cancelar circuito" onPress={() => setCircuit({ attractions: [] })} />
           </>
+        )}
 
-        <FabPosition onPress={() => handleGoToMyPosition()} />
+        {circuit.attractions.length === 0 && (
+          <FabPosition onPress={() => handleGoToMyPosition()} />
+        )}
         {destination.status === "start" && (
           <FabCancel label="Cancelar" onPress={() => handleCancelDestination()} />
         )}
+        
         {/* Menu FAB */}
-        {destination.status !== "start" && (
+        {destination.status !== "start" && circuit.attractions.length === 0 && (
           <Menu 
             open={openMenu}
             actions={actions}
