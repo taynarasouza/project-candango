@@ -7,22 +7,6 @@ import {setMarkers} from '../markers/actions';
 import api from './../../../services/api';
 //import history from '~/services/history';
 
-const fakeData = [
-  {
-    amountVisits: 1,
-    attractionCode: 11,
-    attractionLocal: {
-      CEP: "71010-092",
-      Endereco: "Guará I QI 2 Bloco B Conjunto Q R",
-      Latitude: "-15.815580",
-      Longitude: "-47.982582"
-    },
-    attractionName: "Casa do Vijay",
-    userAttractionImg: null,
-    userCode: 13
-  }
-];
-
 export function* signIn({payload}) {
   try {
     const {email, password} = payload;
@@ -37,15 +21,6 @@ export function* signIn({payload}) {
 
     let cookie = headers["set-cookie"];
     let visited = userVisitedAttractions;
-
-    // if (!visited.length)
-    //   visited = fakeData;
-
-    // console.log("-------------");
-    // console.log("Attractions: ", attractions);
-    // console.log("-------------");
-    // console.log("Visited: ", visited);
-    // console.log("-------------\n");
 
     const markers = attractions.reduce((res, pt) => {
       const isOk = visited.length > 0 && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).length > 0;
