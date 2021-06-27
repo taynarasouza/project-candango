@@ -49,10 +49,7 @@ export default function user(state = INITIAL_STATE, action) {
       }
 
       case '@user/VISIT_ATTRACTION_SUCCESS': {
-        draft.profile = {
-          ...state.profile,
-          exp: action.payload.exp
-        };
+        draft.profile.exp = action.payload.exp;
         draft.loading = false;
         break;
       }
