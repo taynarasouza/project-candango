@@ -1,6 +1,7 @@
 import styled from 'styled-components/native';
 import { Text, Pressable, Modal } from "react-native";
 import { Button as ButtonPaper } from 'react-native-paper';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import normalize from 'react-native-normalize';
 
@@ -47,15 +48,12 @@ export const MiddleContainer = styled.View`
 `;
 
 export const BottomContainer = styled.View`
-    height: 130px;
     width: 100%;
-    align-items: center;
-    justify-content: space-around;
 `;
 
 export const Button = styled(ButtonPaper)`
     width: 100%;
-    height: 50px;
+    height: 40px;
     border-radius: 30px;
     justify-content: center;
 
@@ -63,16 +61,16 @@ export const Button = styled(ButtonPaper)`
 `;
 
 export const ButtonRescued = styled(Button).attrs({
-    color: "gold"
+    color: "rgba(255, 215, 0, 1)"
 })`
     background-color: rgba(255, 215, 0, .45);
     border-width: 1px;
-    border-color: gold;
+    border-color: rgba(255, 215, 0, 1);
     width: 100%;
-    height: 50px;
+    height: 40px;
     border-radius: 30px;
     justify-content: center;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
 `;
 
 export const ModalCloseButton = styled(Pressable)`
@@ -109,17 +107,22 @@ export const ModalTitle = styled(Text)`
     font-size: 20px;
 `;
 
-export const CongratsText = styled(Text).attrs({
-    children: "Medalha resgatada"
-})`
+export const Warning = styled(Text).attrs(props => ({
+    children: `Ponto turístico já visitado nas últimas 24 horas! Será liberado somente ${props.expDate || "00/00/0000"}`
+}))`
     width: 100%;
-    height: 50px;
-    align-items: center;
+    padding: 10px 10px;
+    font-size: 12px;
     text-align: center;
-    color: gold;
-    text-transform: uppercase;
+    color: #ffffff;
+    background-color: rgba(0, 0, 153, .55);
+    
     border-width: 1px;
-    border-color: gold;
+    border-color: #000099;
+    border-radius: 5px;
+
+    margin-bottom: 20px;
+    line-height: 17px;
 `;
 
 // width: "100%",

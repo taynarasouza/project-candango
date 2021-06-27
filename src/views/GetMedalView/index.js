@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal } from "react-native";
+import { Modal, View } from "react-native";
 import {
   Medal,
   MedalContainer,
@@ -13,7 +13,8 @@ import {
   ModalCloseButton,
   ModalTitle,
   MedalExp,
-  ButtonRescued
+  ButtonRescued,
+  Warning
 } from './styles';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -30,19 +31,39 @@ const defaults = {
   }
 }
 
-function hasExpired(expDate, now = new Date()) {
-  if (!expDate)
+function hasExpired(lastVisit, now = new Date()) {
+  if (!lastVisit)
     return;
-  
-  const MILISECONDS_DAY = 3600 * 1000; // segundos em 24hrs * mil
-  const diff = Math.abs( (now.getTime() - expDate.getTime()) );
-  
-  return diff > MILISECONDS_DAY;
+
+  const expDate = _setExpirationDate(lastVisit);
+  return expDate <= now.getTime();
 }
 
+function _setExpirationDate(lastVisit) {
+  // Adiciona 1 dia na data
+  return lastVisit.setDate( lastVisit.getDate() + 1 );
+}
+
+function formatExpirationDate(d) {
+  const 
+    ed = new Date(_setExpirationDate(d)),
+    _d = ed.getDate() < 10 ? ("0" + ed.getDate()) : ed.getDate(),
+    _m = ed.getMonth() + 1 < 10 ? ("0" + (ed.getMonth() + 1)) : ed.getMonth() + 1,
+    _y = ed.getFullYear(),
+    _h = ed.getHours(),
+    _mi = ed.getMinutes(),
+    _s = ed.getSeconds() < 10 ? ("0" + ed.getSeconds()): ed.getSeconds();
+  
+  return `${_d}/${_m}/${_y} ${_h}:${_mi}:${_s}`;
+}
+
+// marker.expirationDate: representa a data da ultima visita
 function GetMedalView({open, marker = defaults.marker, onGetMedal, onClose, onOpenMarkerView, onNavigate}) {
   const { name, exp, urlImg, hasMedal, expirationDate } = marker;
   const showVisitButton = hasExpired(new Date(expirationDate.default));
+  
+  const expDate = (formatExpirationDate(new Date(expirationDate.default)));
+
   return (
     <Modal
       animationType="slide"
@@ -72,20 +93,26 @@ function GetMedalView({open, marker = defaults.marker, onGetMedal, onClose, onOp
           </MiddleContainer>
 
           <BottomContainer>
+            {!showVisitButton && (
+              <Warning expDate={expDate} />
+            )}
+            
             {hasMedal && (
               <ButtonRescued icon="medal">
                 Medalha conquistada
               </ButtonRescued>
             )}
+            
             <Button 
               icon="information-outline" 
               mode="outlined"
               color="white"
               onPress={() => onOpenMarkerView()}
-              style={{marginBottom: 40}}
+              style={{marginBottom: 10}}
             >
               Informações
             </Button>
+
             {showVisitButton && (
               <Button 
                 icon="map-marker-radius" 
