@@ -64,10 +64,8 @@ export function* signUp({payload}) {
       country
     });
 
-    Alert.alert('Cadastro realizado com sucesso!');
-
-    const { user, attractions } = response.data;
     const { headers } = response;
+    const { user, attractions } = response.data;
 
     let cookieHeader = headers["set-cookie"][0];
     let cookie = cookieHeader.split('; ')[0];
@@ -86,6 +84,7 @@ export function* signUp({payload}) {
 
     yield put(setMarkers(markers));
     yield put(signInSuccess(cookie, user));
+    Alert.alert('Cadastro realizado com sucesso!');
   } catch (error) {
     Alert.alert('Falha no cadastro', error.response.data.error);
     yield put(signFailure());

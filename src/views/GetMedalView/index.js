@@ -32,7 +32,7 @@ const defaults = {
 }
 
 function hasExpired(lastVisit, now = new Date()) {
-  if (!lastVisit)
+  if (!lastVisit || isNaN(lastVisit))
     return;
 
   const expDate = _setExpirationDate(lastVisit);
@@ -59,8 +59,10 @@ function formatExpirationDate(d) {
 
 // marker.expirationDate: representa a data da ultima visita
 function GetMedalView({open, marker = defaults.marker, onGetMedal, onClose, onOpenMarkerView, onNavigate}) {
+  console.log(marker);
   const { name, exp, urlImg, hasMedal, expirationDate } = marker;
-  const showVisitButton = hasExpired(new Date(expirationDate.default));
+  const boExpired = hasExpired(new Date(expirationDate.default));
+  const showVisitButton = boExpired || boExpired == null;
   
   const expDate = (formatExpirationDate(new Date(expirationDate.default)));
 
