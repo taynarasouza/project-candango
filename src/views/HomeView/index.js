@@ -291,7 +291,19 @@ const HomeView = ({navigation}) => {
   }
 
   const handlePressCard = (attraction) => {
-    console.log(attraction);
+    setDestination({
+      status: "start",
+      coordinates: {
+        latitude: parseFloat(attraction.Local.Latitude),
+        longitude: parseFloat(attraction.Local.Longitude),   
+      }
+    });
+    mapRef.current.animateToRegion({ 
+      latitude: parseFloat(attraction.Local.Latitude),
+      longitude: parseFloat(attraction.Local.Longitude), 
+      latitudeDelta: LATITUDE_DELTA,
+      longitudeDelta: LONGITUDE_DELTA
+    }, 1000);
   }
 
   const actions = [
@@ -465,7 +477,21 @@ const HomeView = ({navigation}) => {
                 </FooterCard>
               ))}
             </HorizontalScroll>
-            <FabCancel label="Cancelar circuito" onPress={() => setCircuit({ attractions: [] })} />
+            <FabCancel 
+              label="Cancelar circuito" 
+              onPress={() => {
+                setCircuit({ attractions: [] });
+                if (destination.status === "start") {
+                  setDestination({
+                    status: "stop",
+                    coordinates: {
+                      latitude: null,
+                      longitude: null
+                    }
+                  });
+                }
+              }} 
+            />
           </>
         )}
 
