@@ -54,19 +54,23 @@ export function* getUserMedal({payload}) {
     const response = yield call(api.post, 'attractions/user', { attractionCode });
     const { exp, medalStatus, userVisitedAttraction } = response.data;
     const visited = userVisitedAttraction;
-    
     const upmarkers = markers.reduce((res, pt) => {
-      const isOk = visited.length > 0 && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).length > 0;
-      const hasMedal =  isOk;
-      const qtdVisits = isOk && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.ammountVisits)[0];
-      const expVisitF = isOk && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.lastVisit)[0];
-      const expVisitD = isOk && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.lastVisit1)[0];
+      let hasMedal = false;
+      let qtdVisits = 0;
+      let expVisitF = "";
+      let expVisitD = "";
+      if (visited.length > 0 && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).length > 0) {
+        hasMedal = true;
+        qtdVisits = visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.ammountVisits)[0];
+        expVisitF = visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.lastVisit)[0];
+        expVisitD = visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.lastVisit1)[0];
+      }
 
       pt.hasMedal = hasMedal;
-      pt.qtdVisits = qtdVisits || 0;
+      pt.qtdVisits = qtdVisits;
       pt.expirationDate = {
-        default: expVisitD || "",
-        formatted: expVisitF || ""
+        default: expVisitD,
+        formatted: expVisitF
       };
       
       res.push(pt);
