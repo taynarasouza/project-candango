@@ -12,4 +12,5 @@ export const Routes = {
   Info: "InfoView",
   Circuits: "CircuitsView",
   SingleCircuit: "SingleCircuitView",
+  ChangePassword: "ChangePasswordView"
 }; 

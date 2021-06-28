@@ -40,6 +40,8 @@ import {
 
 import profile from '../../../assets/images/profile.png';
 
+import { Routes } from "../../utils/constants";
+
 const ProfileView = ({ navigation }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.profile);
@@ -68,21 +70,6 @@ const ProfileView = ({ navigation }) => {
         const numLenOnlyDigits = val.replace(/[^\d]/g, '').length;
         return numLenOnlyDigits >= 10;
       }),
-    oldPassword: Yup.string(),
-    newPassword: Yup.string().when('oldPassword', {
-      is: (oldPassword) => oldPassword && oldPassword.length > 0,
-      then: Yup.string()
-        .min(8, ({ min }) => `A senha deve ter pelo menos ${min} caracteres.`)
-        .required('Campo obrigatório'),
-      otherwise: Yup.string(),
-    }),
-    confirmNewPassword: Yup.string()
-      .when('oldPassword', {
-        is: (oldPassword) => oldPassword && oldPassword.length > 0,
-        then: Yup.string().required('Campo obrigatório'),
-        otherwise: Yup.string(),
-      })  
-      .oneOf([Yup.ref('newPassword'), null], 'As senhas não conferem.'),
     state: Yup.string()
       .required("Campo obrigatório!")
       .max(2, "Apenas 2 letras."),
@@ -102,7 +89,7 @@ const ProfileView = ({ navigation }) => {
 
     if (!noErrors)
       showMessage({
-        message: "Existem erros no formulário",
+        message: "Existem erros no formulário.",
         type: "danger",
       });
 
@@ -185,39 +172,6 @@ const ProfileView = ({ navigation }) => {
                 <Helper type="error" visible={Boolean(errors.email && touched.email)}>
                   {errors.email}
                 </Helper>
-                <Input 
-                  label="Senha antiga"
-                  value={values.oldPassword}
-                  placeholder="Escreva sua senha antiga" 
-                  secureTextEntry
-                  onChange={handleChange('oldPassword')} 
-                  touched={touched.oldPassword}
-                />
-                <Helper type="error" visible={Boolean(errors.oldPassword && touched.oldPassword)}>
-                  {errors.oldPassword}
-                </Helper>
-                <Input 
-                  label="Nova senha"
-                  value={values.newPassword}
-                  placeholder="Escreva sua nova senha" 
-                  secureTextEntry
-                  onChange={handleChange('newPassword')}  
-                  touched={touched.newPassword}
-                />
-                <Helper type="error" visible={Boolean(errors.newPassword && touched.newPassword)}>
-                  {errors.newPassword}
-                </Helper>
-                <Input 
-                  label="Confirmar nova senha"
-                  value={values.confirmNewPassword}
-                  placeholder="Digite a nova senha novamente" 
-                  secureTextEntry
-                  onChange={handleChange('confirmNewPassword')} 
-                  touched={touched.confirmNewPassword}
-                />
-                <Helper type="error" visible={Boolean(errors.confirmNewPassword && touched.confirmNewPassword)}>
-                  {errors.confirmNewPassword}
-                </Helper>
                 <Picker 
                   ref={selectContryRef}
                   openModal={openContryModal}
@@ -236,6 +190,11 @@ const ProfileView = ({ navigation }) => {
                   errors={errors.state}
                   touched={touched.state}
                 />
+                <Button
+                  onPress={() => navigation.navigate(Routes.ChangePassword)}
+                >
+                  Alterar senha
+                </Button>
                 <Button
                   onPress={() => handlePressSubmit(handleSubmit, errors)}
                   mode="contained"

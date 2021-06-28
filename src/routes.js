@@ -16,6 +16,7 @@ import NotifyView from './views/NotifyView';
 import InfoView from './views/InfoView';
 import CircuitsView from './views/CircuitsView';
 import SingleCircuitView from './views/SingleCircuitView';
+import ChangePasswordView from './views/ChangePasswordView';
 
 export default (signedIn = false) =>
   createAppContainer(
@@ -48,7 +49,8 @@ export default (signedIn = false) =>
             InfoView,
             NotifyView,
             CircuitsView,
-            SingleCircuitView
+            SingleCircuitView,
+            ChangePasswordView
           },
           {
             defaultNavigationOptions: {
