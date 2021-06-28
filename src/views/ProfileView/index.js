@@ -66,10 +66,13 @@ const ProfileView = ({ navigation }) => {
       .max(1, "Apenas 2 letras."),
     phone: Yup.string()
       .required("Campo obrigatório.")
-      .min(14, ({ min }) => `Deve conter pelo menos 10 digitos.`),
+      .test("len", "Deve conter pelo menos 10 digitos.", (val) => {
+        const val_length_without_dashes = val.replace(/[^\d]/g, '').length;
+        return val_length_without_dashes >= 10;
+      }),
     oldPassword: Yup.string(),
     newPassword: Yup.string().when('oldPassword', {
-      is: val => !!val.length,
+      is: (oldPassword) => oldPassword && oldPassword.length > 0,
       then: Yup.string()
         .min(8, ({ min }) => `A senha deve ter pelo menos ${min} caracteres.`)
         .required('Campo obrigatório'),
@@ -77,7 +80,7 @@ const ProfileView = ({ navigation }) => {
     }),
     confirmNewPassword: Yup.string()
       .when('oldPassword', {
-        is: val => !!val.length,
+        is: (oldPassword) => oldPassword && oldPassword.length > 0,
         then: Yup.string().required('Campo obrigatório'),
         otherwise: Yup.string(),
       })  

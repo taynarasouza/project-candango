@@ -14,5 +14,5 @@ export const Avatar = styled.Image.attrs({
     height: ${ `${normalize(100)}px` };
     border-width: 5px;
     border-color: rgba(0, 0, 153, 0.8);
-    border-radius: 50px;
+    border-radius: ${ `${normalize(50)}px` };
 `;
