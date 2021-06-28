@@ -54,10 +54,10 @@ const LoginView = ({navigation}) => {
           <Form
             validationSchema={schemaValidation}
             initialValues={{ 
-              email: 'teste@example.com',
-              password: '12345678', 
-              // email: '', 
-              // password: '', 
+              // email: 'teste@example.com',
+              // password: '12345678', 
+              email: '', 
+              password: '', 
             }}
             onSubmit={values => handleLogin(values)}
           >
