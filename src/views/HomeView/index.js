@@ -442,6 +442,7 @@ const HomeView = ({navigation}) => {
                 apikey={GOOGLE_API_KEY}
                 strokeWidth={3}
                 strokeColor="#000099"
+                resetOnChange={false}
                 onReady={handleReadyDirections}
                 onError={handleErrorDirections}
               />
