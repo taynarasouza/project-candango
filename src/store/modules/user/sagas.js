@@ -52,8 +52,10 @@ export function* getUserMedal({payload}) {
     const { attractionCode, markers } = payload;
 
     const response = yield call(api.post, 'attractions/user', { attractionCode });
+    
     const { exp, medalStatus, userVisitedAttraction } = response.data;
     const visited = userVisitedAttraction;
+
     const upmarkers = markers.reduce((res, pt) => {
       let hasMedal = false;
       let qtdVisits = 0;
