@@ -132,14 +132,13 @@ const HomeView = ({navigation}) => {
     // se nao faz nada
     if ((coordinates.latitude === position.latitude) && (coordinates.longitude === position.longitude))
       return;
-      
-    mapRef.current.animateToRegion({ 
-      ...coordinates, 
-      latitudeDelta: LATITUDE_DELTA, 
-      longitudeDelta: LONGITUDE_DELTA 
-    }, 1000);
 
     dispatch(setUserPosition(coordinates));
+    mapRef.current.animateToRegion({ 
+      ...coordinates, 
+      latitudeDelta: 0, 
+      longitudeDelta: 0 
+    }, 500);
   }
   
   const [openMenu, setOpenMenu] = useState(false);
