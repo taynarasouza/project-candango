@@ -55,7 +55,7 @@ export const HorizontalScroll = styled.ScrollView.attrs({
   bottom: 60px;
 `;
 
-export const FooterCard = styled.View`
+export const FooterCard = styled.TouchableOpacity`
     background: #fff;
     height: 155px;
     width: 155px;
