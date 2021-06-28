@@ -16,18 +16,23 @@ export function* signIn({payload}) {
       password,
     });
 
-    const { user, attractions, userVisitedAttractions } = response.data;
     const { headers } = response;
+    const { user, attractions, userVisitedAttractions } = response.data;
 
     let cookie = headers["set-cookie"];
     let visited = userVisitedAttractions;
-
+    
     const markers = attractions.reduce((res, pt) => {
-      const isOk = visited.length > 0 && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).length > 0;
-      const hasMedal =  isOk;
-      const qtdVisits = isOk && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.ammountVisits)[0];
-      const expVisitF = isOk && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.lastVisit)[0];
-      const expVisitD = isOk && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.lastVisit1)[0];
+      let hasMedal = false;
+      let qtdVisits = 0;
+      let expVisitF = "";
+      let expVisitD = "";
+      if (visited.length > 0 && visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).length > 0) {
+        hasMedal = true;
+        qtdVisits = visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.ammountVisits)[0];
+        expVisitF = visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.lastVisit)[0];
+        expVisitD = visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.lastVisit1)[0];
+      }
 
       pt.hasMedal = hasMedal;
       pt.qtdVisits = qtdVisits;
