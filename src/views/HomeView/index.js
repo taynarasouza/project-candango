@@ -359,7 +359,6 @@ const HomeView = ({navigation}) => {
             style={styles.mapStyle}
             onMapReady={getUserPosition}
             onUserLocationChange={_setUserPosition}
-            enableHighAccuracy
           >
             {circuit.attractions.length > 0 && circuit.attractions.map((marker, i) => {
               let color = "#000099";
