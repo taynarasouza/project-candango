@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import * as Yup from 'yup';
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 import {
   gendersOptions,
@@ -58,17 +59,14 @@ const ProfileView = ({ navigation }) => {
 
   const schemaValidation = Yup.object().shape({
     name: Yup.string().required("Campo obrigatório."),
-    // email: Yup.string()
-    //   .email("Email inválido.")
-    //   .required("Campo obrigatório."),
     gender: Yup.string()
       .required("Campo obrigatório!")
       .max(1, "Apenas 2 letras."),
     phone: Yup.string()
       .required("Campo obrigatório.")
       .test("len", "Deve conter pelo menos 10 digitos.", (val) => {
-        const val_length_without_dashes = val.replace(/[^\d]/g, '').length;
-        return val_length_without_dashes >= 10;
+        const numLenOnlyDigits = val.replace(/[^\d]/g, '').length;
+        return numLenOnlyDigits >= 10;
       }),
     oldPassword: Yup.string(),
     newPassword: Yup.string().when('oldPassword', {
@@ -93,8 +91,22 @@ const ProfileView = ({ navigation }) => {
   });
   
   const handleUpdateUser = (data) => {
-    console.log(data);
     dispatch(updateProfileRequest(data));
+  };
+
+  const handlePressSubmit = (handleSubmit, errors) => {
+    let noErrors = 
+      errors && 
+      Object.keys(errors).length === 0 && 
+      errors.constructor === Object;
+
+    if (!noErrors)
+      showMessage({
+        message: "Existem erros no formulário",
+        type: "danger",
+      });
+
+    handleSubmit();
   };
 
   return (
@@ -141,7 +153,7 @@ const ProfileView = ({ navigation }) => {
                   touched={touched.name}
                 />
                 {/* Tive que adicionar o Boolean() pois não tava pegando o touched undefined como false */}
-                <Helper type="error" visible={errors.name && touched.name}>
+                <Helper type="error" visible={Boolean(errors.name && touched.name)}>
                   {errors.name}
                 </Helper>
                 <Picker 
@@ -225,7 +237,7 @@ const ProfileView = ({ navigation }) => {
                   touched={touched.state}
                 />
                 <Button
-                  onPress={handleSubmit}
+                  onPress={() => handlePressSubmit(handleSubmit, errors)}
                   mode="contained"
                   loading={loading}
                   disabled={loading || (

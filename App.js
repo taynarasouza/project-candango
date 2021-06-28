@@ -1,9 +1,10 @@
 import React from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
-import { theme } from "./src/utils/theme";
-
+import FlashMessage from "react-native-flash-message";
 import {PersistGate} from 'redux-persist/integration/react';
 import {Provider} from 'react-redux';
+
+import { theme } from "./src/utils/theme";
 
 import AppIndex from './src';
 
@@ -18,6 +19,7 @@ function App() {
       <Provider store={store}>
         <PersistGate persistor={persistor}>
           <AppIndex />
+          <FlashMessage position="top" />
         </PersistGate>
       </Provider>
     </PaperProvider>

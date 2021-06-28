@@ -1,6 +1,7 @@
 import {all, takeLatest, call, put} from 'redux-saga/effects';
-
 import {Alert} from 'react-native';
+import { showMessage, hideMessage } from "react-native-flash-message";
+
 import api from '../../../services/api';
 
 import {setMarkers} from '../markers/actions';
@@ -32,7 +33,10 @@ export function* updateProfile({payload}) {
 
     const response = yield call(api.put, 'user', profile);
 
-    Alert.alert('Perfil atualizado com sucesso!');
+    showMessage({
+      message: "Perfil atualizado com sucesso!",
+      type: "success",
+    });
 
     const { user } = response.data;
 
