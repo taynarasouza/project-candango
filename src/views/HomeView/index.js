@@ -134,11 +134,13 @@ const HomeView = ({navigation}) => {
       return;
 
     dispatch(setUserPosition(coordinates));
-    mapRef.current.animateToRegion({ 
-      ...coordinates, 
-      latitudeDelta: 0, 
-      longitudeDelta: 0 
-    }, 500);
+    if (destination.status === "start") {
+      mapRef.current.animateToRegion({ 
+        ...coordinates, 
+        latitudeDelta: 0, 
+        longitudeDelta: 0 
+      }, 500);
+    }
   }
   
   const [openMenu, setOpenMenu] = useState(false);
@@ -359,6 +361,7 @@ const HomeView = ({navigation}) => {
             style={styles.mapStyle}
             onMapReady={getUserPosition}
             onUserLocationChange={_setUserPosition}
+            enableHighAccuracy
           >
             {circuit.attractions.length > 0 && circuit.attractions.map((marker, i) => {
               let color = "#000099";
