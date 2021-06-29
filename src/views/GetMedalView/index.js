@@ -50,8 +50,8 @@ function formatExpirationDate(d) {
     _d = ed.getDate() < 10 ? ("0" + ed.getDate()) : ed.getDate(),
     _m = ed.getMonth() + 1 < 10 ? ("0" + (ed.getMonth() + 1)) : ed.getMonth() + 1,
     _y = ed.getFullYear(),
-    _h = ed.getHours(),
-    _mi = ed.getMinutes(),
+    _h = ed.getHours() < 10 ? ("0" + ed.getHours()) : ed.getHours(),
+    _mi = ed.getMinutes() < 10 ? ("0" + ed.getMinutes()) : ed.getMinutes(),
     _s = ed.getSeconds() < 10 ? ("0" + ed.getSeconds()): ed.getSeconds();
   
   return `${_d}/${_m}/${_y} ${_h}:${_mi}:${_s}`;
