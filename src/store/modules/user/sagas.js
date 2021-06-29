@@ -49,14 +49,14 @@ export function* updateProfile({payload}) {
 
 export function* getUserMedal({payload}) {
   try {
-    const { attractionCode, markers } = payload;
+    const { attractionCode } = payload;
 
     const response = yield call(api.post, 'attractions/user', { attractionCode });
     
-    const { exp, medalStatus, userVisitedAttraction } = response.data;
+    const { exp, medalStatus, attractions, userVisitedAttraction } = response.data;
     const visited = userVisitedAttraction;
 
-    const upmarkers = markers.reduce((res, pt) => {
+    const upmarkers = attractions.reduce((res, pt) => {
       let hasMedal = false;
       let qtdVisits = 0;
       let expVisitF = "";
@@ -65,7 +65,7 @@ export function* getUserMedal({payload}) {
         hasMedal = true;
         qtdVisits = visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.ammountVisits)[0];
         expVisitF = visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.lastVisit)[0];
-        expVisitD = visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.lastVisit1)[0];
+        expVisitD = new Date();
       }
 
       pt.hasMedal = hasMedal;
@@ -79,6 +79,8 @@ export function* getUserMedal({payload}) {
       return res;
     }, []);
 
+    console.log("\n")
+    console.log("UPMARKERS: ", upmarkers);
     yield put(setMarkers(upmarkers));
     yield put(visitAttractionSuccess({ exp }));
     Alert.alert("Ponto turísitco visitado", medalStatus);
