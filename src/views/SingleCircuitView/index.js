@@ -1,5 +1,6 @@
 import React from 'react';
-
+import {useDispatch, useSelector} from 'react-redux';
+import { startCircuit, continueCircuit } from '../../store/modules/circuits/actions';
 import { Routes } from "../../utils/constants";
 
 import {
@@ -30,11 +31,45 @@ import {
 } from './styles';
 
 const SingleCircuitView = ({ navigation }) => {
+  const dispatch = useDispatch();
+  let circuits = useSelector(state => state.circuits.circuits);
   let circuit = navigation.getParam('circuit');
   let { attractions } = circuit;
 
+  const a = circuits.filter(c => c.circuitId === circuit.circuitId);
+
+  /**
+   * Situacoes para verificar o circuito:
+   * 1: Nao tem circuitos
+   * 2: Tem circuitos mas nao tem esse circuito na memoria
+   * 3: Tem circuits e tem esse circuito na memoria
+   */
   const handleStartCircuit = () => {
-    navigation.navigate(Routes.Home, { attractions });
+    // let c = circuits;
+    let r = [];
+    let k = circuit;
+    console.log("\n---------");
+    if (circuits.length && circuits.filter(cc => cc.circuitId === circuit.circuitId).length) {
+      console.log("Já comecei esse circuito");
+      const circuitIndex = circuits.findIndex(cc => cc.circuitId === circuit.circuitId);
+      dispatch(continueCircuit(circuitIndex));
+    } else if (circuits.length) {
+      console.log("Ja comecei um circuito mas nao foi esse");
+      k.status = "start";
+      k.attractions = circuit.attractions.map(attraction => ({ ...attraction, isVisited: false }));
+      dispatch(startCircuit(k));
+    } else {
+      console.log("Sem circuito");
+      k.status = "start";
+      k.attractions = k.attractions.map(attraction => ({ ...attraction, isVisited: false }));
+      dispatch(startCircuit(k));
+    }
+    // console.log(r);
+    console.log("----------\n");
+    // dispatch(
+    //   startCircuit(r)
+    // );
+    navigation.navigate(Routes.Home);
   };
 
   return (
@@ -86,8 +121,10 @@ const SingleCircuitView = ({ navigation }) => {
         <Button
           mode="contained" 
           icon="navigation"
-          onPress={handleStartCircuit}>
-          Iniciar circuito
+          onPress={handleStartCircuit}
+          disabled={a.length > 0 && (a[0].attractions.filter(attraction => attraction.hasVisited).length === attractions.length)}
+        >
+          {a.length > 0 ? "Continuar circuito" : "Iniciar circuito"}
         </Button>
       </Scroll>
     </Container>

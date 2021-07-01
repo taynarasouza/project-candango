@@ -25,11 +25,17 @@ export const FabPosition = styled(FAB).attrs(props => ({
 
   position: absolute;
   bottom: 8px;
-  right: 75px;
+  right: ${props => {
+    if (props.isCircuiting)
+      return "195px";
+    if (props.isDirecting)
+      return "155px";
+    return "75px";
+  }};
 `;
 
 export const FabCancel = styled(FAB).attrs(props => ({
-  icon: "close",
+  icon: props.icon ? props.icons : "close",
   label: "Cancelar circuito",
   ...props
 }))`
@@ -38,7 +44,7 @@ export const FabCancel = styled(FAB).attrs(props => ({
   border-radius: 50px;
 
   position: absolute;
-  bottom: 0;
+  bottom: 4px;
   right: 0;
   z-index: 0;
 `;
@@ -52,7 +58,7 @@ export const HorizontalScroll = styled.ScrollView.attrs({
   }
 })`
   position: absolute;
-  bottom: 60px;
+  bottom: 70px;
 `;
 
 export const FooterCard = styled.TouchableOpacity`

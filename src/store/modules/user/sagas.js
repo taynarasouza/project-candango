@@ -65,7 +65,7 @@ export function* getUserMedal({payload}) {
         hasMedal = true;
         qtdVisits = visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.ammountVisits)[0];
         expVisitF = visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.lastVisit)[0];
-        expVisitD = new Date();
+        expVisitD = visited.filter(ptv => ptv.attractionCode.toString() === pt.codLocal.toString()).map(ptv => ptv.lastVisit1)[0];
       }
 
       pt.hasMedal = hasMedal;
@@ -79,11 +79,10 @@ export function* getUserMedal({payload}) {
       return res;
     }, []);
 
-    console.log("\n")
-    console.log("UPMARKERS: ", upmarkers);
     yield put(setMarkers(upmarkers));
     yield put(visitAttractionSuccess({ exp }));
-    Alert.alert("Ponto turísitco visitado", medalStatus);
+    Alert.alert("Ponto turístico visitado", medalStatus);
+    
 
   } catch (error) {
     console.log(error);

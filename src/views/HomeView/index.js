@@ -11,16 +11,29 @@ import GetMedalView from "../GetMedalView";
 
 import { Routes } from "../../utils/constants";
 import { setUserPosition, visitAttraction } from '../../store/modules/user/actions';
-import api from "../../services/api";
+import { stopCircuit, visitCircuitAttraction } from '../../store/modules/circuits/actions';
+import { Audio } from 'expo-av';
+// import profile from '../../../assets/images/profile.png';
 
-import { FabPosition, FabCancel, HorizontalScroll, FooterCard, FooterContent, FooterCover, FooterDivider, FooterTitle, Footer } from "./styles";
+import { 
+  FabPosition, 
+  FabCancel, 
+  HorizontalScroll, 
+  FooterCard, 
+  FooterContent, 
+  FooterCover, 
+  FooterDivider, 
+  FooterTitle, 
+  ProfileContainer, 
+  ProfileAvatarXp 
+} from "./styles";
 
 const GOOGLE_API_KEY = "AIzaSyB90RnyJ2NDSeoXAuIEGfv8viCx_BrCo28";
 
 const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
-const LATITUDE_DELTA = 0.1722;
+const LATITUDE_DELTA = 0.2122;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const INITIAL_LATITUDE = -15.793542565926458; 
 const INITIAL_LONGITUDE = -47.88287557901528;
@@ -64,22 +77,13 @@ const HomeView = ({navigation}) => {
   const dispatch = useDispatch();
   const position = useSelector(state => state.user.position);
   const markers = useSelector(state => state.markers.markers);
+  const circuits = useSelector(state => state.circuits.circuits);
   const mapRef = React.useRef();
-
-  const [circuit, setCircuit] = useState({
-    attractions: []
-  });
-
-  useEffect(() => {
-    if (("params" in navigation.state) && ("attractions" in navigation.state.params)) {
-      setCircuit({ attractions: navigation.state.params.attractions });
-    }
-
-  }, [navigation.state]);
 
   const [ComponentGMV, setComponentGMV] = useState({
     open: false,
-    payload: {}
+    payload: {},
+    isNear: false
   });
   const [destination, setDestination] = useState({
     // start || pause || stop
@@ -90,11 +94,24 @@ const HomeView = ({navigation}) => {
     }
   });
 
+  // Effect para atualizar o payload do GMV
+  // GMV => GetMedalView
+  useEffect(() => {
+    if (ComponentGMV.open && Object.keys(ComponentGMV.payload).length) {
+      const marker = markers.filter(marker => marker.codLocal === ComponentGMV.payload.codLocal)[0];
+      setComponentGMV({
+        open: true,
+        payload: marker,
+        isNear: true
+      });
+    }
+  }, [markers]);
+
   // Effect para resgatar a posicao do usuario 
   // e disparar a acao para salvar a posicao na store
   // assim que entrar na view
   useEffect(() => {
-    getUserPosition();    
+    getUserPosition();
 
     return () => {
       dispatch(
@@ -105,6 +122,29 @@ const HomeView = ({navigation}) => {
       );
     }
   }, []);
+
+  const [sound, setSound] = React.useState();
+
+  async function playSound() {
+    console.log('Loading Sound');
+    const { sound } = await Audio.Sound.createAsync(
+       require('../../../assets/audios/win_medal_audio.mpeg')
+    );
+
+    setSound(sound);
+
+    console.log('Playing Sound');
+    await sound.playAsync();
+  }
+
+  React.useEffect(() => {
+    return sound
+      ? () => {
+          console.log('Unloading Sound');
+          sound.unloadAsync(); 
+        }
+      : undefined;
+  }, [sound]);
 
   const getUserPosition = () => {
     navigator.geolocation.getCurrentPosition(
@@ -134,13 +174,13 @@ const HomeView = ({navigation}) => {
       return;
 
     dispatch(setUserPosition(coordinates));
-    if (destination.status === "start") {
-      mapRef.current.animateToRegion({ 
-        ...coordinates, 
-        latitudeDelta: 0, 
-        longitudeDelta: 0 
-      }, 500);
-    }
+    // if (destination.status === "start") {
+    //   mapRef.current.animateToRegion({ 
+    //     ...coordinates, 
+    //     latitudeDelta: 0, 
+    //     longitudeDelta: 0 
+    //   }, 500);
+    // }
   }
   
   const [openMenu, setOpenMenu] = useState(false);
@@ -177,7 +217,8 @@ const HomeView = ({navigation}) => {
     if ((status === "stop" && isnear) || (status === "start" && isnear)) {
       setComponentGMV({
         open: true,
-        payload: marker
+        payload: marker,
+        isNear: true
       });
       return;
     }
@@ -211,13 +252,6 @@ const HomeView = ({navigation}) => {
   };
 
   const handleClose = () => {
-    // setDestination(d => ({ 
-    //   status: "stop", 
-    //   coordinates: {
-    //     longitude: null,
-    //     latitude: null
-    //   } 
-    // }));
     setModal(m => ({
       open: false,
       payload: {},
@@ -226,47 +260,80 @@ const HomeView = ({navigation}) => {
   }
 
   const handleReadyDirections = result => {
-    mapRef.current.fitToCoordinates(
-      result.coordinates,
-      {
-        edgePadding: {
-          right: (width / 20),
-          bottom: (height / 20),
-          left: (width / 20),
-          top: (height / 20)
-        }
-      }
-    )
+    // mapRef.current.fitToCoordinates(
+    //   result.coordinates,
+    //   {
+    //     edgePadding: {
+    //       right: (width / 20),
+    //       bottom: (height / 20),
+    //       left: (width / 20),
+    //       top: (height / 20)
+    //     }
+    //   }
+    // )
 
-    setTimeout(() => {
-      handleGoToMyPosition(0, 0);
-    }, 100);
+    if (mapTimeout != null)
+      clearTimeout(mapTimeout);
+
+    mapTimeout = setTimeout(() => {
+      // mapRef.current.animateToRegion({ 
+      //   ...position, 
+      //   latitudeDelta: 0.0212, 
+      //   longitudeDelta: 0.0212 * ASPECT_RATIO
+      // }, 1000);
+
+      // mapRef.current.animateToViewingAngle(90, 1000);
+      mapRef.current.animateCamera({ 
+        center: position,
+        zoom: 17,
+        pitch: 0 
+      }, 
+      { duration: 1500 });
+    }, 500);
+  }
+
+  const handleStopCircuit = (cs, id) => {
+    let k = [];
+
+    if (cs.filter(c => c.status === "start").length > 0) {
+      const circuitIndex = circuits.findIndex(cc => cc.circuitId === id);
+      dispatch(
+        stopCircuit(circuitIndex)
+      );
+    }
   }
 
   const handleCancelDestination = () => {
-    mapRef.current.animateToRegion({ 
-      ...destination.coordinates, 
-      latitudeDelta: LATITUDE_DELTA, 
-      longitudeDelta: LONGITUDE_DELTA 
-    }, 1000);
+    // mapRef.current.animateToRegion({ 
+    //   ...destination.coordinates, 
+    //   latitudeDelta: LATITUDE_DELTA, 
+    //   longitudeDelta: LONGITUDE_DELTA 
+    // }, 1000);
 
-    setTimeout(() => {
-      setDestination({ 
-        status: "stop", 
-        coordinates: { 
-          latitude: null, 
-          longitude: null
-        }
-      });
-    }, 150);
+    mapRef.current.animateCamera(
+      { 
+        center: destination.coordinates,
+        zoom: 13,
+        pitch: 0 
+      }, 
+      { 
+        duration: 1500
+      }
+    );
+
+    setDestination({ 
+      status: "stop", 
+      coordinates: { 
+        latitude: null, 
+        longitude: null
+      }
+    });
   }
 
   const handleGoToMyPosition = (latitudeDelta = LATITUDE_DELTA, longitudeDelta = LONGITUDE_DELTA) => {
-    mapRef.current.animateToRegion({ 
-      ...position, 
-      latitudeDelta: latitudeDelta,
-      longitudeDelta: longitudeDelta
-    }, 1000);
+    mapRef.current.animateCamera({
+      center: position
+    });
   }
 
   const handleErrorDirections = errorMessage => {
@@ -288,6 +355,7 @@ const HomeView = ({navigation}) => {
         markers
       })
     );
+    playSound();
   }
 
   const handlePressCard = (attraction) => {
@@ -298,12 +366,37 @@ const HomeView = ({navigation}) => {
         longitude: parseFloat(attraction.Local.Longitude),   
       }
     });
-    mapRef.current.animateToRegion({ 
-      latitude: parseFloat(attraction.Local.Latitude),
-      longitude: parseFloat(attraction.Local.Longitude), 
-      latitudeDelta: LATITUDE_DELTA,
-      longitudeDelta: LONGITUDE_DELTA
-    }, 1000);
+    // mapRef.current.animateToRegion({ 
+    //   latitude: parseFloat(attraction.Local.Latitude),
+    //   longitude: parseFloat(attraction.Local.Longitude), 
+    //   latitudeDelta: LATITUDE_DELTA,
+    //   longitudeDelta: LONGITUDE_DELTA
+    // }, 1000);
+  }
+
+  let mapTimeout = null;
+  const handleMapReady = () => {
+    // Mapa terminou de carregar
+    // - Recupera a posicao do usuario
+    // - Verifica se tem timeout, se sim limpa
+    // - Seta um timeout de 1s para levar o usuario
+    // a regiao do DF
+
+    getUserPosition();
+    // if (mapTimeout != null)
+    //   clearTimeout(mapTimeout);
+    
+    // mapTimeout = setTimeout(() => {
+    //   // mapRef.current.animateToRegion(initialRegion, 1000);
+    //   mapRef.current.animateCamera({ 
+    //     center: { 
+    //       latitude: INITIAL_LATITUDE, 
+    //       longitude: INITIAL_LONGITUDE 
+    //     },
+    //     zoom: 13
+    //   }, 
+    //   { duration: 1500 });
+    // }, 800);
   }
 
   const actions = [
@@ -353,6 +446,12 @@ const HomeView = ({navigation}) => {
     },
   ];
 
+  const isDirecting = destination.status === "start";
+  const isCircuitOngoing = circuits.filter(c => c.status === "start").length > 0;
+  // console.log("\n--------");
+  // console.log(circuits);
+  // console.log("-----------\n")
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={{...StyleSheet.absoluteFillObject}}>
@@ -365,18 +464,50 @@ const HomeView = ({navigation}) => {
             loadingEnabled={true}
             toolbarEnabled={false}
             // minZoomLevel={0}
-            maxZoomLevel={15}
+            // maxZoomLevel={15}
             showsUserLocation={true}
             followsUserLocation={true}
             showsMyLocationButton={false}
             pitchEnabled={true}
             style={styles.mapStyle}
-            onMapReady={getUserPosition}
+            onMapReady={handleMapReady}
             onUserLocationChange={_setUserPosition}
             enableHighAccuracy
           >
-            {circuit.attractions.length > 0 && circuit.attractions.map((marker, i) => {
-              let color = "#000099";
+            {isCircuitOngoing && circuits.filter(c => c.status === "start").map((circuit, i) => {
+              // console.log(circuit.attractions.map(marker => marker));
+              return circuit.attractions.map(marker => (
+                <Fragment key={marker.codLocal}>
+                  <Marker
+                    pinColor="#000099"
+                    coordinate={{
+                      latitude: parseFloat(marker.Local.Latitude),
+                      longitude: parseFloat(marker.Local.Longitude)
+                    }}
+                    onPress={e => {
+                      const coordinates = e.nativeEvent.coordinate;
+                      MarkerController(
+                        coordinates,
+                        marker
+                      )
+                    }}
+                  />
+                  <Circle 
+                    center={{
+                      latitude: parseFloat(marker.Local.Latitude),
+                      longitude: parseFloat(marker.Local.Longitude)
+                    }}
+                    fillColor="rgba(135,206,235, .5)"
+                    strokeColor="rgba(135,206,235, .8)"
+                    strokeWidth={1}
+                    radius={MARKER_RADIUS}
+                    zIndex={100}
+                  />
+                </Fragment>
+              ))
+            })}
+
+            {!isCircuitOngoing && markers && markers.map((marker, i) => {
               const latitude = parseFloat(marker.Local.Latitude);
               const longitude = parseFloat(marker.Local.Longitude);
 
@@ -384,7 +515,6 @@ const HomeView = ({navigation}) => {
                 <Fragment key={marker.codLocal}>
                   <Marker
                     key={marker.codLocal}
-                    pinColor={color}
                     coordinate={{
                       latitude,
                       longitude 
@@ -397,6 +527,7 @@ const HomeView = ({navigation}) => {
                       )
                     }}
                   />
+
                   <Circle 
                     center={{
                       latitude,
@@ -412,43 +543,7 @@ const HomeView = ({navigation}) => {
               )
             })}
 
-            {circuit.attractions.length === 0 && markers && markers.map((marker, i) => {
-              const latitude = parseFloat(marker.Local.Latitude);
-              const longitude = parseFloat(marker.Local.Longitude);
-
-              return (
-                <Fragment key={marker.codLocal}>
-                  <Marker
-                    key={marker.codLocal}
-                    coordinate={{
-                      latitude,
-                      longitude 
-                    }}
-                    onPress={e => {
-                      const coordinates = e.nativeEvent.coordinate;
-                      MarkerController(
-                        coordinates,
-                        marker
-                      )
-                    }}
-                  />
-
-                  <Circle 
-                    center={{
-                      latitude,
-                      longitude 
-                    }}
-                    fillColor="rgba(135,206,235, .5)"
-                    strokeColor="rgba(135,206,235, .8)"
-                    strokeWidth={1}
-                    radius={MARKER_RADIUS}
-                    zIndex={100}
-                  />
-                </Fragment>
-              )
-            })}
-
-            {destination.status === "start" && (
+            {isDirecting && (
               <MapViewDirections
                 mode="DRIVING"
                 origin={position}
@@ -464,46 +559,50 @@ const HomeView = ({navigation}) => {
           </MapView>
         </>
 
-        {circuit.attractions.length > 0 && (
-          <>
-            <HorizontalScroll>
-              {circuit.attractions.map((attraction, i) => (
-                <FooterCard key={i} onPress={() => handlePressCard(attraction)}>
-                  <FooterCover source={{ uri: attraction.urlImg }} />
-                  <FooterContent>
-                    <FooterDivider />
-                    <FooterTitle>{attraction.name}</FooterTitle>
-                  </FooterContent>
-                </FooterCard>
-              ))}
-            </HorizontalScroll>
-            <FabCancel 
-              label="Cancelar circuito" 
-              onPress={() => {
-                setCircuit({ attractions: [] });
-                if (destination.status === "start") {
-                  setDestination({
-                    status: "stop",
-                    coordinates: {
-                      latitude: null,
-                      longitude: null
-                    }
-                  });
-                }
-              }} 
-            />
-          </>
-        )}
+        {isCircuitOngoing && circuits.filter(c => c.status === "start").map((circuit, i) => {
+          return (
+            <Fragment key={circuit.circuitId}>
+              <HorizontalScroll>
+                {circuit.attractions.map((attraction, i) => (
+                  <FooterCard key={i} onPress={() => handlePressCard(attraction)}>
+                    <FooterCover source={{ uri: attraction.urlImg }} />
+                    <FooterContent>
+                      <FooterDivider />
+                      <FooterTitle>{attraction.name}</FooterTitle>
+                    </FooterContent>
+                  </FooterCard>
+                ))}
+              </HorizontalScroll>
+              <FabCancel
+                icon="stop"
+                label="Parar circuito" 
+                onPress={() => handleStopCircuit(circuits, circuit.circuitId)} 
+              />
+            </Fragment>
+          )
+        })}
 
-        {circuit.attractions.length === 0 && (
-          <FabPosition onPress={() => handleGoToMyPosition()} />
-        )}
-        {destination.status === "start" && circuit.attractions.length === 0 && (
+        {/* <ProfileContainer>
+          <ProfileAvatarXp
+            size={50}
+            percent={user.exp}
+            image={profile}
+          />
+        </ProfileContainer> */}
+
+        
+        <FabPosition 
+          onPress={() => handleGoToMyPosition()} 
+          isDirecting={isDirecting} 
+          isCircuiting={isCircuitOngoing} 
+        />
+
+        {!isCircuitOngoing && isDirecting && (
           <FabCancel label="Cancelar" onPress={() => handleCancelDestination()} />
         )}
         
         {/* Menu FAB */}
-        {destination.status !== "start" && circuit.attractions.length === 0 && (
+        {!isCircuitOngoing && !isDirecting && (
           <Menu 
             open={openMenu}
             actions={actions}

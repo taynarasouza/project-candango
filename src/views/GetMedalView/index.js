@@ -41,30 +41,17 @@ function hasExpired(lastVisit, now = new Date()) {
 
 function _setExpirationDate(lastVisit) {
   // Adiciona 1 dia na data
+  // e retorna em milisegundos
   return lastVisit.setDate( lastVisit.getDate() + 1 );
-}
-
-function formatExpirationDate(d) {
-  const 
-    ed = new Date(_setExpirationDate(d)),
-    _d = ed.getDate() < 10 ? ("0" + ed.getDate()) : ed.getDate(),
-    _m = ed.getMonth() + 1 < 10 ? ("0" + (ed.getMonth() + 1)) : ed.getMonth() + 1,
-    _y = ed.getFullYear(),
-    _h = ed.getHours() < 10 ? ("0" + ed.getHours()) : ed.getHours(),
-    _mi = ed.getMinutes() < 10 ? ("0" + ed.getMinutes()) : ed.getMinutes(),
-    _s = ed.getSeconds() < 10 ? ("0" + ed.getSeconds()): ed.getSeconds();
-  
-  return `${_d}/${_m}/${_y} ${_h}:${_mi}:${_s}`;
 }
 
 // marker.expirationDate: representa a data da ultima visita
 function GetMedalView({open, marker = defaults.marker, onGetMedal, onClose, onOpenMarkerView, onNavigate}) {
-  console.log(marker);
   const { name, exp, urlImg, hasMedal, expirationDate } = marker;
   const boExpired = hasExpired(new Date(expirationDate.default));
   const showVisitButton = boExpired || boExpired == null;
   
-  const expDate = (formatExpirationDate(new Date(expirationDate.default)));
+  const expDate = expirationDate.formatted.replace(",", " às");
 
   return (
     <Modal
